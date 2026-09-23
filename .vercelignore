@@ -1,0 +1,5 @@
+# Vercel Ignore
+# Don't ignore PWA files - they are generated during build
+!public/sw.js
+!public/workbox-*.js
+!public/worker-*.js

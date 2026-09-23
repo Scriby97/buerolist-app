@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bürolist Favicon - blockiges B-Monogramm, analog zum FleetTrack-Logo
+       (geometrische Formen aus Rechtecken statt Live-Schrift, damit das SVG
+       auch eingebettet als <img> ueberall gleich aussieht). Platzhalter bis
+       zum finalen Logo-Design (siehe Plan). Feste dunkle Markenfarbe (Ink). -->
+  <g fill="#232a31">
+    <rect x="60" y="80" width="42" height="240"/>
+    <rect x="60" y="80" width="140" height="42"/>
+    <rect x="158" y="80" width="42" height="131"/>
+    <rect x="60" y="169" width="140" height="42"/>
+    <rect x="158" y="211" width="42" height="67"/>
+    <rect x="60" y="278" width="140" height="42"/>
+  </g>
+</svg>

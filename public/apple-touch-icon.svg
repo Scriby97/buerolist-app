@@ -1,0 +1,19 @@
+<svg width="180" height="180" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bürolist App-Icon (Android Home-Screen / PWA / Apple Touch Icon).
+       Volle Flaeche bis zum Rand (kein transparenter Rand, den Android/iOS
+       sonst selbst auffuellen wuerden) + B-Monogramm zentriert innerhalb der
+       "Safe Zone" fuer adaptive Icons (~62% Durchmesser, damit rundes/eckiges
+       Masking durch den Launcher nichts abschneidet). Platzhalter bis zum
+       finalen Logo-Design (siehe Plan). -->
+  <rect width="400" height="400" fill="#1b2126"/>
+  <g transform="translate(200,200) scale(0.62) translate(-200,-200)">
+    <g fill="#86a9c4">
+      <rect x="60" y="80" width="42" height="240"/>
+      <rect x="60" y="80" width="140" height="42"/>
+      <rect x="158" y="80" width="42" height="131"/>
+      <rect x="60" y="169" width="140" height="42"/>
+      <rect x="158" y="211" width="42" height="67"/>
+      <rect x="60" y="278" width="140" height="42"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bürolist Logo - blockiges B-Monogramm fuer hellen Hintergrund, analog
+       zum FleetTrack-Logo (geometrische Rechteckformen statt Live-Schrift).
+       Platzhalter bis zum finalen Logo-Design (siehe Plan). -->
+  <g fill="#3e5d78">
+    <rect x="60" y="80" width="42" height="240"/>
+    <rect x="60" y="80" width="140" height="42"/>
+    <rect x="158" y="80" width="42" height="131"/>
+    <rect x="60" y="169" width="140" height="42"/>
+    <rect x="158" y="211" width="42" height="67"/>
+    <rect x="60" y="278" width="140" height="42"/>
+  </g>
+</svg>
