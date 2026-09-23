@@ -25,6 +25,7 @@
     "redirectingToOnboarding": "Weiterleitung zur Organisationseinrichtung..."
   },
   "userMenu": {
+    "language": "Sprache",
     "settings": "Einstellungen",
     "roleAdministrator": "⭐ Administrator",
     "roleOwner": "👑 Eigentümer",
@@ -273,7 +274,10 @@
     "darkDescription": "Schont die Augen",
     "lightLabel": "Hell",
     "lightDescription": "Heller Hintergrund",
-    "saveSuccess": "Ansicht gespeichert"
+    "saveSuccess": "Ansicht gespeichert",
+    "languageSectionTitle": "Sprache",
+    "languageSectionDescription": "Wähle deine bevorzugte Sprache.",
+    "languageSaveSuccess": "Sprache geändert"
   },
   "subscriptionTiers": {
     "free": "Free",

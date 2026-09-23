@@ -2,10 +2,7 @@
 // Datei sowohl von Server-Code (i18n/request.ts) als auch von Client
 // Components (z.B. UserMenu.tsx fuer den Sprachumschalter) importiert werden
 // kann, ohne next/headers ins Client-Bundle zu ziehen.
-// Nur Deutsch fuer die erste Version (siehe Plan "Nicht im Scope") - die
-// next-intl-Mechanik selbst ist mehrsprachig-faehig, weitere Sprachen sind
-// rein additiv nachruestbar (Eintrag hier + eine neue messages/<locale>.json).
-export const SUPPORTED_LOCALES = ['de'] as const;
+export const SUPPORTED_LOCALES = ['de', 'en', 'fr', 'it'] as const;
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number];
 export const DEFAULT_LOCALE: AppLocale = 'de';
 export const LOCALE_COOKIE_NAME = 'NEXT_LOCALE';
