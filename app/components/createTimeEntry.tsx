@@ -11,6 +11,7 @@ import { getProjects, getProjectDetail, type Project } from '@/lib/api/projects'
 import { createTimeEntry } from '@/lib/api/timeEntries';
 import type { Category } from '@/lib/api/categories';
 import { ToastContainer } from './Toast';
+import { DateInput } from './DateInput';
 
 interface FormState {
   projectId: string;
@@ -318,12 +319,10 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           <label htmlFor="entryDate" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
             {t('dateLabel')}
           </label>
-          <input
+          <DateInput
             id="entryDate"
-            type="date"
             value={formData.date}
-            onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
-            className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+            onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
             required
           />
         </div>

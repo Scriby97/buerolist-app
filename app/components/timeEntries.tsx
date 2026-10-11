@@ -13,6 +13,7 @@ import { useToast } from '@/lib/hooks/useToast';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { ToastContainer } from './Toast';
 import { ConfirmDialog } from './ConfirmDialog';
+import { DateInput } from './DateInput';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
@@ -373,12 +374,10 @@ const MyEntries: FC = () => {
                   <label htmlFor="edit-date" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                     {t('dateLabel')}
                   </label>
-                  <input
+                  <DateInput
                     id="edit-date"
-                    type="date"
                     value={editForm.date}
-                    onChange={(e) => setEditForm((prev) => ({ ...prev, date: e.target.value }))}
-                    className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+                    onChange={(date) => setEditForm((prev) => ({ ...prev, date }))}
                     required
                     disabled={!canEditEditingEntry}
                   />
