@@ -1,13 +1,10 @@
-<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-  <!-- Bürolist Logo - blockiges B-Monogramm fuer dunklen Hintergrund. Gleiche
-       Geometrie wie buerolist-logo-light.svg, helleres Blau fuer genug
-       Kontrast auf dunklem Grund. Platzhalter bis zum finalen Logo-Design. -->
-  <g fill="#86a9c4">
-    <rect x="60" y="80" width="42" height="240"/>
-    <rect x="60" y="80" width="140" height="42"/>
-    <rect x="158" y="80" width="42" height="131"/>
-    <rect x="60" y="169" width="140" height="42"/>
-    <rect x="158" y="211" width="42" height="67"/>
-    <rect x="60" y="278" width="140" height="42"/>
+<svg width="400" height="400" viewBox="-7 -10 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bürolist Logo "Zeit-B" fuer dunklen Hintergrund. Gleiche Geometrie wie
+       buerolist-logo-light.svg, hellere Farben fuer genug Kontrast. -->
+  <g fill="none" stroke="#86a9c4" stroke-width="14">
+    <path d="M25 10V90"/>
+    <path d="M18 17H62V44H25"/>
+    <path d="M25 44H62A19.5 19.5 0 0 1 62 83H18"/>
   </g>
+  <path d="M62 54V63.5H70" fill="none" stroke="#d3ae7c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
