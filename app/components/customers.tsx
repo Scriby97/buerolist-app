@@ -208,7 +208,7 @@ const Customers: FC = () => {
       )}
 
       {!isLoading && customers.length > 0 ? (
-        <div className="grid gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {customers.map((customer) => (
             <CustomerItem key={customer.id} customer={customer} onSelect={selectCustomer} />
           ))}

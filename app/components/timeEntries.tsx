@@ -451,7 +451,7 @@ const MyEntries: FC = () => {
         </div>
       ) : entries.length > 0 ? (
         <>
-          <div className="grid gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {entries.map((entry) => (
               <EntryItem
                 key={entry.id}
