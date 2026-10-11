@@ -173,7 +173,10 @@
     "photoDeleteError": "Error deleting the photo",
     "deleteError": "Error deleting the note",
     "confirmDeleteTitle": "Delete note",
-    "confirmDeleteMessage": "Are you sure you want to delete this note?"
+    "confirmDeleteMessage": "Are you sure you want to delete this note?",
+    "deletePhoto": "Delete photo",
+    "confirmDeletePhotoTitle": "Delete photo",
+    "confirmDeletePhotoMessage": "Are you sure you want to delete this photo?"
   },
   "settingsCategories": {
     "title": "Categories",

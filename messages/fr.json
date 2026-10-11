@@ -173,7 +173,10 @@
     "photoDeleteError": "Erreur lors de la suppression de la photo",
     "deleteError": "Erreur lors de la suppression de la note",
     "confirmDeleteTitle": "Supprimer la note",
-    "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette note ?"
+    "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette note ?",
+    "deletePhoto": "Supprimer la photo",
+    "confirmDeletePhotoTitle": "Supprimer la photo",
+    "confirmDeletePhotoMessage": "Voulez-vous vraiment supprimer cette photo ?"
   },
   "settingsCategories": {
     "title": "Catégories",

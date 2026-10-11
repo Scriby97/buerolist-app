@@ -36,6 +36,7 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
   const [error, setError] = useState<string | null>(null);
   const [uploadingNoteId, setUploadingNoteId] = useState<string | null>(null);
   const [confirmDeleteNoteId, setConfirmDeleteNoteId] = useState<string | null>(null);
+  const [confirmDeletePhoto, setConfirmDeletePhoto] = useState<{ noteId: string; photoId: string } | null>(null);
 
   const canDelete = (note: Note) =>
     isAdmin || canManageSelectedOrganization || note.authorId === userProfile?.id;
@@ -156,13 +157,19 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
                       alt=""
                       className="w-16 h-16 rounded-lg object-cover border border-zinc-200 dark:border-zinc-700"
                     />
+                    {/* Immer sichtbar (nicht nur bei Hover) - auf Touch-Geraeten
+                        gibt es kein Hover. */}
                     {canDelete(note) && (
                       <button
-                        onClick={() => handleDeletePhoto(note.id, photo.id)}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-600 text-white text-xs leading-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        aria-label={tCommon('delete')}
+                        type="button"
+                        onClick={() => setConfirmDeletePhoto({ noteId: note.id, photoId: photo.id })}
+                        className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow ring-2 ring-white dark:ring-zinc-900 transition-colors"
+                        aria-label={t('deletePhoto')}
+                        title={t('deletePhoto')}
                       >
-                        ×
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" aria-hidden="true">
+                          <path d="M6 6l12 12M18 6L6 18" />
+                        </svg>
                       </button>
                     )}
                   </div>
@@ -202,6 +209,20 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
           cancelLabel={tCommon('cancel')}
           onConfirm={() => { handleDeleteNote(confirmDeleteNoteId); setConfirmDeleteNoteId(null); }}
           onCancel={() => setConfirmDeleteNoteId(null)}
+        />
+      )}
+
+      {confirmDeletePhoto && (
+        <ConfirmDialog
+          title={t('confirmDeletePhotoTitle')}
+          message={t('confirmDeletePhotoMessage')}
+          confirmLabel={tCommon('delete')}
+          cancelLabel={tCommon('cancel')}
+          onConfirm={() => {
+            handleDeletePhoto(confirmDeletePhoto.noteId, confirmDeletePhoto.photoId);
+            setConfirmDeletePhoto(null);
+          }}
+          onCancel={() => setConfirmDeletePhoto(null)}
         />
       )}
     </div>

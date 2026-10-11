@@ -173,7 +173,10 @@
     "photoDeleteError": "Fehler beim Löschen des Fotos",
     "deleteError": "Fehler beim Löschen der Notiz",
     "confirmDeleteTitle": "Notiz löschen",
-    "confirmDeleteMessage": "Möchtest du diese Notiz wirklich löschen?"
+    "confirmDeleteMessage": "Möchtest du diese Notiz wirklich löschen?",
+    "deletePhoto": "Foto löschen",
+    "confirmDeletePhotoTitle": "Foto löschen",
+    "confirmDeletePhotoMessage": "Möchtest du dieses Foto wirklich löschen?"
   },
   "settingsCategories": {
     "title": "Kategorien",
