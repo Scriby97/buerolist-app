@@ -706,6 +706,7 @@
     "TIME_ENTRY_EDIT_FORBIDDEN": "Only organization admins or owners may edit other members' time entries.",
     "TIME_ENTRY_END_BEFORE_START": "The end time must be after the start time.",
     "TIME_ENTRY_CATEGORY_NOT_ALLOWED": "This category is not selected for the project.",
+    "TIME_ENTRY_OVERLAP": "You have already logged time for this period. Please choose a time that does not overlap an existing entry.",
     "NOTE_NOT_FOUND": "Note was not found.",
     "NOTE_TARGET_REQUIRED": "A note must be attached to either a customer or a project.",
     "NOTE_DELETE_FORBIDDEN": "Only the author or organization admins/owners may delete this note.",

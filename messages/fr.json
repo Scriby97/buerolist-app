@@ -706,6 +706,7 @@
     "TIME_ENTRY_EDIT_FORBIDDEN": "Seuls les administrateurs ou le propriétaire de l'organisation peuvent modifier les entrées de temps d'autres membres.",
     "TIME_ENTRY_END_BEFORE_START": "L'heure de fin doit être postérieure à l'heure de début.",
     "TIME_ENTRY_CATEGORY_NOT_ALLOWED": "Cette catégorie n'est pas sélectionnée pour le projet.",
+    "TIME_ENTRY_OVERLAP": "Vous avez déjà saisi du temps pour cette période. Veuillez choisir une plage qui ne chevauche pas une saisie existante.",
     "NOTE_NOT_FOUND": "Note introuvable.",
     "NOTE_TARGET_REQUIRED": "Une note doit être rattachée soit à un client, soit à un projet.",
     "NOTE_DELETE_FORBIDDEN": "Seuls l'auteur ou les administrateurs/le propriétaire de l'organisation peuvent supprimer cette note.",
