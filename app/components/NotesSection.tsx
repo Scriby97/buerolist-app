@@ -9,6 +9,7 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { createNote, addNotePhoto, deleteNotePhoto, deleteNote, type Note } from '@/lib/api/notes';
 import { resizePhoto, ImageValidationError } from '@/lib/images/resizeImage';
 import { ConfirmDialog } from './ConfirmDialog';
+import { PhotoLightbox } from './PhotoLightbox';
 
 interface NotesSectionProps {
   // Genau eines von beiden setzen - siehe CreateNoteDto im Backend.
@@ -37,6 +38,8 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
   const [uploadingNoteId, setUploadingNoteId] = useState<string | null>(null);
   const [confirmDeleteNoteId, setConfirmDeleteNoteId] = useState<string | null>(null);
   const [confirmDeletePhoto, setConfirmDeletePhoto] = useState<{ noteId: string; photoId: string } | null>(null);
+  const [lightbox, setLightbox] = useState<{ noteId: string; index: number } | null>(null);
+  const lightboxNote = lightbox ? notes.find((n) => n.id === lightbox.noteId) : undefined;
 
   const canDelete = (note: Note) =>
     isAdmin || canManageSelectedOrganization || note.authorId === userProfile?.id;
@@ -149,14 +152,21 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                {note.photos.map((photo) => (
+                {note.photos.map((photo, photoIndex) => (
                   <div key={photo.id} className="relative group">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={photo.url}
-                      alt=""
-                      className="w-16 h-16 rounded-lg object-cover border border-zinc-200 dark:border-zinc-700"
-                    />
+                    <button
+                      type="button"
+                      onClick={() => setLightbox({ noteId: note.id, index: photoIndex })}
+                      className="block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      aria-label={t('openPhoto')}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photo.url}
+                        alt=""
+                        className="w-16 h-16 rounded-lg object-cover border border-zinc-200 dark:border-zinc-700 cursor-zoom-in"
+                      />
+                    </button>
                     {/* Immer sichtbar (nicht nur bei Hover) - auf Touch-Geraeten
                         gibt es kein Hover. */}
                     {canDelete(note) && (
@@ -209,6 +219,17 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
           cancelLabel={tCommon('cancel')}
           onConfirm={() => { handleDeleteNote(confirmDeleteNoteId); setConfirmDeleteNoteId(null); }}
           onCancel={() => setConfirmDeleteNoteId(null)}
+        />
+      )}
+
+      {lightbox && lightboxNote && lightboxNote.photos.length > 0 && (
+        <PhotoLightbox
+          photos={lightboxNote.photos}
+          startIndex={Math.min(lightbox.index, lightboxNote.photos.length - 1)}
+          onClose={() => setLightbox(null)}
+          closeLabel={tCommon('close')}
+          previousLabel={t('previousPhoto')}
+          nextLabel={t('nextPhoto')}
         />
       )}
 

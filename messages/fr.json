@@ -176,7 +176,10 @@
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette note ?",
     "deletePhoto": "Supprimer la photo",
     "confirmDeletePhotoTitle": "Supprimer la photo",
-    "confirmDeletePhotoMessage": "Voulez-vous vraiment supprimer cette photo ?"
+    "confirmDeletePhotoMessage": "Voulez-vous vraiment supprimer cette photo ?",
+    "openPhoto": "Afficher la photo",
+    "previousPhoto": "Photo précédente",
+    "nextPhoto": "Photo suivante"
   },
   "settingsCategories": {
     "title": "Catégories",
