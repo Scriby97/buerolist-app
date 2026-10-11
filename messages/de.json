@@ -86,7 +86,17 @@
     "confirmDeleteTitle": "Eintrag löschen",
     "confirmDeleteMessage": "Möchtest du diesen Eintrag wirklich löschen?",
     "loadMore": "Mehr laden",
-    "loadingMore": "Lade weitere Einträge…"
+    "loadingMore": "Lade weitere Einträge…",
+    "listView": "Liste",
+    "calendarView": "Kalender",
+    "dayTotal": "Total {duration}"
+  },
+  "calendar": {
+    "today": "Heute",
+    "month": "Monat",
+    "week": "Woche",
+    "previous": "Zurück",
+    "next": "Weiter"
   },
   "customersOverview": {
     "title": "Kunden",

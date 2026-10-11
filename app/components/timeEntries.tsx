@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, type FC, type FormEvent } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback, type FC, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { getApiBaseUrlOrNull } from '@/lib/api/url';
@@ -14,15 +14,49 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { ToastContainer } from './Toast';
 import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
+import CalendarView from './CalendarView';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
 
-function formatDuration(startAt: string, endAt: string): string {
-  const minutes = Math.round((new Date(endAt).getTime() - new Date(startAt).getTime()) / 60000);
+function durationMinutes(startAt: string, endAt: string): number {
+  return Math.round((new Date(endAt).getTime() - new Date(startAt).getTime()) / 60000);
+}
+
+function formatMinutes(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
   return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
+}
+
+function formatDuration(startAt: string, endAt: string): string {
+  return formatMinutes(durationMinutes(startAt, endAt));
+}
+
+interface DayGroup {
+  key: string;
+  date: Date;
+  entries: TimeEntry[];
+  totalMinutes: number;
+}
+
+// Eintraege (bereits neueste zuerst sortiert) nach lokalem Kalendertag gruppieren.
+function groupByDay(entries: TimeEntry[]): DayGroup[] {
+  const groups: DayGroup[] = [];
+  const byKey = new Map<string, DayGroup>();
+  for (const entry of entries) {
+    const start = new Date(entry.startAt);
+    const key = start.toDateString();
+    let group = byKey.get(key);
+    if (!group) {
+      group = { key, date: start, entries: [], totalMinutes: 0 };
+      byKey.set(key, group);
+      groups.push(group);
+    }
+    group.entries.push(entry);
+    group.totalMinutes += durationMinutes(entry.startAt, entry.endAt);
+  }
+  return groups;
 }
 
 function toDateInputValue(iso: string): string {
@@ -45,7 +79,6 @@ interface EntryItemProps {
 const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit }) => {
   const t = useTranslations('myEntries');
   const tCommon = useTranslations('common');
-  const dateLocale = useDateLocale();
   const creatorName = entry.creator.firstName || entry.creator.lastName
     ? `${entry.creator.firstName || ''} ${entry.creator.lastName || ''}`.trim()
     : entry.creator.email;
@@ -65,10 +98,6 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
           </h3>
         </div>
         <div className="space-y-1 text-sm text-zinc-600 dark:text-zinc-400">
-          <p>
-            <span className="font-medium">{t('dateLabel')}:</span>{' '}
-            {new Date(entry.startAt).toLocaleDateString(dateLocale)}
-          </p>
           <p>
             <span className="font-medium">{t('timeRangeLabel')}</span>{' '}
             {toTimeInputValue(entry.startAt)} — {toTimeInputValue(entry.endAt)}{' '}
@@ -136,6 +165,27 @@ const MyEntries: FC = () => {
   const listRequestRef = useRef(0);
   const loadingMoreRef = useRef(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const dateLocale = useDateLocale();
+
+  const [view, setView] = useState<'list' | 'calendar'>('list');
+  // Kalenderansicht: laedt genau den sichtbaren Monat/die sichtbare Woche.
+  const [calendarEntries, setCalendarEntries] = useState<TimeEntry[]>([]);
+  const [calendarRange, setCalendarRange] = useState<{ start: string; end: string } | null>(null);
+  const handleVisibleRangeChange = useCallback(({ start, end }: { start: Date; end: Date }) => {
+    setCalendarRange({ start: start.toISOString(), end: end.toISOString() });
+  }, []);
+
+  const dayGroups = useMemo(() => groupByDay(entries), [entries]);
+  const calendarEvents = useMemo(
+    () =>
+      calendarEntries.map((entry) => ({
+        id: entry.id,
+        title: `${entry.project.customerName} - ${entry.project.title}`,
+        start: entry.startAt,
+        end: entry.endAt,
+      })),
+    [calendarEntries],
+  );
 
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
   const [editCategories, setEditCategories] = useState<Category[]>([]);
@@ -177,7 +227,10 @@ const MyEntries: FC = () => {
         startAt,
         endAt,
       });
-      setEntries((prev) => prev.map((entry) => (entry.id === editingEntry.id ? { ...entry, ...updated } : entry)));
+      const applyUpdate = (prev: TimeEntry[]) =>
+        prev.map((entry) => (entry.id === editingEntry.id ? { ...entry, ...updated } : entry));
+      setEntries(applyUpdate);
+      setCalendarEntries(applyUpdate);
       handleCancelEdit();
       showToast(t('updateSuccess'), 'success');
     } catch (err) {
@@ -193,6 +246,7 @@ const MyEntries: FC = () => {
     try {
       await deleteTimeEntry(id);
       setEntries((prev) => prev.filter((entry) => entry.id !== id));
+      setCalendarEntries((prev) => prev.filter((entry) => entry.id !== id));
       showToast(t('deleteSuccess'), 'success');
     } catch (err) {
       console.error('Fehler beim Löschen des Zeiteintrags:', err);
@@ -285,6 +339,50 @@ const MyEntries: FC = () => {
     return () => observer.disconnect();
   }, [nextCursor, isLoading, isLoadingMore, loadMoreError, loadMore]);
 
+  // Kalenderansicht: genau den sichtbaren Monat/die sichtbare Woche laden
+  // (ohne limit - der Zeitraum ist von sich aus klein).
+  useEffect(() => {
+    if (view !== 'calendar' || !calendarRange) return;
+    if (!getApiBaseUrlOrNull() || !selectedOrgId) return;
+
+    const controller = new AbortController();
+    let cancelled = false;
+
+    const fetchVisibleRange = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const page = await getTimeEntries(selectedOrgId, {
+          startDate: calendarRange.start,
+          endDate: calendarRange.end,
+          signal: controller.signal,
+        });
+        if (cancelled) return;
+        setCalendarEntries(page.timeEntries);
+      } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') return;
+        if (cancelled) return;
+        console.error('Fehler beim Laden der Zeiteinträge:', err);
+        setError(t('loadError'));
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+
+    fetchVisibleRange();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, selectedOrgId, calendarRange]);
+
+  const handleEventClick = (eventId: string | number) => {
+    const entry = calendarEntries.find((e) => e.id === String(eventId));
+    if (entry) handleEdit(entry);
+  };
+
   return (
     <section className="space-y-4">
       <div>
@@ -311,15 +409,23 @@ const MyEntries: FC = () => {
               </select>
             </div>
           )}
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            {isLoading
-              ? t('loadingEntries')
-              : nextCursor
-                ? t('entriesShownCountMore', { count: entries.length })
-                : t('entriesFoundCount', { count: entries.length })}
-          </p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              {isLoading
+                ? t('loadingEntries')
+                : view === 'calendar'
+                  ? t('entriesFoundCount', { count: calendarEntries.length })
+                  : nextCursor
+                    ? t('entriesShownCountMore', { count: entries.length })
+                    : t('entriesFoundCount', { count: entries.length })}
+            </p>
+            <div className="flex gap-2 shrink-0">
+              <button onClick={() => setView('list')} className={`px-2 sm:px-3 py-1 text-sm rounded ${view === 'list' ? 'bg-zinc-200 dark:bg-zinc-700' : ''}`}>{t('listView')}</button>
+              <button onClick={() => setView('calendar')} className={`px-2 sm:px-3 py-1 text-sm rounded ${view === 'calendar' ? 'bg-zinc-200 dark:bg-zinc-700' : ''}`}>{t('calendarView')}</button>
+            </div>
+          </div>
         </div>
-        {error && entries.length === 0 && (
+        {error && (view === 'calendar' ? calendarEntries : entries).length === 0 && (
           <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 mt-3">
             <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
           </div>
@@ -445,22 +551,44 @@ const MyEntries: FC = () => {
         );
       })()}
 
-      {isLoading ? (
+      {view === 'calendar' ? (
+        // Immer gemountet (auch waehrend des Ladens), sonst ginge beim Blaettern
+        // der gewaehlte Monat verloren.
+        <CalendarView
+          events={calendarEvents}
+          onEventClick={handleEventClick}
+          onVisibleRangeChange={handleVisibleRangeChange}
+        />
+      ) : isLoading ? (
         <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 p-4 text-center">
           <p className="text-zinc-600 dark:text-zinc-400">{t('loadingEntriesEllipsis')}</p>
         </div>
       ) : entries.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 gap-3">
-            {entries.map((entry) => (
-              <EntryItem
-                key={entry.id}
-                entry={entry}
-                onEdit={handleEdit}
-                onDelete={(id) => setConfirmDeleteId(id)}
-                canManage={canManageSelectedOrganization}
-                canEdit={canEditEntry(entry)}
-              />
+          <div className="grid grid-cols-1 gap-5">
+            {dayGroups.map((group) => (
+              <div key={group.key} className="space-y-2">
+                <div className="flex items-baseline justify-between gap-3 border-b border-zinc-200 dark:border-zinc-700 pb-1">
+                  <h2 className="min-w-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                    {group.date.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                  </h2>
+                  <span className="shrink-0 text-sm text-zinc-600 dark:text-zinc-400">
+                    {t('dayTotal', { duration: formatMinutes(group.totalMinutes) })}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
+                  {group.entries.map((entry) => (
+                    <EntryItem
+                      key={entry.id}
+                      entry={entry}
+                      onEdit={handleEdit}
+                      onDelete={(id) => setConfirmDeleteId(id)}
+                      canManage={canManageSelectedOrganization}
+                      canEdit={canEditEntry(entry)}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
           {nextCursor && (

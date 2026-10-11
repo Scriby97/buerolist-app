@@ -86,7 +86,17 @@
     "confirmDeleteTitle": "Elimina voce",
     "confirmDeleteMessage": "Vuoi davvero eliminare questa voce?",
     "loadMore": "Carica altro",
-    "loadingMore": "Caricamento di altre voci…"
+    "loadingMore": "Caricamento di altre voci…",
+    "listView": "Elenco",
+    "calendarView": "Calendario",
+    "dayTotal": "Totale {duration}"
+  },
+  "calendar": {
+    "today": "Oggi",
+    "month": "Mese",
+    "week": "Settimana",
+    "previous": "Indietro",
+    "next": "Avanti"
   },
   "customersOverview": {
     "title": "Clienti",

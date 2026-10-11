@@ -86,7 +86,17 @@
     "confirmDeleteTitle": "Supprimer l'entrée",
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette entrée ?",
     "loadMore": "Charger plus",
-    "loadingMore": "Chargement d'autres entrées…"
+    "loadingMore": "Chargement d'autres entrées…",
+    "listView": "Liste",
+    "calendarView": "Calendrier",
+    "dayTotal": "Total {duration}"
+  },
+  "calendar": {
+    "today": "Aujourd'hui",
+    "month": "Mois",
+    "week": "Semaine",
+    "previous": "Précédent",
+    "next": "Suivant"
   },
   "customersOverview": {
     "title": "Clients",

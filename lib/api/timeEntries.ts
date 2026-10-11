@@ -46,6 +46,9 @@ export interface GetTimeEntriesOptions {
   cursor?: string
   // Nur Eintraege eines bestimmten Projekts (Projekt-Detailansicht).
   projectId?: string
+  // Zeitraum (ISO, nur zusammen) fuer die Kalenderansicht - filtert nach startAt.
+  startDate?: string
+  endDate?: string
   signal?: AbortSignal
 }
 
@@ -65,6 +68,10 @@ export async function getTimeEntries(
   }
   if (options.projectId) {
     url.searchParams.set('projectId', options.projectId)
+  }
+  if (options.startDate && options.endDate) {
+    url.searchParams.set('startDate', options.startDate)
+    url.searchParams.set('endDate', options.endDate)
   }
   if (options.limit) {
     url.searchParams.set('limit', String(options.limit))
