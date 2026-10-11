@@ -87,7 +87,7 @@ export default function CreateOrganizationSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
       <div className="max-w-md w-full text-center bg-white dark:bg-zinc-800 shadow-lg rounded-lg p-8">
         <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   }, [userProfile, hasOrganization])
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4 py-10 flex items-center justify-center">
+    <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 py-10 flex items-center justify-center">
       <div className="max-w-3xl w-full">
         <div className="flex items-center justify-end gap-3 mb-6 text-sm">
           {supabaseUser?.email && (

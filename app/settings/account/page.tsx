@@ -77,14 +77,14 @@ export default function SettingsAccountPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4 pt-20 pb-24 md:pt-8 md:pb-8">
+    <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 pt-20 pb-24 md:pt-8 md:pb-8">
       <ToastContainer toasts={toasts} onRemove={removeToast} />
       <div className="max-w-3xl mx-auto space-y-6">
         <Breadcrumbs

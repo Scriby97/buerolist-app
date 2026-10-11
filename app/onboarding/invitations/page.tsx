@@ -88,7 +88,7 @@ export default function OnboardingInvitationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4 py-10 flex items-center justify-center">
+    <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 py-10 flex items-center justify-center">
       <div className="max-w-2xl w-full space-y-6">
         <div>
           <Link href={backHref} className="text-sm text-blue-600 dark:text-blue-400 hover:underline">

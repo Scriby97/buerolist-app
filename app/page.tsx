@@ -59,7 +59,7 @@ export default function Home() {
 
   if (userProfile && !hasOrganization) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
+      <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-zinc-600 dark:text-zinc-400">{t("redirectingToOnboarding")}</p>
@@ -69,9 +69,9 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-black font-sans">
+    <div className="flex min-h-dvh bg-zinc-50 dark:bg-black font-sans">
       {/* Left menu - Hidden on mobile */}
-      <aside className="hidden md:flex md:w-64 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0b0b0b] px-6 py-8 flex-col h-screen sticky top-0">
+      <aside className="hidden md:flex md:w-64 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#0b0b0b] px-6 py-8 flex-col h-dvh sticky top-0">
         <div className="mb-8 flex-shrink-0 space-y-3">
           <button
             type="button"

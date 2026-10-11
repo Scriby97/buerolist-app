@@ -82,7 +82,7 @@ export default function AdminOrganizationsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     )
@@ -93,7 +93,7 @@ export default function AdminOrganizationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-900">
+    <div className="min-h-dvh bg-white dark:bg-zinc-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 md:py-8 space-y-6">
         <Breadcrumbs
           items={[

@@ -86,7 +86,7 @@ const LoginPage: FC = () => {
   // das Formular) - bis die Middleware auf / weiterleitet.
   if (isRecoveryRedirect || redirecting || supabaseUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
+      <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
         <div className="max-w-md w-full text-center">
           <div className="bg-white dark:bg-zinc-800 shadow-lg rounded-lg p-8">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -98,7 +98,7 @@ const LoginPage: FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">

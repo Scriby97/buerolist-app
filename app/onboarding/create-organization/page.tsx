@@ -169,7 +169,7 @@ export default function CreateOrganizationOnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4 py-10">
+    <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 py-10">
       <div className="max-w-5xl mx-auto space-y-8">
         <div>
           <Link href={backHref} className="text-sm text-blue-600 dark:text-blue-400 hover:underline">

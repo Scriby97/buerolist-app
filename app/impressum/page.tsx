@@ -8,7 +8,7 @@ export default function ImpressumPage() {
   const t = useTranslations('impressum')
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900 px-4 py-8">
+    <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 py-8">
       <div className="max-w-2xl mx-auto space-y-6">
         <Breadcrumbs items={[{ label: 'Dashboard', href: '/' }, { label: t('title') }]} />
 

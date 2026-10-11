@@ -57,7 +57,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4 py-8">
+    <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4 py-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{t('title')}</h1>
