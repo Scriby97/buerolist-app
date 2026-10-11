@@ -10,16 +10,20 @@ import { OrgSwitcher } from "./OrgSwitcher";
 // eigenen, tab-state-gebundenen Header behaelt).
 export function MobileHeader() {
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bg-zinc-950 border-b border-zinc-800 px-5 py-4 flex items-center justify-between z-50">
+    <div className="md:hidden fixed top-0 left-0 right-0 bg-zinc-950 border-b border-zinc-800 px-5 py-4 flex items-center gap-3 z-50">
       <Link href="/" className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity">
         <Image src="/buerolist-logo-dark.svg" alt="Bürolist" width={26} height={26} />
         <h2 className="text-base font-semibold text-zinc-50">Bürolist</h2>
       </Link>
-      <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
+      {/* Kein justify-end: wuerde bei Platzmangel nach links ueber das Logo
+          ueberlaufen. Stattdessen fuellt der OrgSwitcher den Rest und kuerzt. */}
+      <div className="flex items-center gap-2 min-w-0 flex-1">
         <div className="shrink-0">
           <InstallPrompt />
         </div>
-        <OrgSwitcher onDark />
+        <div className="min-w-0 flex-1">
+          <OrgSwitcher onDark />
+        </div>
       </div>
     </div>
   );
