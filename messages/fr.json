@@ -386,7 +386,7 @@
     "logoChooseButton": "Choisir un logo",
     "logoRemoveButton": "Supprimer",
     "logoInvalidType": "Choisis une image PNG, JPEG ou WebP.",
-    "logoTooLarge": "L'image ne doit pas dépasser 2 Mo.",
+    "logoTooLarge": "L'image ne doit pas dépasser 30 Mo.",
     "logoProcessingFailed": "L'image n'a pas pu être traitée."
   },
   "onboardingCreateOrgSuccess": {
@@ -732,7 +732,7 @@
     "nameErrorGeneric": "Le nom n'a pas pu être enregistré.",
     "logoErrorGeneric": "Le logo n'a pas pu être enregistré.",
     "invalidImageType": "Choisis une image PNG, JPEG ou WebP.",
-    "imageTooLarge": "L'image ne doit pas dépasser 2 Mo.",
+    "imageTooLarge": "L'image ne doit pas dépasser 30 Mo.",
     "imageProcessingFailed": "L'image n'a pas pu être traitée.",
     "saveSuccess": "Modifications enregistrées",
     "logoPendingHint": "Ne sera appliqué qu'à l'enregistrement.",

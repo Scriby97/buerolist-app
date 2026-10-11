@@ -1,4 +1,7 @@
-const MAX_INPUT_BYTES = 2 * 1024 * 1024
+// Das Originalbild wird ohnehin verkleinert (hochgeladen wird nur das
+// Ergebnis) - daher nur ein grobes Limit gegen Speicherprobleme beim
+// Dekodieren, damit auch Handyfotos (3-15 MB) direkt funktionieren.
+const MAX_INPUT_BYTES = 30 * 1024 * 1024
 const ACCEPTED_TYPES = ['image/png', 'image/jpeg', 'image/webp']
 
 export class ImageValidationError extends Error {}
@@ -19,7 +22,12 @@ export async function resizeToSquareWebp(
     throw new ImageValidationError('too-large')
   }
 
-  const bitmap = await loadBitmap(file)
+  let bitmap: ImageBitmap | HTMLImageElement
+  try {
+    bitmap = await loadBitmap(file)
+  } catch {
+    throw new ImageValidationError('decode-failed')
+  }
   try {
     const canvas = document.createElement('canvas')
     canvas.width = size
