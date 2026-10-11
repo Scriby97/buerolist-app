@@ -47,6 +47,62 @@ export async function resizeToSquareWebp(
   }
 }
 
+// Fotos (z.B. Baustellenfotos an Notizen) kommen direkt vom Handy und sind
+// oft 3-15 MB gross - sie werden ohnehin verkleinert, daher nur ein grobes
+// Limit gegen Speicherprobleme beim Dekodieren.
+const MAX_PHOTO_INPUT_BYTES = 30 * 1024 * 1024
+// HEIC/HEIF: iOS konvertiert beim Auswählen meist selbst nach JPEG; falls
+// nicht, kann Safari HEIC trotzdem dekodieren (andere Browser: decode-failed).
+const ACCEPTED_PHOTO_TYPES = [...ACCEPTED_TYPES, 'image/heic', 'image/heif']
+
+/**
+ * Verkleinert ein Foto auf max. `maxDimension` px an der längeren Seite,
+ * OHNE Zuschnitt (anders als resizeToSquareWebp fürs Logo), und kodiert als
+ * JPEG - überall unterstützt (Safari < 17 kann kein WebP-Encoding) und für
+ * Fotos kompakt (typisch 200-600 KB statt mehrerer MB).
+ * Wirft ImageValidationError bei falschem Typ / zu grosser / defekter Datei.
+ */
+export async function resizePhoto(
+  file: File,
+  maxDimension = 1600,
+): Promise<Blob> {
+  if (file.type && !ACCEPTED_PHOTO_TYPES.includes(file.type)) {
+    throw new ImageValidationError('unsupported-type')
+  }
+  if (file.size > MAX_PHOTO_INPUT_BYTES) {
+    throw new ImageValidationError('too-large')
+  }
+
+  let bitmap: ImageBitmap | HTMLImageElement
+  try {
+    bitmap = await loadBitmap(file)
+  } catch {
+    throw new ImageValidationError('decode-failed')
+  }
+  try {
+    const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bitmap.width * scale)
+    canvas.height = Math.round(bitmap.height * scale)
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new ImageValidationError('canvas-unavailable')
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+
+    return await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (blob) =>
+          blob
+            ? resolve(blob)
+            : reject(new ImageValidationError('encode-failed')),
+        'image/jpeg',
+        0.85,
+      )
+    })
+  } finally {
+    if ('close' in bitmap) (bitmap as ImageBitmap).close()
+  }
+}
+
 async function loadBitmap(file: File): Promise<ImageBitmap | HTMLImageElement> {
   if (typeof createImageBitmap === 'function') {
     return createImageBitmap(file)

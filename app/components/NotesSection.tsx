@@ -7,7 +7,7 @@ import { useAuth } from '@/lib/auth/AuthProvider';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { createNote, addNotePhoto, deleteNotePhoto, deleteNote, type Note } from '@/lib/api/notes';
-import { resizeToSquareWebp, ImageValidationError } from '@/lib/images/resizeImage';
+import { resizePhoto, ImageValidationError } from '@/lib/images/resizeImage';
 import { ConfirmDialog } from './ConfirmDialog';
 
 interface NotesSectionProps {
@@ -60,14 +60,14 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
     setUploadingNoteId(noteId);
     setError(null);
     try {
-      const blob = await resizeToSquareWebp(file);
+      const blob = await resizePhoto(file);
       const photo = await addNotePhoto(noteId, blob);
       onChanged(
         notes.map((n) => (n.id === noteId ? { ...n, photos: [...n.photos, photo] } : n)),
       );
     } catch (err) {
       if (err instanceof ImageValidationError) {
-        setError(t('photoInvalid'));
+        setError(t(err.message === 'too-large' ? 'photoTooLarge' : 'photoInvalid'));
       } else {
         setError(getApiErrorMessage(err, t('photoUploadError')));
       }

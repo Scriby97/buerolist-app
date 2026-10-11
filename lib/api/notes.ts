@@ -41,7 +41,8 @@ export async function createNote(data: {
 
 export async function addNotePhoto(noteId: string, file: Blob): Promise<NotePhoto> {
   const form = new FormData()
-  form.append('file', file, 'photo.webp')
+  const ext = file.type === 'image/jpeg' ? 'jpg' : file.type === 'image/png' ? 'png' : 'webp'
+  form.append('file', file, `photo.${ext}`)
 
   const res = await authenticatedFetch(buildApiUrl(`/notes/${noteId}/photos`), {
     method: 'POST',
