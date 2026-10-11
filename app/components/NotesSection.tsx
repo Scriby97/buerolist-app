@@ -47,7 +47,7 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
     setError(null);
     try {
       const note = await createNote({ customerId, projectId, text: text.trim() });
-      onChanged([note, ...notes]);
+      onChanged([{ ...note, photos: note.photos ?? [] }, ...notes]);
       setText('');
     } catch (err) {
       setError(getApiErrorMessage(err, t('createError')));
