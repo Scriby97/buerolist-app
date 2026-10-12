@@ -23,10 +23,18 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
   const [address, setAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Pflichtfeld-Hinweis: der Speichern-Button bleibt bewusst aktiv, damit ein
+  // Klick ohne Eingabe erklaert, was fehlt (statt still nichts zu tun).
+  const [nameMissing, setNameMissing] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.trim() || !selectedOrgId) return;
+    if (!name.trim()) {
+      setNameMissing(true);
+      document.getElementById('customerName')?.focus();
+      return;
+    }
+    if (!selectedOrgId) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -57,12 +65,22 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
             </label>
             <input
               id="customerName"
-              required
+              aria-required="true"
+              aria-invalid={nameMissing}
+              aria-describedby={nameMissing ? 'customerName-error' : undefined}
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-sm dark:bg-zinc-700 dark:text-zinc-100 focus:border-blue-500 focus:ring-blue-500"
+              onChange={(e) => {
+                setName(e.target.value);
+                if (nameMissing) setNameMissing(false);
+              }}
+              className={`w-full px-3 py-2 border ${nameMissing ? 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-zinc-300 dark:border-zinc-600 focus:border-blue-500 focus:ring-blue-500'} rounded-lg text-sm dark:bg-zinc-700 dark:text-zinc-100`}
               placeholder={t('namePlaceholder')}
             />
+            {nameMissing && (
+              <p id="customerName-error" className="text-sm text-red-600 dark:text-red-400">
+                {t('nameRequired')}
+              </p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -120,7 +138,7 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
             </button>
             <button
               type="submit"
-              disabled={submitting || !name.trim()}
+              disabled={submitting}
               className="px-4 py-2 text-sm rounded-lg bg-brown-600 hover:bg-brown-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? t('submitting') : t('submitButton')}

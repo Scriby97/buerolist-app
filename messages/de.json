@@ -149,7 +149,8 @@
     "addressLabel": "Adresse",
     "createError": "Fehler beim Anlegen des Kunden",
     "submitting": "Wird erstellt...",
-    "submitButton": "Kunde erstellen"
+    "submitButton": "Kunde erstellen",
+    "nameRequired": "Bitte gib einen Namen für den Kunden ein."
   },
   "createProject": {
     "title": "Projekt hinzufügen",
@@ -158,7 +159,8 @@
     "categoriesLabel": "Kategorien",
     "createError": "Fehler beim Anlegen des Projekts",
     "submitting": "Wird erstellt...",
-    "submitButton": "Projekt erstellen"
+    "submitButton": "Projekt erstellen",
+    "titleRequired": "Bitte gib eine Projektbezeichnung ein."
   },
   "notesSection": {
     "title": "Notizen",

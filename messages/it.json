@@ -149,7 +149,8 @@
     "addressLabel": "Indirizzo",
     "createError": "Errore durante la creazione del cliente",
     "submitting": "Creazione in corso...",
-    "submitButton": "Crea cliente"
+    "submitButton": "Crea cliente",
+    "nameRequired": "Inserisci un nome per il cliente."
   },
   "createProject": {
     "title": "Aggiungi progetto",
@@ -158,7 +159,8 @@
     "categoriesLabel": "Categorie",
     "createError": "Errore durante la creazione del progetto",
     "submitting": "Creazione in corso...",
-    "submitButton": "Crea progetto"
+    "submitButton": "Crea progetto",
+    "titleRequired": "Inserisci una denominazione del progetto."
   },
   "notesSection": {
     "title": "Note",

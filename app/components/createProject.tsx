@@ -24,6 +24,9 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Pflichtfeld-Hinweis: der Speichern-Button bleibt bewusst aktiv, damit ein
+  // Klick ohne Eingabe erklaert, was fehlt (statt still nichts zu tun).
+  const [titleMissing, setTitleMissing] = useState(false);
 
   useEffect(() => {
     if (!selectedOrgId) return;
@@ -32,7 +35,12 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!title.trim() || !selectedOrgId) return;
+    if (!title.trim()) {
+      setTitleMissing(true);
+      document.getElementById('projectTitle')?.focus();
+      return;
+    }
+    if (!selectedOrgId) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -62,12 +70,22 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
             </label>
             <input
               id="projectTitle"
-              required
+              aria-required="true"
+              aria-invalid={titleMissing}
+              aria-describedby={titleMissing ? 'projectTitle-error' : undefined}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-sm dark:bg-zinc-700 dark:text-zinc-100 focus:border-blue-500 focus:ring-blue-500"
+              onChange={(e) => {
+                setTitle(e.target.value);
+                if (titleMissing) setTitleMissing(false);
+              }}
+              className={`w-full px-3 py-2 border ${titleMissing ? 'border-red-500 dark:border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-zinc-300 dark:border-zinc-600 focus:border-blue-500 focus:ring-blue-500'} rounded-lg text-sm dark:bg-zinc-700 dark:text-zinc-100`}
               placeholder={t('titlePlaceholder')}
             />
+            {titleMissing && (
+              <p id="projectTitle-error" className="text-sm text-red-600 dark:text-red-400">
+                {t('titleRequired')}
+              </p>
+            )}
           </div>
 
           {categories.length > 0 && (
@@ -122,7 +140,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
             </button>
             <button
               type="submit"
-              disabled={submitting || !title.trim()}
+              disabled={submitting}
               className="px-4 py-2 text-sm rounded-lg bg-brown-600 hover:bg-brown-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? t('submitting') : t('submitButton')}
