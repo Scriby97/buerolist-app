@@ -25,6 +25,7 @@ interface PlanDefinition {
   price: string
   maxProjects: string
   maxMembers: string
+  maxCustomers: string
   paid: boolean
   highlight?: boolean
 }
@@ -43,8 +44,9 @@ export default function CreateOrganizationOnboardingPage() {
       id: 'free',
       label: tTier('free'),
       price: t('freeLabel'),
-      maxProjects: '1',
-      maxMembers: '2',
+      maxProjects: '8',
+      maxMembers: '5',
+      maxCustomers: '8',
       paid: false,
     },
     {
@@ -53,6 +55,7 @@ export default function CreateOrganizationOnboardingPage() {
       price: `CHF 39.- ${t('perMonthSuffix')}`,
       maxProjects: t('unlimitedLabel'),
       maxMembers: t('unlimitedLabel'),
+      maxCustomers: t('unlimitedLabel'),
       paid: true,
       highlight: true,
     },
@@ -217,6 +220,7 @@ export default function CreateOrganizationOnboardingPage() {
                     <ul className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
                       <li>{plan.maxProjects} {t('projectsSuffix')}</li>
                       <li>{plan.maxMembers} {t('membersSuffix')}</li>
+                      <li>{plan.maxCustomers} {t('customersSuffix')}</li>
                     </ul>
                   </button>
                 )

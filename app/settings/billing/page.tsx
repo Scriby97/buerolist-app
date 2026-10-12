@@ -22,6 +22,7 @@ interface PlanDefinition {
   price: string
   maxProjects: string
   maxMembers: string
+  maxCustomers: string
   paid: boolean
 }
 
@@ -47,8 +48,8 @@ export default function SettingsBillingPage() {
   const [portalLoading, setPortalLoading] = useState(false)
 
   const plans: PlanDefinition[] = [
-    { id: 'free', label: tTier('free'), price: t('freeLabel'), maxProjects: '1', maxMembers: '2', paid: false },
-    { id: 'pro', label: tTier('pro'), price: `CHF 39.- ${t('perMonthSuffix')}`, maxProjects: t('unlimitedLabel'), maxMembers: t('unlimitedLabel'), paid: true },
+    { id: 'free', label: tTier('free'), price: t('freeLabel'), maxProjects: '8', maxMembers: '5', maxCustomers: '8', paid: false },
+    { id: 'pro', label: tTier('pro'), price: `CHF 39.- ${t('perMonthSuffix')}`, maxProjects: t('unlimitedLabel'), maxMembers: t('unlimitedLabel'), maxCustomers: t('unlimitedLabel'), paid: true },
   ]
 
   useEffect(() => {
@@ -250,6 +251,7 @@ export default function SettingsBillingPage() {
                       <ul className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
                         <li>{plan.maxProjects} {t('projectsSuffix')}</li>
                         <li>{plan.maxMembers} {t('membersSuffix')}</li>
+                        <li>{plan.maxCustomers} {t('customersSuffix')}</li>
                       </ul>
                       <button
                         type="button"

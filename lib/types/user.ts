@@ -54,6 +54,7 @@ export interface OrganizationMemberDetail {
 export interface SubscriptionLimits {
   maxProjects: number | null
   maxMembers: number | null
+  maxCustomers: number | null
   priceChf: number
 }
 
