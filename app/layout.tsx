@@ -41,9 +41,35 @@ export const viewport: Viewport = {
   themeColor: "#1b2126",
 };
 
+// Absolute Basis-URL fuer Open-Graph-Bilder (WhatsApp & Co. brauchen absolute
+// URLs). VERCEL_PROJECT_PRODUCTION_URL setzt Vercel automatisch beim Build.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
+const siteDescription = "Arbeitszeiterfassung pro Kunde und Projekt für Handwerksbetriebe";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Bürolist - Arbeitszeiterfassung",
-  description: "Zeiterfassung pro Kunde und Projekt für Handwerksbetriebe",
+  description: siteDescription,
+  // Link-Vorschau beim Teilen (WhatsApp, Teams, Mail ...) - z.B. ueber
+  // "App teilen" in der Mitarbeiterverwaltung.
+  openGraph: {
+    type: "website",
+    siteName: "Bürolist",
+    title: "Bürolist",
+    description: siteDescription,
+    url: "/",
+    locale: "de_CH",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Bürolist" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bürolist",
+    description: siteDescription,
+    images: ["/og-image.png"],
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

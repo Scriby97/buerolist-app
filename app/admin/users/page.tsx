@@ -230,7 +230,9 @@ export default function UsersPage() {
   }
 
   const handleShareApp = async () => {
-    const url = 'https://buerolist-frontend.vercel.app'
+    // Immer die Adresse, unter der die App gerade laeuft (Produktion,
+    // Preview oder localhost) - kein fest verdrahteter Platzhalter.
+    const url = window.location.origin
     if (navigator.share) {
       try {
         await navigator.share({ url, title: 'Bürolist' })
