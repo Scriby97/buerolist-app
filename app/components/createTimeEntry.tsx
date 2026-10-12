@@ -8,7 +8,7 @@ import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useToast } from '@/lib/hooks/useToast';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { getProjects, getProjectDetail, type Project } from '@/lib/api/projects';
-import { createTimeEntry } from '@/lib/api/timeEntries';
+import { createTimeEntry, getTimeEntries } from '@/lib/api/timeEntries';
 import type { Category } from '@/lib/api/categories';
 import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
@@ -21,8 +21,19 @@ interface FormState {
   endTime: string;
 }
 
+const pad2 = (n: number) => String(n).padStart(2, '0');
+
+// Lokales Datum (YYYY-MM-DD) - nicht toISOString(), das waere UTC und
+// lieferte z.B. zwischen 00:00 und 02:00 Schweizer Zeit noch den Vortag.
 function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0];
+  const now = new Date();
+  return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
+}
+
+// ISO-Zeitpunkt -> lokale Uhrzeit "HH:MM" (Format von <input type="time">).
+function toLocalTime(iso: string): string {
+  const d = new Date(iso);
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
 }
 
 // Zwischenspeicherung der Formular-Eingaben, damit ein Mitarbeiter offline
@@ -56,7 +67,7 @@ interface CreateTimeEntryProps {
 }
 
 const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) => {
-  const { isAdmin } = useAuth();
+  const { isAdmin, userProfile } = useAuth();
   const { organizations, selectedOrgId, setSelectedOrgId, canManageSelectedOrganization } = useOrganization();
   const { toasts, showToast, removeToast } = useToast();
   const t = useTranslations('createTimeEntry');
@@ -79,6 +90,9 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   const [error, setError] = useState<string | null>(null);
   const [timeError, setTimeError] = useState<string | null>(null);
   const currentProjectIdRef = useRef<string>('');
+  // Zuletzt automatisch vorgeschlagene Startzeit - nur diese (oder eine leere)
+  // wird bei einem Datumswechsel ersetzt, nie eine von Hand eingegebene.
+  const autoStartTimeRef = useRef<string>('');
   const [activeDraftOrgId, setActiveDraftOrgId] = useState<string | null>(null);
   const [dismissedNoProjectsDialog, setDismissedNoProjectsDialog] = useState(false);
   const showNoProjectsDialog =
@@ -114,6 +128,42 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     }
   }, [formData, selectedOrgId, activeDraftOrgId]);
 
+  // Ende des letzten eigenen Eintrags am gewaehlten Tag (projektunabhaengig)
+  // als Startzeit vorschlagen, damit Eintraege lueckenlos aneinander
+  // anschliessen. Admin/Owner bekommen alle Eintraege der Organisation -
+  // daher clientseitig auf die eigenen filtern.
+  const userId = userProfile?.id;
+  useEffect(() => {
+    if (!selectedOrgId || !userId || activeDraftOrgId !== selectedOrgId || !formData.date) return;
+    const date = formData.date;
+    const controller = new AbortController();
+
+    getTimeEntries(selectedOrgId, {
+      startDate: new Date(`${date}T00:00:00`).toISOString(),
+      endDate: new Date(`${date}T23:59:59.999`).toISOString(),
+      signal: controller.signal,
+    })
+      .then(({ timeEntries }) => {
+        const ownEndTimes = timeEntries
+          .filter((entry) => entry.creatorId === userId)
+          .map((entry) => entry.endAt)
+          .sort();
+        const latestEndAt = ownEndTimes[ownEndTimes.length - 1];
+        const suggestion = latestEndAt ? toLocalTime(latestEndAt) : '';
+        setFormData((prev) => {
+          if (prev.date !== date) return prev;
+          if (prev.startTime !== '' && prev.startTime !== autoStartTimeRef.current) return prev;
+          autoStartTimeRef.current = suggestion;
+          return prev.startTime === suggestion ? prev : { ...prev, startTime: suggestion };
+        });
+      })
+      .catch(() => {
+        // Offline/abgebrochen - dann eben keine Vorbelegung.
+      });
+
+    return () => controller.abort();
+  }, [formData.date, selectedOrgId, userId, activeDraftOrgId]);
+
   const fetchProjectCategories = useCallback(async (projectId: string) => {
     if (!projectId) {
       setCategories([]);
@@ -148,10 +198,15 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     }
   };
 
-  const handleSaveSuccess = (projectId: string, categoryId: string) => {
+  const handleSaveSuccess = (projectId: string, categoryId: string, savedDate: string, savedEndTime: string) => {
     // Zuletzt gewaehltes Projekt/Kategorie bleiben fuer die naechste
-    // Erfassung voreingestellt - nur die Uhrzeiten werden zurueckgesetzt.
-    setFormData({ projectId, categoryId, date: getTodayDate(), startTime: '', endTime: '' });
+    // Erfassung voreingestellt. Die neue Startzeit ist das Ende des eben
+    // gespeicherten Eintrags (falls fuer heute erfasst; sonst laedt der
+    // Effekt oben den Vorschlag fuer heute).
+    const today = getTodayDate();
+    const startTime = savedDate === today ? savedEndTime : '';
+    autoStartTimeRef.current = startTime;
+    setFormData({ projectId, categoryId, date: today, startTime, endTime: '' });
     showToast(t('saveSuccess'), 'success');
   };
 
@@ -186,7 +241,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         startAt,
         endAt,
       });
-      handleSaveSuccess(formData.projectId, formData.categoryId);
+      handleSaveSuccess(formData.projectId, formData.categoryId, formData.date, formData.endTime);
     } catch (err) {
       handleSaveError(err);
     } finally {
