@@ -58,6 +58,7 @@ export const TimeInput: FC<TimeInputProps> = ({ id, value, onChange, required, d
   const rootRef = useRef<HTMLDivElement>(null);
   const hoursRef = useRef<HTMLDivElement>(null);
   const minutesRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   // Von aussen geaenderten Wert (z.B. vorgeschlagene Startzeit) uebernehmen.
   if (value !== lastValue) {
@@ -110,6 +111,12 @@ export const TimeInput: FC<TimeInputProps> = ({ id, value, onChange, required, d
     center(hoursRef.current, selectedHour || '07');
     center(minutesRef.current, selectedMinute ? pad2(Math.round(Number(selectedMinute) / 5) * 5 % 60) : '00');
   }, [open, selectedHour, selectedMinute]);
+
+  // In scrollbaren Containern (z.B. Bearbeiten-Dialog) die Auswahl beim
+  // Oeffnen ganz sichtbar machen, statt sie unten abzuschneiden.
+  useEffect(() => {
+    if (open) popoverRef.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [open]);
 
   const pickHour = (hour: string) => onChange(`${hour}:${selectedMinute || '00'}`);
   const pickMinute = (minute: string) => {
@@ -165,7 +172,7 @@ export const TimeInput: FC<TimeInputProps> = ({ id, value, onChange, required, d
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full z-40 mt-1 flex w-44 gap-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-1 shadow-lg">
+        <div ref={popoverRef} className="absolute left-0 top-full z-40 mt-1 flex w-44 gap-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-1 shadow-lg">
           <div ref={hoursRef} role="listbox" aria-label={t('hours')} className="max-h-56 flex-1 overflow-y-auto">
             {HOURS.map((hour) => (
               <button
