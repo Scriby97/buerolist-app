@@ -3,16 +3,19 @@
 // from FleetTrack's sw.js, ohne den Push-/Notification-Teil (siehe Plan
 // "Nicht im Scope" - Push-Erinnerungen sind fuer v1 zurueckgestellt).
 
-const CACHE_NAME = 'buerolist-v1';
-const STATIC_CACHE_NAME = 'buerolist-static-v1';
+// Version hochzaehlen, wenn sich gecachte statische Dateien (Logos, Icons)
+// aendern - beim Aktivieren werden die alten Caches geloescht. Icon-Dateinamen
+// zusaetzlich versionieren (-v2), damit Browser/OS das neue App-Icon erkennen.
+const CACHE_NAME = 'buerolist-v2';
+const STATIC_CACHE_NAME = 'buerolist-static-v2';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
   '/',
   '/manifest.webmanifest',
   '/offline.html',
-  '/icon-192x192.png',
-  '/icon-512x512.png',
+  '/icon-192x192-v2.png',
+  '/icon-512x512-v2.png',
 ];
 
 // Install event - cache static assets
