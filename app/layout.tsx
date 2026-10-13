@@ -90,6 +90,18 @@ export const metadata: Metadata = {
   },
 };
 
+const INSTALL_PROMPT_CAPTURE_SCRIPT = `
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault();
+  window.__deferredInstallPrompt = e;
+  window.dispatchEvent(new Event('installpromptchange'));
+});
+window.addEventListener('appinstalled', function () {
+  window.__deferredInstallPrompt = null;
+  window.dispatchEvent(new Event('installpromptchange'));
+});
+`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -100,6 +112,13 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        {/* Chrome feuert beforeinstallprompt nur einmal, sehr frueh beim
+            Laden - oft bevor InstallPrompt gemountet ist (z.B. waehrend die
+            Anmeldung noch laedt). Daher hier vor React abfangen und global
+            ablegen; InstallPrompt liest es von dort. */}
+        <script dangerouslySetInnerHTML={{ __html: INSTALL_PROMPT_CAPTURE_SCRIPT }} />
+      </head>
       <body
         className={`${plexSans.variable} ${plexSansCondensed.variable} ${plexMono.variable} antialiased`}
       >
