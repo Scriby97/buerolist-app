@@ -8,6 +8,8 @@ import { useAuth } from '@/lib/auth/AuthProvider';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { getTimeEntries, updateTimeEntry, deleteTimeEntry, type TimeEntry } from '@/lib/api/timeEntries';
 import { getProjectDetail } from '@/lib/api/projects';
+import { getOrganizationMembers } from '@/lib/api/organizationMembers';
+import type { OrganizationMemberDetail } from '@/lib/types/user';
 import type { Category } from '@/lib/api/categories';
 import { useToast } from '@/lib/hooks/useToast';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -179,6 +181,46 @@ const MyEntries: FC = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const dateLocale = useDateLocale();
 
+  // Mitarbeiterauswahl (nur Admin/Owner): '' = alle Personen der Organisation.
+  // Die Auswahl gilt nur fuer die Organisation, in der sie getroffen wurde -
+  // so faellt sie beim Organisationswechsel ohne zusaetzlichen Ladevorgang weg.
+  const [members, setMembers] = useState<OrganizationMemberDetail[]>([]);
+  const [creatorFilter, setCreatorFilter] = useState<{ orgId: string; creatorId: string } | null>(null);
+  const creatorId =
+    canManageSelectedOrganization && creatorFilter?.orgId === selectedOrgId
+      ? creatorFilter.creatorId || undefined
+      : undefined;
+
+  useEffect(() => {
+    if (!canManageSelectedOrganization || !selectedOrgId || !getApiBaseUrlOrNull()) {
+      setMembers([]);
+      return;
+    }
+    let cancelled = false;
+    getOrganizationMembers(selectedOrgId)
+      .then((list) => {
+        if (!cancelled) setMembers(list);
+      })
+      .catch((err) => {
+        console.error('Fehler beim Laden der Mitglieder:', err);
+        if (!cancelled) setMembers([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [canManageSelectedOrganization, selectedOrgId]);
+
+  const memberOptions = useMemo(
+    () =>
+      members
+        .map((m) => ({
+          id: m.userId,
+          name: `${m.user.firstName || ''} ${m.user.lastName || ''}`.trim() || m.user.email,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name, dateLocale)),
+    [members, dateLocale],
+  );
+
   const [view, setView] = useState<'list' | 'calendar'>('list');
   // Kalenderansicht: laedt genau den sichtbaren Monat/die sichtbare Woche.
   const [calendarEntries, setCalendarEntries] = useState<TimeEntry[]>([]);
@@ -268,7 +310,8 @@ const MyEntries: FC = () => {
     }
   };
 
-  // Erste Seite (neueste zuerst) laden, wenn die Organisation wechselt.
+  // Erste Seite (neueste zuerst) laden, wenn die Organisation oder die
+  // Mitarbeiterauswahl wechselt.
   // Weitere Seiten kommen ueber loadMore beim Scrollen.
   useEffect(() => {
     if (!getApiBaseUrlOrNull() || !selectedOrgId) return;
@@ -285,7 +328,7 @@ const MyEntries: FC = () => {
       setError(null);
 
       try {
-        const page = await getTimeEntries(selectedOrgId, { limit: PAGE_SIZE, signal: controller.signal });
+        const page = await getTimeEntries(selectedOrgId, { limit: PAGE_SIZE, creatorId, signal: controller.signal });
         if (requestId !== listRequestRef.current) return;
         setEntries(page.timeEntries);
         setNextCursor(page.nextCursor);
@@ -308,7 +351,7 @@ const MyEntries: FC = () => {
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedOrgId]);
+  }, [selectedOrgId, creatorId]);
 
   const loadMore = useCallback(async () => {
     if (!nextCursor || !selectedOrgId || loadingMoreRef.current) return;
@@ -318,7 +361,7 @@ const MyEntries: FC = () => {
     setLoadMoreError(false);
 
     try {
-      const page = await getTimeEntries(selectedOrgId, { limit: PAGE_SIZE, cursor: nextCursor });
+      const page = await getTimeEntries(selectedOrgId, { limit: PAGE_SIZE, cursor: nextCursor, creatorId });
       if (requestId !== listRequestRef.current) return;
 
       setEntries((prev) => {
@@ -337,7 +380,7 @@ const MyEntries: FC = () => {
         setIsLoadingMore(false);
       }
     }
-  }, [nextCursor, selectedOrgId]);
+  }, [nextCursor, selectedOrgId, creatorId]);
 
   useEffect(() => {
     const node = sentinelRef.current;
@@ -369,6 +412,7 @@ const MyEntries: FC = () => {
         const page = await getTimeEntries(selectedOrgId, {
           startDate: calendarRange.start,
           endDate: calendarRange.end,
+          creatorId,
           signal: controller.signal,
         });
         if (cancelled) return;
@@ -390,7 +434,7 @@ const MyEntries: FC = () => {
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, selectedOrgId, calendarRange]);
+  }, [view, selectedOrgId, calendarRange, creatorId]);
 
   const handleEventClick = (eventId: string | number) => {
     const entry = calendarEntries.find((e) => e.id === String(eventId));
@@ -418,6 +462,26 @@ const MyEntries: FC = () => {
                 {organizations.map(org => (
                   <option key={org.id} value={org.id}>
                     {org.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {canManageSelectedOrganization && memberOptions.length > 1 && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="entriesCreatorSelect" className="text-sm text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                {t('employeeLabel')}:
+              </label>
+              <select
+                id="entriesCreatorSelect"
+                value={creatorId ?? ''}
+                onChange={(e) => selectedOrgId && setCreatorFilter({ orgId: selectedOrgId, creatorId: e.target.value })}
+                className="flex-1 min-w-0 sm:flex-initial px-3 py-1.5 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">{t('allEmployees')}</option>
+                {memberOptions.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
                   </option>
                 ))}
               </select>

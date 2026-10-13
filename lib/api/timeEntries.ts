@@ -50,6 +50,8 @@ export interface GetTimeEntriesOptions {
   // Zeitraum (ISO, nur zusammen) fuer die Kalenderansicht - filtert nach startAt.
   startDate?: string
   endDate?: string
+  // Nur Eintraege dieser Person (Mitarbeiterauswahl fuer Admin/Owner).
+  creatorId?: string
   signal?: AbortSignal
 }
 
@@ -69,6 +71,9 @@ export async function getTimeEntries(
   }
   if (options.projectId) {
     url.searchParams.set('projectId', options.projectId)
+  }
+  if (options.creatorId) {
+    url.searchParams.set('creatorId', options.creatorId)
   }
   if (options.startDate && options.endDate) {
     url.searchParams.set('startDate', options.startDate)
