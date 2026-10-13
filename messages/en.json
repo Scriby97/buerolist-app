@@ -156,6 +156,7 @@
     "statusUpdated": "Status updated",
     "timeSummaryTitle": "Time summary",
     "timeSummaryDetails": "Details",
+    "categoryChartTitle": "Effort per category",
     "categoryColumn": "Category",
     "totalLabel": "Total",
     "noTimeEntries": "No time entries for this project yet.",

@@ -156,6 +156,7 @@
     "statusUpdated": "Stato aggiornato",
     "timeSummaryTitle": "Riepilogo tempo",
     "timeSummaryDetails": "Dettagli",
+    "categoryChartTitle": "Impegno per categoria",
     "categoryColumn": "Categoria",
     "totalLabel": "Totale",
     "noTimeEntries": "Nessuna voce di tempo per questo progetto ancora.",

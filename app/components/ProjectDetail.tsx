@@ -3,6 +3,7 @@
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { ProjectTimeReport } from './ProjectTimeReport';
+import { CategoryEffortChart } from './CategoryEffortChart';
 import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -347,6 +348,18 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                 </tr>
               </tfoot>
             </table>
+          </div>
+        )}
+        {summaryMatrix.rows.length >= 2 && (
+          <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4">
+            <CategoryEffortChart
+              title={t('categoryChartTitle')}
+              rows={summaryMatrix.rows.map((row) => ({
+                key: row.categoryId ?? 'none',
+                label: row.categoryName ?? t('noCategoryLabel'),
+                totalMinutes: row.totalMinutes,
+              }))}
+            />
           </div>
         )}
       </div>
