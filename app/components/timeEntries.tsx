@@ -40,8 +40,11 @@ interface DayGroup {
   totalMinutes: number;
 }
 
-// Eintraege (bereits neueste zuerst sortiert) nach lokalem Kalendertag gruppieren.
-function groupByDay(entries: TimeEntry[]): DayGroup[] {
+// Eintraege (bereits neueste zuerst sortiert) nach lokalem Kalendertag
+// gruppieren. Die Tage bleiben neueste zuerst, innerhalb eines Tages wird
+// zeitlich aufsteigend sortiert (07:00-09:00 vor 09:00-17:00), so wie man
+// den Arbeitstag liest.
+export function groupByDay(entries: TimeEntry[]): DayGroup[] {
   const groups: DayGroup[] = [];
   const byKey = new Map<string, DayGroup>();
   for (const entry of entries) {
@@ -55,6 +58,9 @@ function groupByDay(entries: TimeEntry[]): DayGroup[] {
     }
     group.entries.push(entry);
     group.totalMinutes += durationMinutes(entry.startAt, entry.endAt);
+  }
+  for (const group of groups) {
+    group.entries.sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
   }
   return groups;
 }
