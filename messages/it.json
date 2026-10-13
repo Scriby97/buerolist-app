@@ -21,7 +21,7 @@
   },
   "nav": {
     "createTimeEntry": "Registra tempo",
-    "myEntries": "Le mie voci",
+    "myEntries": "Voci",
     "customersOverview": "Clienti",
     "tabTimeEntry": "Registra",
     "tabMyEntries": "Voci",
@@ -63,11 +63,10 @@
     "noProjectsDialogEmployeeMessage": "Il tuo amministratore dell'organizzazione deve prima creare un cliente e un progetto prima che tu possa registrare il tempo.",
     "noProjectsDialogAdminMessage": "Crea prima un cliente e un progetto, prima che tu e il tuo team possiate registrare il tempo.",
     "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora",
-    "commentLabel": "Osservazione (facoltativa)",
-    "commentPlaceholder": "ad es. materiale ritirato, cliente assente"
+    "commentLabel": "Osservazione (facoltativa)"
   },
   "myEntries": {
-    "title": "Le mie voci",
+    "title": "Voci",
     "dateLabel": "Data",
     "timeRangeLabel": "Orario:",
     "categoryLabel": "Categoria:",
@@ -98,7 +97,9 @@
     "calendarView": "Calendario",
     "dayTotal": "Totale {duration}",
     "commentLabel": "Osservazione:",
-    "editCommentLabel": "Osservazione"
+    "editCommentLabel": "Osservazione",
+    "employeeLabel": "Collaboratore",
+    "allEmployees": "Tutti i collaboratori"
   },
   "calendar": {
     "today": "Oggi",

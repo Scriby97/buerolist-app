@@ -21,7 +21,7 @@
   },
   "nav": {
     "createTimeEntry": "Zeit erfassen",
-    "myEntries": "Meine Einträge",
+    "myEntries": "Einträge",
     "customersOverview": "Kunden",
     "tabTimeEntry": "Erfassen",
     "tabMyEntries": "Einträge",
@@ -63,11 +63,10 @@
     "noProjectsDialogEmployeeMessage": "Dein Organisationsadministrator muss zuerst einen Kunden und ein Projekt anlegen, bevor du Zeit erfassen kannst.",
     "noProjectsDialogAdminMessage": "Lege zuerst einen Kunden und ein Projekt an, bevor du und deine Mitarbeiter Zeit erfassen könnt.",
     "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen",
-    "commentLabel": "Bemerkung (optional)",
-    "commentPlaceholder": "z.B. Material abgeholt, Kunde nicht angetroffen"
+    "commentLabel": "Bemerkung (optional)"
   },
   "myEntries": {
-    "title": "Meine Einträge",
+    "title": "Einträge",
     "dateLabel": "Datum",
     "timeRangeLabel": "Zeit:",
     "categoryLabel": "Kategorie:",
@@ -98,7 +97,9 @@
     "calendarView": "Kalender",
     "dayTotal": "Total {duration}",
     "commentLabel": "Bemerkung:",
-    "editCommentLabel": "Bemerkung"
+    "editCommentLabel": "Bemerkung",
+    "employeeLabel": "Mitarbeiter",
+    "allEmployees": "Alle Mitarbeiter"
   },
   "calendar": {
     "today": "Heute",

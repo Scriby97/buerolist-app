@@ -21,7 +21,7 @@
   },
   "nav": {
     "createTimeEntry": "Log time",
-    "myEntries": "My entries",
+    "myEntries": "Entries",
     "customersOverview": "Customers",
     "tabTimeEntry": "Log",
     "tabMyEntries": "Entries",
@@ -63,11 +63,10 @@
     "noProjectsDialogEmployeeMessage": "Your organization admin needs to add a customer and a project first before you can log time.",
     "noProjectsDialogAdminMessage": "Add a customer and a project first, before you and your team can log time.",
     "noProjectsDialogAddProjectButton": "Add customer/project now",
-    "commentLabel": "Comment (optional)",
-    "commentPlaceholder": "e.g. picked up material, customer not at home"
+    "commentLabel": "Comment (optional)"
   },
   "myEntries": {
-    "title": "My entries",
+    "title": "Entries",
     "dateLabel": "Date",
     "timeRangeLabel": "Time:",
     "categoryLabel": "Category:",
@@ -98,7 +97,9 @@
     "calendarView": "Calendar",
     "dayTotal": "Total {duration}",
     "commentLabel": "Comment:",
-    "editCommentLabel": "Comment"
+    "editCommentLabel": "Comment",
+    "employeeLabel": "Employee",
+    "allEmployees": "All employees"
   },
   "calendar": {
     "today": "Today",

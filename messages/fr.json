@@ -21,7 +21,7 @@
   },
   "nav": {
     "createTimeEntry": "Saisir du temps",
-    "myEntries": "Mes entrées",
+    "myEntries": "Entrées",
     "customersOverview": "Clients",
     "tabTimeEntry": "Saisir",
     "tabMyEntries": "Entrées",
@@ -63,11 +63,10 @@
     "noProjectsDialogEmployeeMessage": "Ton administrateur d'organisation doit d'abord créer un client et un projet avant que tu puisses saisir du temps.",
     "noProjectsDialogAdminMessage": "Crée d'abord un client et un projet, avant que toi et ton équipe puissiez saisir du temps.",
     "noProjectsDialogAddProjectButton": "Créer un client/projet maintenant",
-    "commentLabel": "Remarque (facultatif)",
-    "commentPlaceholder": "p. ex. matériel récupéré, client absent"
+    "commentLabel": "Remarque (facultatif)"
   },
   "myEntries": {
-    "title": "Mes entrées",
+    "title": "Entrées",
     "dateLabel": "Date",
     "timeRangeLabel": "Heure :",
     "categoryLabel": "Catégorie :",
@@ -98,7 +97,9 @@
     "calendarView": "Calendrier",
     "dayTotal": "Total {duration}",
     "commentLabel": "Remarque :",
-    "editCommentLabel": "Remarque"
+    "editCommentLabel": "Remarque",
+    "employeeLabel": "Collaborateur",
+    "allEmployees": "Tous les collaborateurs"
   },
   "calendar": {
     "today": "Aujourd'hui",

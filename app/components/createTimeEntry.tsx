@@ -433,7 +433,6 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             maxLength={1000}
             value={formData.comment}
             onChange={(e) => setFormData((prev) => ({ ...prev, comment: e.target.value }))}
-            placeholder={t('commentPlaceholder')}
             className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
