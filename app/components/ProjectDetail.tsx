@@ -137,7 +137,15 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const summaryMatrix = buildCategoryMatrix(timeSummary, t('unknownEmployee'));
   const hasTime = summaryMatrix.rows.length > 0;
   const showTotalColumn = summaryMatrix.employees.length > 1;
-  const numCell = 'px-2 py-1.5 text-right tabular-nums whitespace-nowrap';
+  const numCell = 'px-1.5 py-1.5 text-right tabular-nums whitespace-nowrap';
+  // Kategorie-Spalte bleibt beim seitlichen Scrollen (viele Mitarbeiter) stehen.
+  const stickyCell = 'sticky left-0 z-10 bg-white dark:bg-zinc-800';
+  // Namen zweizeilig (Vorname / Rest), damit auch auf dem Handy mehrere
+  // Mitarbeiter plus Total-Spalte nebeneinander Platz haben.
+  const splitName = (name: string) => {
+    const space = name.indexOf(' ');
+    return space === -1 ? [name] : [name.slice(0, space), name.slice(space + 1)];
+  };
 
   return (
     <section className="space-y-6">
@@ -289,18 +297,20 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
         {!hasTime ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noTimeEntries')}</p>
         ) : (
-          <div className="-mx-2 overflow-x-auto">
+          <div className="-mx-1.5 overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="text-zinc-500 dark:text-zinc-400">
-                  <th scope="col" className="px-2 py-1.5 text-left font-medium">{t('categoryColumn')}</th>
+                  <th scope="col" className={`${stickyCell} px-1.5 py-1.5 text-left align-bottom font-medium`}>{t('categoryColumn')}</th>
                   {summaryMatrix.employees.map((employee) => (
-                    <th key={employee.id} scope="col" className="px-2 py-1.5 text-right font-medium whitespace-nowrap">
-                      {employee.name}
+                    <th key={employee.id} scope="col" className="px-1.5 py-1.5 text-right align-bottom font-medium leading-tight">
+                      {splitName(employee.name).map((part, idx) => (
+                        <span key={idx} className="block whitespace-nowrap">{part}</span>
+                      ))}
                     </th>
                   ))}
                   {showTotalColumn && (
-                    <th scope="col" className="px-2 py-1.5 text-right font-semibold text-zinc-700 dark:text-zinc-300">
+                    <th scope="col" className="px-1.5 py-1.5 text-right align-bottom font-semibold text-zinc-700 dark:text-zinc-300">
                       {t('totalLabel')}
                     </th>
                   )}
@@ -309,7 +319,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
               <tbody className="text-zinc-700 dark:text-zinc-300">
                 {summaryMatrix.rows.map((row) => (
                   <tr key={row.categoryId ?? 'none'} className="border-t border-zinc-100 dark:border-zinc-700/60">
-                    <th scope="row" className="px-2 py-1.5 text-left font-normal">
+                    <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left font-normal`}>
                       {row.categoryName ?? t('noCategoryLabel')}
                     </th>
                     {summaryMatrix.employees.map((employee) => (
@@ -327,7 +337,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
               </tbody>
               <tfoot>
                 <tr className="border-t-2 border-zinc-200 dark:border-zinc-600 font-semibold text-zinc-900 dark:text-zinc-50">
-                  <th scope="row" className="px-2 py-1.5 text-left">{t('totalLabel')}</th>
+                  <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left`}>{t('totalLabel')}</th>
                   {summaryMatrix.employees.map((employee) => (
                     <td key={employee.id} className={numCell}>
                       {formatHoursMinutes(summaryMatrix.minutesByEmployee[employee.id] ?? 0)}
