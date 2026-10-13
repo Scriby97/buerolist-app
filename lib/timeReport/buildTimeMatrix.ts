@@ -140,3 +140,69 @@ export function formatHoursMinutes(minutes: number): string {
   if (!minutes) return ''
   return `${Math.floor(minutes / 60)}:${pad2(minutes % 60)}`
 }
+
+// ---------------------------------------------------------------------------
+// Zeit-Zusammenfassung als Matrix Kategorie (Zeilen) x Mitarbeiter (Spalten),
+// aus den bereits serverseitig gruppierten Zeilen (Mitarbeiter+Kategorie).
+
+export interface SummaryRowInput {
+  creatorId: string
+  creatorFirstName: string | null
+  creatorLastName: string | null
+  creatorEmail: string | null
+  categoryId: string | null
+  categoryName: string | null
+  totalMinutes: number
+}
+
+export interface CategoryMatrixRow {
+  /** null = Eintraege ohne Kategorie */
+  categoryId: string | null
+  categoryName: string | null
+  minutesByEmployee: Record<string, number>
+  totalMinutes: number
+}
+
+export interface CategoryMatrix {
+  employees: MatrixEmployee[]
+  /** Nach Stunden absteigend, "ohne Kategorie" immer zuletzt */
+  rows: CategoryMatrixRow[]
+  minutesByEmployee: Record<string, number>
+  totalMinutes: number
+}
+
+export function buildCategoryMatrix(summary: SummaryRowInput[], unknownEmployeeName = '?'): CategoryMatrix {
+  const employees = new Map<string, MatrixEmployee>()
+  const rows = new Map<string, CategoryMatrixRow>()
+  const minutesByEmployee: Record<string, number> = {}
+  let totalMinutes = 0
+
+  for (const row of summary) {
+    if (!employees.has(row.creatorId)) {
+      const name = `${row.creatorFirstName ?? ''} ${row.creatorLastName ?? ''}`.trim()
+      employees.set(row.creatorId, { id: row.creatorId, name: name || row.creatorEmail || unknownEmployeeName })
+    }
+    const key = row.categoryId ?? '__none__'
+    let categoryRow = rows.get(key)
+    if (!categoryRow) {
+      categoryRow = { categoryId: row.categoryId, categoryName: row.categoryName, minutesByEmployee: {}, totalMinutes: 0 }
+      rows.set(key, categoryRow)
+    }
+    add(categoryRow.minutesByEmployee, row.creatorId, row.totalMinutes)
+    categoryRow.totalMinutes += row.totalMinutes
+    add(minutesByEmployee, row.creatorId, row.totalMinutes)
+    totalMinutes += row.totalMinutes
+  }
+
+  return {
+    employees: [...employees.values()].sort(
+      (a, b) => (minutesByEmployee[b.id] ?? 0) - (minutesByEmployee[a.id] ?? 0) || a.name.localeCompare(b.name),
+    ),
+    rows: [...rows.values()].sort((a, b) => {
+      if ((a.categoryId === null) !== (b.categoryId === null)) return a.categoryId === null ? 1 : -1
+      return b.totalMinutes - a.totalMinutes || (a.categoryName ?? '').localeCompare(b.categoryName ?? '')
+    }),
+    minutesByEmployee,
+    totalMinutes,
+  }
+}

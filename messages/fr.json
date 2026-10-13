@@ -156,6 +156,8 @@
     "statusUpdated": "Statut mis à jour",
     "timeSummaryTitle": "Récapitulatif du temps",
     "timeSummaryDetails": "Détails",
+    "categoryColumn": "Catégorie",
+    "totalLabel": "Total",
     "noTimeEntries": "Aucune entrée de temps pour ce projet pour l'instant.",
     "unknownEmployee": "Inconnu",
     "noCategoryLabel": "Sans catégorie",

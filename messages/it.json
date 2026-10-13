@@ -156,6 +156,8 @@
     "statusUpdated": "Stato aggiornato",
     "timeSummaryTitle": "Riepilogo tempo",
     "timeSummaryDetails": "Dettagli",
+    "categoryColumn": "Categoria",
+    "totalLabel": "Totale",
     "noTimeEntries": "Nessuna voce di tempo per questo progetto ancora.",
     "unknownEmployee": "Sconosciuto",
     "noCategoryLabel": "Senza categoria",

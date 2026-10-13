@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { TimeEntry } from '@/lib/api/timeEntries'
-import { buildTimeMatrix, formatHoursMinutes, isoWeek } from './buildTimeMatrix'
+import { buildCategoryMatrix, buildTimeMatrix, formatHoursMinutes, isoWeek } from './buildTimeMatrix'
 
 const entry = (id: string, creatorId: string, firstName: string, startAt: string, endAt: string) =>
   ({
@@ -63,5 +63,37 @@ describe('formatHoursMinutes', () => {
     expect(formatHoursMinutes(510)).toBe('8:30')
     expect(formatHoursMinutes(60)).toBe('1:00')
     expect(formatHoursMinutes(0)).toBe('')
+  })
+})
+
+describe('buildCategoryMatrix', () => {
+  const row = (creatorId: string, firstName: string, categoryId: string | null, categoryName: string | null, totalMinutes: number) => ({
+    creatorId,
+    creatorFirstName: firstName,
+    creatorLastName: null,
+    creatorEmail: null,
+    categoryId,
+    categoryName,
+    totalMinutes,
+  })
+  const matrix = buildCategoryMatrix([
+    row('nico', 'Nico', 'c-streichen', 'Streichen', 90),
+    row('nico', 'Nico', 'c-abdecken', 'Abdecken', 570),
+    row('nico', 'Nico', null, null, 60),
+    row('seb', 'Seb', 'c-abdecken', 'Abdecken', 300),
+    row('seb', 'Seb', 'c-schleifen', 'Schleifen', 300),
+  ])
+
+  it('summiert pro Kategorie, pro Mitarbeiter und gesamt', () => {
+    const abdecken = matrix.rows.find((r) => r.categoryId === 'c-abdecken')!
+    expect(abdecken.minutesByEmployee).toEqual({ nico: 570, seb: 300 })
+    expect(abdecken.totalMinutes).toBe(870)
+    expect(matrix.minutesByEmployee).toEqual({ nico: 720, seb: 600 })
+    expect(matrix.totalMinutes).toBe(1320)
+  })
+
+  it('sortiert Kategorien nach Stunden, "ohne Kategorie" zuletzt', () => {
+    expect(matrix.rows.map((r) => r.categoryName)).toEqual(['Abdecken', 'Schleifen', 'Streichen', null])
+    expect(matrix.employees.map((e) => e.name)).toEqual(['Nico', 'Seb'])
   })
 })

@@ -3,6 +3,7 @@
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { ProjectTimeReport } from './ProjectTimeReport';
+import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import {
@@ -130,28 +131,13 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
 
   const { project, categories, notes, timeSummary } = detail;
 
-  // Zeit-Zusammenfassung pro Mitarbeiter aggregieren (die API liefert bereits
-  // pro Mitarbeiter+Kategorie gruppierte Zeilen - hier zu einer Gesamtzeit pro
-  // Mitarbeiter zusammengefasst, die Kategorie-Aufschluesselung bleibt darunter).
-  const byCreator = new Map<string, { name: string; totalMinutes: number; rows: typeof timeSummary }>();
-  timeSummary.forEach((row) => {
-    const name = row.creatorFirstName || row.creatorLastName
-      ? `${row.creatorFirstName ?? ''} ${row.creatorLastName ?? ''}`.trim()
-      : row.creatorEmail ?? t('unknownEmployee');
-    const existing = byCreator.get(row.creatorId);
-    if (existing) {
-      existing.totalMinutes += row.totalMinutes;
-      existing.rows.push(row);
-    } else {
-      byCreator.set(row.creatorId, { name, totalMinutes: row.totalMinutes, rows: [row] });
-    }
-  });
-
-  const formatMinutes = (minutes: number) => {
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    return m === 0 ? `${h} h` : `${h} h ${m} min`;
-  };
+  // Zeit-Zusammenfassung als Matrix Kategorie x Mitarbeiter (die API liefert
+  // bereits pro Mitarbeiter+Kategorie gruppierte Zeilen), mit Total pro
+  // Kategorie, pro Mitarbeiter und gesamt.
+  const summaryMatrix = buildCategoryMatrix(timeSummary, t('unknownEmployee'));
+  const hasTime = summaryMatrix.rows.length > 0;
+  const showTotalColumn = summaryMatrix.employees.length > 1;
+  const numCell = 'px-2 py-1.5 text-right tabular-nums whitespace-nowrap';
 
   return (
     <section className="space-y-6">
@@ -280,14 +266,14 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
       {/* Ganze Karte klickbar (oeffnet die Zeitaufstellung), der Button daneben
           ist das fuer Tastatur/Screenreader erreichbare Bedienelement. */}
       <div
-        onClick={byCreator.size > 0 ? () => setShowTimeReport(true) : undefined}
+        onClick={hasTime ? () => setShowTimeReport(true) : undefined}
         className={`rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-3 ${
-          byCreator.size > 0 ? 'cursor-pointer transition-colors hover:border-blue-300 dark:hover:border-blue-700' : ''
+          hasTime ? 'cursor-pointer transition-colors hover:border-blue-300 dark:hover:border-blue-700' : ''
         }`}
       >
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('timeSummaryTitle')}</h2>
-          {byCreator.size > 0 && (
+          {hasTime && (
             <button
               type="button"
               onClick={(e) => {
@@ -300,28 +286,57 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
             </button>
           )}
         </div>
-        {byCreator.size === 0 ? (
+        {!hasTime ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noTimeEntries')}</p>
         ) : (
-          <div className="space-y-4">
-            {Array.from(byCreator.entries()).map(([creatorId, data]) => (
-              <div key={creatorId}>
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-zinc-900 dark:text-zinc-50">{data.name}</span>
-                  <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                    {formatMinutes(data.totalMinutes)}
-                  </span>
-                </div>
-                <ul className="mt-1 space-y-0.5">
-                  {data.rows.map((row, idx) => (
-                    <li key={idx} className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pl-3">
-                      <span>{row.categoryName ?? t('noCategoryLabel')}</span>
-                      <span>{formatMinutes(row.totalMinutes)}</span>
-                    </li>
+          <div className="-mx-2 overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr className="text-zinc-500 dark:text-zinc-400">
+                  <th scope="col" className="px-2 py-1.5 text-left font-medium">{t('categoryColumn')}</th>
+                  {summaryMatrix.employees.map((employee) => (
+                    <th key={employee.id} scope="col" className="px-2 py-1.5 text-right font-medium whitespace-nowrap">
+                      {employee.name}
+                    </th>
                   ))}
-                </ul>
-              </div>
-            ))}
+                  {showTotalColumn && (
+                    <th scope="col" className="px-2 py-1.5 text-right font-semibold text-zinc-700 dark:text-zinc-300">
+                      {t('totalLabel')}
+                    </th>
+                  )}
+                </tr>
+              </thead>
+              <tbody className="text-zinc-700 dark:text-zinc-300">
+                {summaryMatrix.rows.map((row) => (
+                  <tr key={row.categoryId ?? 'none'} className="border-t border-zinc-100 dark:border-zinc-700/60">
+                    <th scope="row" className="px-2 py-1.5 text-left font-normal">
+                      {row.categoryName ?? t('noCategoryLabel')}
+                    </th>
+                    {summaryMatrix.employees.map((employee) => (
+                      <td key={employee.id} className={numCell}>
+                        {formatHoursMinutes(row.minutesByEmployee[employee.id] ?? 0)}
+                      </td>
+                    ))}
+                    {showTotalColumn && (
+                      <td className={`${numCell} font-medium text-zinc-900 dark:text-zinc-100`}>
+                        {formatHoursMinutes(row.totalMinutes)}
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-zinc-200 dark:border-zinc-600 font-semibold text-zinc-900 dark:text-zinc-50">
+                  <th scope="row" className="px-2 py-1.5 text-left">{t('totalLabel')}</th>
+                  {summaryMatrix.employees.map((employee) => (
+                    <td key={employee.id} className={numCell}>
+                      {formatHoursMinutes(summaryMatrix.minutesByEmployee[employee.id] ?? 0)}
+                    </td>
+                  ))}
+                  {showTotalColumn && <td className={numCell}>{formatHoursMinutes(summaryMatrix.totalMinutes)}</td>}
+                </tr>
+              </tfoot>
+            </table>
           </div>
         )}
       </div>
