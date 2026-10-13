@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
+import { ProjectTimeReport } from './ProjectTimeReport';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import {
@@ -39,6 +40,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const [togglingStatus, setTogglingStatus] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showTimeReport, setShowTimeReport] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -275,8 +277,29 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
       </div>
 
       {/* Zeit-Zusammenfassung */}
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-3">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('timeSummaryTitle')}</h2>
+      {/* Ganze Karte klickbar (oeffnet die Zeitaufstellung), der Button daneben
+          ist das fuer Tastatur/Screenreader erreichbare Bedienelement. */}
+      <div
+        onClick={byCreator.size > 0 ? () => setShowTimeReport(true) : undefined}
+        className={`rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-3 ${
+          byCreator.size > 0 ? 'cursor-pointer transition-colors hover:border-blue-300 dark:hover:border-blue-700' : ''
+        }`}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('timeSummaryTitle')}</h2>
+          {byCreator.size > 0 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowTimeReport(true);
+              }}
+              className="shrink-0 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {t('timeSummaryDetails')} →
+            </button>
+          )}
+        </div>
         {byCreator.size === 0 ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noTimeEntries')}</p>
         ) : (
@@ -328,6 +351,15 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
+      )}
+      {showTimeReport && (
+        <ProjectTimeReport
+          projectId={project.id}
+          organizationId={project.organizationId}
+          projectTitle={project.title}
+          customerName={project.customer?.name}
+          onClose={() => setShowTimeReport(false)}
+        />
       )}
     </section>
   );

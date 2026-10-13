@@ -128,6 +128,18 @@
     "confirmDeleteMessage": "Möchtest du diesen Kunden wirklich löschen? Das ist nur möglich, solange keine Projekte mehr bestehen.",
     "deleteError": "Fehler beim Löschen des Kunden"
   },
+  "projectTimeReport": {
+    "title": "Zeitaufstellung",
+    "dayColumn": "Tag",
+    "totalColumn": "Total",
+    "totalRow": "Total",
+    "weekLabel": "KW {week}",
+    "noCategory": "Ohne Kategorie",
+    "unknownEmployee": "Unbekannt",
+    "noEntries": "Noch keine Zeiteinträge für dieses Projekt.",
+    "loadError": "Die Zeiteinträge konnten nicht geladen werden.",
+    "hint": "Stunden im Format h:mm. Tippe auf einen Tag, um die einzelnen Einträge zu sehen."
+  },
   "projectDetail": {
     "backLink": "← Zurück zum Kunden",
     "loadError": "Fehler beim Laden des Projekts",
@@ -143,6 +155,7 @@
     "saveError": "Fehler beim Speichern",
     "statusUpdated": "Status aktualisiert",
     "timeSummaryTitle": "Zeit-Zusammenfassung",
+    "timeSummaryDetails": "Details",
     "noTimeEntries": "Noch keine Zeiteinträge für dieses Projekt.",
     "unknownEmployee": "Unbekannt",
     "noCategoryLabel": "Ohne Kategorie",

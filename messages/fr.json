@@ -128,6 +128,18 @@
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer ce client ? Cela n'est possible que s'il n'a plus de projets.",
     "deleteError": "Erreur lors de la suppression du client"
   },
+  "projectTimeReport": {
+    "title": "Décompte des heures",
+    "dayColumn": "Jour",
+    "totalColumn": "Total",
+    "totalRow": "Total",
+    "weekLabel": "Sem. {week}",
+    "noCategory": "Sans catégorie",
+    "unknownEmployee": "Inconnu",
+    "noEntries": "Aucune saisie de temps pour ce projet.",
+    "loadError": "Les saisies de temps n'ont pas pu être chargées.",
+    "hint": "Heures au format h:mm. Touche un jour pour voir les saisies."
+  },
   "projectDetail": {
     "backLink": "← Retour au client",
     "loadError": "Erreur lors du chargement du projet",
@@ -143,6 +155,7 @@
     "saveError": "Erreur lors de l'enregistrement",
     "statusUpdated": "Statut mis à jour",
     "timeSummaryTitle": "Récapitulatif du temps",
+    "timeSummaryDetails": "Détails",
     "noTimeEntries": "Aucune entrée de temps pour ce projet pour l'instant.",
     "unknownEmployee": "Inconnu",
     "noCategoryLabel": "Sans catégorie",

@@ -128,6 +128,18 @@
     "confirmDeleteMessage": "Vuoi davvero eliminare questo cliente? Ciò è possibile solo se non ha più progetti.",
     "deleteError": "Errore durante l'eliminazione del cliente"
   },
+  "projectTimeReport": {
+    "title": "Riepilogo ore",
+    "dayColumn": "Giorno",
+    "totalColumn": "Totale",
+    "totalRow": "Totale",
+    "weekLabel": "Sett. {week}",
+    "noCategory": "Senza categoria",
+    "unknownEmployee": "Sconosciuto",
+    "noEntries": "Nessuna registrazione per questo progetto.",
+    "loadError": "Impossibile caricare le registrazioni.",
+    "hint": "Ore nel formato h:mm. Tocca un giorno per vedere le singole registrazioni."
+  },
   "projectDetail": {
     "backLink": "← Torna al cliente",
     "loadError": "Errore durante il caricamento del progetto",
@@ -143,6 +155,7 @@
     "saveError": "Errore durante il salvataggio",
     "statusUpdated": "Stato aggiornato",
     "timeSummaryTitle": "Riepilogo tempo",
+    "timeSummaryDetails": "Dettagli",
     "noTimeEntries": "Nessuna voce di tempo per questo progetto ancora.",
     "unknownEmployee": "Sconosciuto",
     "noCategoryLabel": "Senza categoria",

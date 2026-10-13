@@ -128,6 +128,18 @@
     "confirmDeleteMessage": "Are you sure you want to delete this customer? This is only possible while no projects remain.",
     "deleteError": "Error deleting the customer"
   },
+  "projectTimeReport": {
+    "title": "Time breakdown",
+    "dayColumn": "Day",
+    "totalColumn": "Total",
+    "totalRow": "Total",
+    "weekLabel": "Week {week}",
+    "noCategory": "No category",
+    "unknownEmployee": "Unknown",
+    "noEntries": "No time entries for this project yet.",
+    "loadError": "The time entries could not be loaded.",
+    "hint": "Hours in h:mm. Tap a day to see the individual entries."
+  },
   "projectDetail": {
     "backLink": "← Back to customer",
     "loadError": "Error loading the project",
@@ -143,6 +155,7 @@
     "saveError": "Error saving",
     "statusUpdated": "Status updated",
     "timeSummaryTitle": "Time summary",
+    "timeSummaryDetails": "Details",
     "noTimeEntries": "No time entries for this project yet.",
     "unknownEmployee": "Unknown",
     "noCategoryLabel": "No category",
