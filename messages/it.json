@@ -14,6 +14,11 @@
     "switchOrganization": "Cambia organizzazione",
     "moreActions": "Altre azioni"
   },
+  "timeInput": {
+    "openPicker": "Scegli l'ora",
+    "hours": "Ore",
+    "minutes": "Minuti"
+  },
   "nav": {
     "createTimeEntry": "Registra tempo",
     "myEntries": "Le mie voci",

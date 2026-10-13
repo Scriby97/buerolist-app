@@ -14,6 +14,7 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { ToastContainer } from './Toast';
 import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
+import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
@@ -500,12 +501,10 @@ const MyEntries: FC = () => {
                     <label htmlFor="edit-startTime" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                       {t('startTimeLabel')}
                     </label>
-                    <input
+                    <TimeInput
                       id="edit-startTime"
-                      type="time"
                       value={editForm.startTime}
-                      onChange={(e) => setEditForm((prev) => ({ ...prev, startTime: e.target.value }))}
-                      className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+                      onChange={(startTime) => setEditForm((prev) => ({ ...prev, startTime }))}
                       required
                       disabled={!canEditEditingEntry}
                     />
@@ -514,12 +513,10 @@ const MyEntries: FC = () => {
                     <label htmlFor="edit-endTime" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                       {t('endTimeLabel')}
                     </label>
-                    <input
+                    <TimeInput
                       id="edit-endTime"
-                      type="time"
                       value={editForm.endTime}
-                      onChange={(e) => setEditForm((prev) => ({ ...prev, endTime: e.target.value }))}
-                      className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+                      onChange={(endTime) => setEditForm((prev) => ({ ...prev, endTime }))}
                       required
                       disabled={!canEditEditingEntry}
                     />

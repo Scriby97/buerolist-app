@@ -14,6 +14,11 @@
     "switchOrganization": "Switch organization",
     "moreActions": "More actions"
   },
+  "timeInput": {
+    "openPicker": "Choose time",
+    "hours": "Hours",
+    "minutes": "Minutes"
+  },
   "nav": {
     "createTimeEntry": "Log time",
     "myEntries": "My entries",

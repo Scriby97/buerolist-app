@@ -12,6 +12,7 @@ import { createTimeEntry, getTimeEntries } from '@/lib/api/timeEntries';
 import type { Category } from '@/lib/api/categories';
 import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
+import { TimeInput } from './TimeInput';
 
 interface FormState {
   projectId: string;
@@ -388,15 +389,13 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             <label htmlFor="startTime" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               {t('startTimeLabel')}
             </label>
-            <input
+            <TimeInput
               id="startTime"
-              type="time"
               value={formData.startTime}
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, startTime: e.target.value }));
-                validateTimes(e.target.value, formData.endTime);
+              onChange={(startTime) => {
+                setFormData((prev) => ({ ...prev, startTime }));
+                validateTimes(startTime, formData.endTime);
               }}
-              className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
               required
             />
           </div>
@@ -404,15 +403,13 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             <label htmlFor="endTime" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               {t('endTimeLabel')}
             </label>
-            <input
+            <TimeInput
               id="endTime"
-              type="time"
               value={formData.endTime}
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, endTime: e.target.value }));
-                validateTimes(formData.startTime, e.target.value);
+              onChange={(endTime) => {
+                setFormData((prev) => ({ ...prev, endTime }));
+                validateTimes(formData.startTime, endTime);
               }}
-              className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
               required
             />
           </div>
