@@ -24,7 +24,7 @@ export default function Home() {
   const t = useTranslations("nav");
   const [active, setActive] = useState<MenuKey>("erfassen");
   const { userProfile, hasOrganization } = useAuth();
-  const { selectedOrgId } = useOrganization();
+  const { selectedOrgId, canManageSelectedOrganization } = useOrganization();
 
   // Über die Nav (Tabs, Logo) - im Unterschied zum direkten Auswählen eines
   // Kunden/Projekts in der Kunden-Uebersicht - immer sauber navigieren: ein
@@ -56,6 +56,10 @@ export default function Home() {
       setActive("erfassen");
     }
   }, [selectedOrgId]);
+
+  // Kunden-Bereich nur fuer Admin/Owner - Mitarbeiter landen sonst (z.B. nach
+  // einem Rollenwechsel) auf "Zeit erfassen".
+  const currentTab: MenuKey = active === "kunden" && !canManageSelectedOrganization ? "erfassen" : active;
 
   if (userProfile && !hasOrganization) {
     return (
@@ -90,7 +94,7 @@ export default function Home() {
             onClick={() => goToTab("erfassen")}
             className={
               "text-left px-4 py-3 rounded-md transition-colors " +
-              (active === "erfassen"
+              (currentTab === "erfassen"
                 ? "bg-foreground text-background font-medium"
                 : "hover:bg-zinc-100 dark:hover:bg-zinc-900")
             }
@@ -102,7 +106,7 @@ export default function Home() {
             onClick={() => goToTab("eintraege")}
             className={
               "text-left px-4 py-3 rounded-md transition-colors " +
-              (active === "eintraege"
+              (currentTab === "eintraege"
                 ? "bg-foreground text-background font-medium"
                 : "hover:bg-zinc-100 dark:hover:bg-zinc-900")
             }
@@ -110,17 +114,19 @@ export default function Home() {
             {t("myEntries")}
           </button>
 
-          <button
-            onClick={() => goToTab("kunden")}
-            className={
-              "text-left px-4 py-3 rounded-md transition-colors " +
-              (active === "kunden"
-                ? "bg-foreground text-background font-medium"
-                : "hover:bg-zinc-100 dark:hover:bg-zinc-900")
-            }
-          >
-            {t("customersOverview")}
-          </button>
+          {canManageSelectedOrganization && (
+            <button
+              onClick={() => goToTab("kunden")}
+              className={
+                "text-left px-4 py-3 rounded-md transition-colors " +
+                (currentTab === "kunden"
+                  ? "bg-foreground text-background font-medium"
+                  : "hover:bg-zinc-100 dark:hover:bg-zinc-900")
+              }
+            >
+              {t("customersOverview")}
+            </button>
+          )}
         </nav>
 
         {/* User Menu at bottom */}
@@ -134,12 +140,12 @@ export default function Home() {
 
       {/* Main content */}
       <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-10 pt-20 md:pt-10 pb-24 md:pb-10">
-        {active === "erfassen" && <CreateTimeEntry onNavigateToAddProject={() => goToTab("kunden")} />}
-        {active === "eintraege" && <MyEntries />}
-        {active === "kunden" && <Customers />}
+        {currentTab === "erfassen" && <CreateTimeEntry onNavigateToAddProject={() => goToTab("kunden")} />}
+        {currentTab === "eintraege" && <MyEntries />}
+        {currentTab === "kunden" && <Customers />}
       </main>
 
-      <BottomNav active={active} onNavigate={goToTab} />
+      <BottomNav active={currentTab} onNavigate={goToTab} />
     </div>
   );
 }

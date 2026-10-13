@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useOrganization } from "@/lib/contexts/OrganizationContext";
 
 type MenuKey = "erfassen" | "eintraege" | "kunden";
 
@@ -19,14 +20,14 @@ interface BottomNavProps {
 // Untere Tab-Leiste fuer Mobile - analog zu FleetTracks BottomNav, gleiches
 // Farbschema (immer Navy/dunkel in beiden Themes). "Konto" ist keine der drei
 // In-Page-Tabs, sondern navigiert auf die bestehende /settings-Route. Der
-// "Kunden"-Tab ist fuer alle Mitglieder sichtbar (nicht nur Admin/Owner) -
-// anders als FleetTracks "Flotte"-Tab, weil auch Mitarbeiter Kunden/Projekte
-// zum Buchen sehen koennen muessen; das Anlegen bleibt Admin/Owner
-// vorbehalten (siehe Kunden-Tab-Inhalt selbst).
+// "Kunden"-Tab ist nur fuer Admin/Owner sichtbar - normale Mitarbeiter buchen
+// ihre Zeit nur ueber die Projektauswahl beim Erfassen (Backend sperrt die
+// Kunden-Endpunkte fuer sie ebenfalls).
 export function BottomNav({ active, onNavigate }: BottomNavProps) {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("nav");
+  const { canManageSelectedOrganization } = useOrganization();
   const accountActive = pathname.startsWith("/settings") || pathname.startsWith("/admin");
 
   const handleTabClick = (key: MenuKey) => {
@@ -62,15 +63,17 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
         <span className={labelClass(active === "eintraege" && !accountActive)}>{t("tabMyEntries")}</span>
       </button>
 
-      <button type="button" onClick={() => handleTabClick("kunden")} className={itemClass(active === "kunden" && !accountActive)}>
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="9" cy="8" r="3" />
-          <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
-          <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3" />
-          <path d="M21 20c0-2.8-1.9-5.1-4.5-5.8" />
-        </svg>
-        <span className={labelClass(active === "kunden" && !accountActive)}>{t("tabCustomers")}</span>
-      </button>
+      {canManageSelectedOrganization && (
+        <button type="button" onClick={() => handleTabClick("kunden")} className={itemClass(active === "kunden" && !accountActive)}>
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="9" cy="8" r="3" />
+            <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+            <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3" />
+            <path d="M21 20c0-2.8-1.9-5.1-4.5-5.8" />
+          </svg>
+          <span className={labelClass(active === "kunden" && !accountActive)}>{t("tabCustomers")}</span>
+        </button>
+      )}
 
       <button type="button" onClick={() => router.push("/settings")} className={itemClass(accountActive)}>
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
