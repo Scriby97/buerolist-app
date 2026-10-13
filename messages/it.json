@@ -62,7 +62,9 @@
     "noProjectsDialogTitle": "Nessun progetto ancora",
     "noProjectsDialogEmployeeMessage": "Il tuo amministratore dell'organizzazione deve prima creare un cliente e un progetto prima che tu possa registrare il tempo.",
     "noProjectsDialogAdminMessage": "Crea prima un cliente e un progetto, prima che tu e il tuo team possiate registrare il tempo.",
-    "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora"
+    "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora",
+    "commentLabel": "Osservazione (facoltativa)",
+    "commentPlaceholder": "ad es. materiale ritirato, cliente assente"
   },
   "myEntries": {
     "title": "Le mie voci",
@@ -94,7 +96,9 @@
     "loadingMore": "Caricamento di altre voci…",
     "listView": "Elenco",
     "calendarView": "Calendario",
-    "dayTotal": "Totale {duration}"
+    "dayTotal": "Totale {duration}",
+    "commentLabel": "Osservazione:",
+    "editCommentLabel": "Osservazione"
   },
   "calendar": {
     "today": "Oggi",

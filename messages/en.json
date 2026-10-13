@@ -62,7 +62,9 @@
     "noProjectsDialogTitle": "No projects yet",
     "noProjectsDialogEmployeeMessage": "Your organization admin needs to add a customer and a project first before you can log time.",
     "noProjectsDialogAdminMessage": "Add a customer and a project first, before you and your team can log time.",
-    "noProjectsDialogAddProjectButton": "Add customer/project now"
+    "noProjectsDialogAddProjectButton": "Add customer/project now",
+    "commentLabel": "Comment (optional)",
+    "commentPlaceholder": "e.g. picked up material, customer not at home"
   },
   "myEntries": {
     "title": "My entries",
@@ -94,7 +96,9 @@
     "loadingMore": "Loading more entries…",
     "listView": "List",
     "calendarView": "Calendar",
-    "dayTotal": "Total {duration}"
+    "dayTotal": "Total {duration}",
+    "commentLabel": "Comment:",
+    "editCommentLabel": "Comment"
   },
   "calendar": {
     "today": "Today",

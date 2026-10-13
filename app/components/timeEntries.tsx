@@ -115,6 +115,11 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
               <span className="font-medium">{t('categoryLabel')}</span> {entry.category.name}
             </p>
           )}
+          {entry.comment && (
+            <p className="whitespace-pre-wrap break-words">
+              <span className="font-medium">{t('commentLabel')}</span> {entry.comment}
+            </p>
+          )}
           {canManage && creatorName && (
             <p>
               <span className="font-medium">{t('createdByLabel')}</span> {creatorName}
@@ -196,7 +201,7 @@ const MyEntries: FC = () => {
 
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
   const [editCategories, setEditCategories] = useState<Category[]>([]);
-  const [editForm, setEditForm] = useState({ categoryId: '', date: '', startTime: '', endTime: '' });
+  const [editForm, setEditForm] = useState({ categoryId: '', date: '', startTime: '', endTime: '', comment: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -207,6 +212,7 @@ const MyEntries: FC = () => {
       date: toDateInputValue(entry.startAt),
       startTime: toTimeInputValue(entry.startAt),
       endTime: toTimeInputValue(entry.endAt),
+      comment: entry.comment ?? '',
     });
     getProjectDetail(entry.projectId)
       .then((detail) => setEditCategories(detail.categories))
@@ -216,7 +222,7 @@ const MyEntries: FC = () => {
   const handleCancelEdit = () => {
     setEditingEntry(null);
     setEditCategories([]);
-    setEditForm({ categoryId: '', date: '', startTime: '', endTime: '' });
+    setEditForm({ categoryId: '', date: '', startTime: '', endTime: '', comment: '' });
   };
 
   const handleSaveEdit = async (e: FormEvent<HTMLFormElement>) => {
@@ -233,6 +239,7 @@ const MyEntries: FC = () => {
         categoryId: editForm.categoryId || null,
         startAt,
         endAt,
+        comment: editForm.comment.trim() || null,
       });
       const applyUpdate = (prev: TimeEntry[]) =>
         prev.map((entry) => (entry.id === editingEntry.id ? { ...entry, ...updated } : entry));
@@ -521,6 +528,21 @@ const MyEntries: FC = () => {
                       disabled={!canEditEditingEntry}
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-comment" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {t('editCommentLabel')}
+                  </label>
+                  <textarea
+                    id="edit-comment"
+                    rows={2}
+                    maxLength={1000}
+                    value={editForm.comment}
+                    onChange={(e) => setEditForm((prev) => ({ ...prev, comment: e.target.value }))}
+                    className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+                    disabled={!canEditEditingEntry}
+                  />
                 </div>
 
                 {error && (

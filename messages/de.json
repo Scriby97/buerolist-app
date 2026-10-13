@@ -62,7 +62,9 @@
     "noProjectsDialogTitle": "Noch keine Projekte erfasst",
     "noProjectsDialogEmployeeMessage": "Dein Organisationsadministrator muss zuerst einen Kunden und ein Projekt anlegen, bevor du Zeit erfassen kannst.",
     "noProjectsDialogAdminMessage": "Lege zuerst einen Kunden und ein Projekt an, bevor du und deine Mitarbeiter Zeit erfassen könnt.",
-    "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen"
+    "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen",
+    "commentLabel": "Bemerkung (optional)",
+    "commentPlaceholder": "z.B. Material abgeholt, Kunde nicht angetroffen"
   },
   "myEntries": {
     "title": "Meine Einträge",
@@ -94,7 +96,9 @@
     "loadingMore": "Lade weitere Einträge…",
     "listView": "Liste",
     "calendarView": "Kalender",
-    "dayTotal": "Total {duration}"
+    "dayTotal": "Total {duration}",
+    "commentLabel": "Bemerkung:",
+    "editCommentLabel": "Bemerkung"
   },
   "calendar": {
     "today": "Heute",

@@ -20,6 +20,7 @@ interface FormState {
   date: string;
   startTime: string;
   endTime: string;
+  comment: string;
 }
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -81,6 +82,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     date: getTodayDate(),
     startTime: '',
     endTime: '',
+    comment: '',
   });
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
@@ -115,6 +117,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       date: draft?.date ?? getTodayDate(),
       startTime: draft?.startTime ?? '',
       endTime: draft?.endTime ?? '',
+      comment: draft?.comment ?? '',
     });
     setActiveDraftOrgId(selectedOrgId);
   }, [selectedOrgId]);
@@ -207,7 +210,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     const today = getTodayDate();
     const startTime = savedDate === today ? savedEndTime : '';
     autoStartTimeRef.current = startTime;
-    setFormData({ projectId, categoryId, date: today, startTime, endTime: '' });
+    setFormData({ projectId, categoryId, date: today, startTime, endTime: '', comment: '' });
     showToast(t('saveSuccess'), 'success');
   };
 
@@ -241,6 +244,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         categoryId: formData.categoryId || undefined,
         startAt,
         endAt,
+        comment: formData.comment.trim() || undefined,
       });
       handleSaveSuccess(formData.projectId, formData.categoryId, formData.date, formData.endTime);
     } catch (err) {
@@ -417,6 +421,22 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         {timeError && (
           <p className="text-sm text-red-700 dark:text-red-200">{timeError}</p>
         )}
+
+        {/* Bemerkung (optional) */}
+        <div className="space-y-2">
+          <label htmlFor="entryComment" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            {t('commentLabel')}
+          </label>
+          <textarea
+            id="entryComment"
+            rows={2}
+            maxLength={1000}
+            value={formData.comment}
+            onChange={(e) => setFormData((prev) => ({ ...prev, comment: e.target.value }))}
+            placeholder={t('commentPlaceholder')}
+            className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+          />
+        </div>
 
         <button
           type="submit"

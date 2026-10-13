@@ -28,6 +28,7 @@ export interface TimeEntry {
   creatorId: string
   startAt: string
   endAt: string
+  comment: string | null
   project: TimeEntryProject
   category: TimeEntryCategory | null
   creator: TimeEntryCreator
@@ -99,6 +100,7 @@ export async function createTimeEntry(data: {
   categoryId?: string
   startAt: string
   endAt: string
+  comment?: string
 }): Promise<TimeEntry> {
   const res = await authenticatedFetch(buildApiUrl('/time-entries'), {
     method: 'POST',
@@ -112,7 +114,7 @@ export async function createTimeEntry(data: {
 
 export async function updateTimeEntry(
   id: string,
-  data: { categoryId?: string | null; startAt?: string; endAt?: string },
+  data: { categoryId?: string | null; startAt?: string; endAt?: string; comment?: string | null },
 ): Promise<TimeEntry> {
   const res = await authenticatedFetch(buildApiUrl(`/time-entries/${id}`), {
     method: 'PUT',
