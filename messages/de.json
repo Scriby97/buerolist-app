@@ -746,7 +746,7 @@
     "TIME_ENTRY_END_BEFORE_START": "Die Endzeit muss nach der Startzeit liegen.",
     "TIME_ENTRY_CATEGORY_NOT_ALLOWED": "Diese Kategorie ist für das Projekt nicht ausgewählt.",
     "TIME_ENTRY_OVERLAP": "Für diesen Zeitraum hast du bereits Zeit erfasst. Bitte wähle eine Zeit, die sich nicht mit einem bestehenden Eintrag überschneidet.",
-    "TIME_ENTRY_LOCKED": "Einträge aus früheren Wochen können nur noch von Admins geändert oder gelöscht werden.",
+    "TIME_ENTRY_LOCKED": "Einträge aus früheren Wochen können nur noch von Admins erfasst, geändert oder gelöscht werden.",
     "NOTE_NOT_FOUND": "Notiz wurde nicht gefunden.",
     "NOTE_TARGET_REQUIRED": "Eine Notiz muss entweder einem Kunden oder einem Projekt zugeordnet sein.",
     "NOTE_DELETE_FORBIDDEN": "Nur der Autor oder Organisations-Admins/-Owner dürfen diese Notiz löschen.",

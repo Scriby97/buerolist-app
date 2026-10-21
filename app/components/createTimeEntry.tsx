@@ -13,6 +13,7 @@ import type { Category } from '@/lib/api/categories';
 import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
+import { currentWeekStartKey } from '@/lib/time/workWeek';
 
 interface FormState {
   projectId: string;
@@ -114,13 +115,18 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     setFormData({
       projectId: draft?.projectId ?? '',
       categoryId: draft?.categoryId ?? '',
-      date: draft?.date ?? getTodayDate(),
+      // Mitarbeiter duerfen nur in der laufenden Woche erfassen - ein alter
+      // Entwurf (z.B. von letzter Woche) startet daher wieder bei heute.
+      date:
+        draft?.date && (canManageSelectedOrganization || draft.date >= currentWeekStartKey())
+          ? draft.date
+          : getTodayDate(),
       startTime: draft?.startTime ?? '',
       endTime: draft?.endTime ?? '',
       comment: draft?.comment ?? '',
     });
     setActiveDraftOrgId(selectedOrgId);
-  }, [selectedOrgId]);
+  }, [selectedOrgId, canManageSelectedOrganization]);
 
   // Formular-Eingaben laufend zwischenspeichern - siehe FleetTracks createUsage.tsx.
   useEffect(() => {
@@ -384,6 +390,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             value={formData.date}
             onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
             required
+            min={canManageSelectedOrganization ? undefined : currentWeekStartKey()}
           />
         </div>
 

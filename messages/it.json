@@ -746,7 +746,7 @@
     "TIME_ENTRY_END_BEFORE_START": "L'ora di fine deve essere successiva all'ora di inizio.",
     "TIME_ENTRY_CATEGORY_NOT_ALLOWED": "Questa categoria non è selezionata per il progetto.",
     "TIME_ENTRY_OVERLAP": "Hai già registrato del tempo per questo periodo. Scegli un orario che non si sovrapponga a una registrazione esistente.",
-    "TIME_ENTRY_LOCKED": "Le registrazioni delle settimane precedenti possono essere modificate o eliminate solo dagli amministratori.",
+    "TIME_ENTRY_LOCKED": "Le registrazioni delle settimane precedenti possono essere aggiunte, modificate o eliminate solo dagli amministratori.",
     "NOTE_NOT_FOUND": "Nota non trovata.",
     "NOTE_TARGET_REQUIRED": "Una nota deve essere collegata a un cliente o a un progetto.",
     "NOTE_DELETE_FORBIDDEN": "Solo l'autore o gli amministratori/il proprietario dell'organizzazione possono eliminare questa nota.",
