@@ -54,3 +54,12 @@ export function rowsToItems(rows: ItemRow[], type: TimeEntryItemType): ItemInput
 export function itemsTotalRappen(items: Pick<TimeEntryItem, 'quantity' | 'unitPriceRappen'>[]): number {
   return items.reduce((sum, item) => sum + Math.round(item.quantity * item.unitPriceRappen), 0)
 }
+
+/** Summe Material bzw. Spesen ueber mehrere Eintraege, in Rappen. */
+export function entriesCostTotals(entries: { items?: TimeEntryItem[] }[]): { material: number; expense: number } {
+  const all = entries.flatMap((entry) => entry.items ?? [])
+  return {
+    material: itemsTotalRappen(all.filter((item) => item.type === 'material')),
+    expense: itemsTotalRappen(all.filter((item) => item.type === 'expense')),
+  }
+}

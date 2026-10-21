@@ -19,7 +19,7 @@ import { DateInput } from './DateInput';
 import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
 import { formatProjectNumber } from '@/lib/format/numbers';
 import { EntryItemsEditor } from './EntryItemsEditor';
-import { itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
+import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
@@ -81,6 +81,23 @@ function toTimeInputValue(iso: string): string {
   const d = new Date(iso);
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
+
+/** "Material CHF 10.40 · Spesen CHF 5.00" fuer einen Tag (nur wenn vorhanden). */
+const DayCostLine: FC<{ entries: TimeEntry[] }> = ({ entries }) => {
+  const tItems = useTranslations('entryItems');
+  const totals = entriesCostTotals(entries);
+  if (totals.material === 0 && totals.expense === 0) return null;
+  return (
+    <p className="-mt-1 text-right text-xs text-zinc-600 dark:text-zinc-400 tabular-nums">
+      {[
+        totals.material > 0 && `${tItems('materialTitle')} CHF ${formatChf(totals.material)}`,
+        totals.expense > 0 && `${tItems('expensesTitle')} CHF ${formatChf(totals.expense)}`,
+      ]
+        .filter(Boolean)
+        .join(' · ')}
+    </p>
+  );
+};
 
 interface EntryItemProps {
   entry: TimeEntry;
@@ -768,6 +785,7 @@ const MyEntries: FC = () => {
                   </span>
                 )}
               </div>
+              <DayCostLine entries={selectedDayGroup.entries} />
               {selectedDayGroup.entries.length === 0 ? (
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">{isLoading ? t('loadingEntriesEllipsis') : t('noEntriesOnDay')}</p>
               ) : (
@@ -808,6 +826,7 @@ const MyEntries: FC = () => {
                     {t('dayTotal', { duration: formatMinutes(group.totalMinutes) })}
                   </span>
                 </div>
+                <DayCostLine entries={group.entries} />
                 <div className="grid grid-cols-1 gap-3">
                   {group.entries.map((entry) => (
                     <EntryItem

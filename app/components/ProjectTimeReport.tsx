@@ -6,6 +6,7 @@ import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries';
 import { buildTimeMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
+import { formatChf, formatQuantity } from '@/lib/format/money';
 
 interface ProjectTimeReportProps {
   projectId: string;
@@ -34,6 +35,7 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
   onClose,
 }) => {
   const t = useTranslations('projectTimeReport');
+  const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
   const dateLocale = useDateLocale();
   const getApiErrorMessage = useApiErrorMessage();
@@ -191,6 +193,14 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                                             {entry.comment}
                                           </span>
                                         )}
+                                        {(entry.items ?? []).map((item) => (
+                                          <span key={item.id} className="flex justify-between gap-3 text-zinc-500 dark:text-zinc-400">
+                                            <span className="min-w-0 break-words">
+                                              {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}: {formatQuantity(item.quantity)}× {item.description}
+                                            </span>
+                                            <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                                          </span>
+                                        ))}
                                       </li>
                                     );
                                   })}

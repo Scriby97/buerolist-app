@@ -36,11 +36,20 @@ export interface ProjectTimeSummaryRow {
   totalMinutes: number
 }
 
+export interface ProjectCostSummaryRow {
+  creatorId: string
+  type: 'material' | 'expense'
+  /** Menge x Stueckpreis, in Rappen */
+  totalRappen: number
+}
+
 export interface ProjectDetail {
   project: Project
   categories: Category[]
   notes: Note[]
   timeSummary: ProjectTimeSummaryRow[]
+  /** Material/Spesen pro Mitarbeiter (fehlt bei aelteren Backends) */
+  costSummary?: ProjectCostSummaryRow[]
 }
 
 export async function getProjects(

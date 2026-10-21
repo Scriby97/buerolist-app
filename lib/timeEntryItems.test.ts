@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { formatChf, parseChfToRappen, parseQuantity } from './format/money'
-import { itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow } from './timeEntryItems'
+import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow } from './timeEntryItems'
 
 describe('money', () => {
   it.each([
@@ -75,5 +75,22 @@ describe('timeEntryItems', () => {
       { quantity: '2', description: 'Kitt', price: '10.40' },
       { quantity: '', description: '', price: '' },
     ])
+  })
+})
+
+describe('entriesCostTotals', () => {
+  it('summiert Material und Spesen getrennt ueber mehrere Eintraege', () => {
+    expect(
+      entriesCostTotals([
+        { items: [{ id: '1', type: 'material', quantity: 1, description: 'Kitt', unitPriceRappen: 1040 }] },
+        {
+          items: [
+            { id: '2', type: 'material', quantity: 2, description: 'Band', unitPriceRappen: 450 },
+            { id: '3', type: 'expense', quantity: 1, description: 'Parkieren', unitPriceRappen: 500 },
+          ],
+        },
+        {},
+      ]),
+    ).toEqual({ material: 1940, expense: 500 })
   })
 })
