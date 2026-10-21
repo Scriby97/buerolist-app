@@ -161,6 +161,9 @@
     "loadError": "The time entries could not be loaded.",
     "hint": "Hours in h:mm. Tap a day to see the individual entries."
   },
+  "projectEntryComments": {
+    "title": "Comments from entries"
+  },
   "projectDetail": {
     "backLink": "← Back to customer",
     "loadError": "Error loading the project",

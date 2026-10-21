@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import CreateProjectModal from './createProject';
 import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
+import { ProjectEntryComments } from './ProjectEntryComments';
 import { formatProjectNumber } from '@/lib/format/numbers';
 import { formatChf } from '@/lib/format/money';
 import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
@@ -441,6 +442,9 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           </div>
         )}
       </div>
+
+      {/* Bemerkungen aus den Zeiteintraegen (aufklappbar) */}
+      <ProjectEntryComments projectId={project.id} organizationId={project.organizationId} />
 
       {/* Notizen */}
       <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5">

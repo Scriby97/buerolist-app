@@ -161,6 +161,9 @@
     "loadError": "Impossibile caricare le registrazioni.",
     "hint": "Ore nel formato h:mm. Tocca un giorno per vedere le singole registrazioni."
   },
+  "projectEntryComments": {
+    "title": "Osservazioni dalle registrazioni"
+  },
   "projectDetail": {
     "backLink": "← Torna al cliente",
     "loadError": "Errore durante il caricamento del progetto",

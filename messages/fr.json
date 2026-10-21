@@ -161,6 +161,9 @@
     "loadError": "Les saisies de temps n'ont pas pu être chargées.",
     "hint": "Heures au format h:mm. Touche un jour pour voir les saisies."
   },
+  "projectEntryComments": {
+    "title": "Remarques des saisies"
+  },
   "projectDetail": {
     "backLink": "← Retour au client",
     "loadError": "Erreur lors du chargement du projet",

@@ -161,6 +161,9 @@
     "loadError": "Die Zeiteinträge konnten nicht geladen werden.",
     "hint": "Stunden im Format h:mm. Tippe auf einen Tag, um die einzelnen Einträge zu sehen."
   },
+  "projectEntryComments": {
+    "title": "Bemerkungen aus Einträgen"
+  },
   "projectDetail": {
     "backLink": "← Zurück zum Kunden",
     "loadError": "Fehler beim Laden des Projekts",
