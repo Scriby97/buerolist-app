@@ -69,6 +69,16 @@
     "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen",
     "commentLabel": "Bemerkung (optional)"
   },
+  "entryItems": {
+    "materialTitle": "Material",
+    "expensesTitle": "Spesen",
+    "quantity": "Menge",
+    "description": "Bezeichnung",
+    "unitPrice": "CHF/Stk.",
+    "remove": "Entfernen",
+    "total": "Total",
+    "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben."
+  },
   "myEntries": {
     "title": "Einträge",
     "titleManager": "Mitarbeiter",

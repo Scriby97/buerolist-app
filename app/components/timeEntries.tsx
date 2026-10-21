@@ -18,6 +18,9 @@ import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
 import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
 import { formatProjectNumber } from '@/lib/format/numbers';
+import { EntryItemsEditor } from './EntryItemsEditor';
+import { itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
+import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 
@@ -92,6 +95,7 @@ interface EntryItemProps {
 
 const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit, canDelete, isLocked }) => {
   const t = useTranslations('myEntries');
+  const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
   const creatorName = entry.creator.firstName || entry.creator.lastName
     ? `${entry.creator.firstName || ''} ${entry.creator.lastName || ''}`.trim()
@@ -132,6 +136,31 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
               <span className="font-medium">{t('commentLabel')}</span> {entry.comment}
             </p>
           )}
+          {(['material', 'expense'] as const).map((type) => {
+            const items = (entry.items ?? []).filter((item) => item.type === type);
+            if (items.length === 0) return null;
+            return (
+              <div key={type} className="pt-1">
+                <p className="font-medium">{type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}</p>
+                <ul className="mt-0.5 space-y-0.5">
+                  {items.map((item) => (
+                    <li key={item.id} className="flex items-baseline justify-between gap-3">
+                      <span className="min-w-0 break-words">
+                        {formatQuantity(item.quantity)}× {item.description}
+                      </span>
+                      <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                    </li>
+                  ))}
+                  {items.length > 1 && (
+                    <li className="flex justify-between gap-3 border-t border-zinc-200 dark:border-zinc-700 pt-0.5 font-medium">
+                      <span>{tItems('total')}</span>
+                      <span className="tabular-nums">CHF {formatChf(itemsTotalRappen(items))}</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            );
+          })}
           {canManage && creatorName && (
             <p>
               <span className="font-medium">{t('createdByLabel')}</span> {creatorName}
@@ -187,6 +216,7 @@ const MyEntries: FC = () => {
   const { isAdmin, userProfile } = useAuth();
   const { organizations, selectedOrgId, setSelectedOrgId, canManageSelectedOrganization } = useOrganization();
   const t = useTranslations('myEntries');
+  const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
   const getApiErrorMessage = useApiErrorMessage();
   // Admin/Owner: alles. Mitarbeiter: eigene Eintraege nur in der laufenden
@@ -282,7 +312,16 @@ const MyEntries: FC = () => {
 
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
   const [editCategories, setEditCategories] = useState<Category[]>([]);
-  const [editForm, setEditForm] = useState({ categoryId: '', date: '', startTime: '', endTime: '', comment: '' });
+  const emptyEditForm = () => ({
+    categoryId: '',
+    date: '',
+    startTime: '',
+    endTime: '',
+    comment: '',
+    materials: withTrailingEmptyRow([]) as ItemRow[],
+    expenses: withTrailingEmptyRow([]) as ItemRow[],
+  });
+  const [editForm, setEditForm] = useState(emptyEditForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -294,6 +333,8 @@ const MyEntries: FC = () => {
       startTime: toTimeInputValue(entry.startAt),
       endTime: toTimeInputValue(entry.endAt),
       comment: entry.comment ?? '',
+      materials: itemsToRows(entry.items, 'material'),
+      expenses: itemsToRows(entry.items, 'expense'),
     });
     getProjectDetail(entry.projectId)
       .then((detail) => setEditCategories(detail.categories))
@@ -303,7 +344,7 @@ const MyEntries: FC = () => {
   const handleCancelEdit = () => {
     setEditingEntry(null);
     setEditCategories([]);
-    setEditForm({ categoryId: '', date: '', startTime: '', endTime: '', comment: '' });
+    setEditForm(emptyEditForm());
   };
 
   const handleSaveEdit = async (e: FormEvent<HTMLFormElement>) => {
@@ -316,11 +357,19 @@ const MyEntries: FC = () => {
     try {
       const startAt = new Date(`${editForm.date}T${editForm.startTime}:00`).toISOString();
       const endAt = new Date(`${editForm.date}T${editForm.endTime}:00`).toISOString();
+      const materials = rowsToItems(editForm.materials, 'material');
+      const expenses = rowsToItems(editForm.expenses, 'expense');
+      if (!materials || !expenses) {
+        setError(tItems('invalid'));
+        setIsSubmitting(false);
+        return;
+      }
       const updated = await updateTimeEntry(editingEntry.id, {
         categoryId: editForm.categoryId || null,
         startAt,
         endAt,
         comment: editForm.comment.trim() || null,
+        items: [...materials, ...expenses],
       });
       const applyUpdate = (prev: TimeEntry[]) =>
         prev.map((entry) => (entry.id === editingEntry.id ? { ...entry, ...updated } : entry));
@@ -650,6 +699,21 @@ const MyEntries: FC = () => {
                     disabled={!canEditEditingEntry}
                   />
                 </div>
+
+                <EntryItemsEditor
+                  idPrefix="edit-material"
+                  title={tItems('materialTitle')}
+                  rows={editForm.materials}
+                  onChange={(materials) => setEditForm((prev) => ({ ...prev, materials }))}
+                  disabled={!canEditEditingEntry}
+                />
+                <EntryItemsEditor
+                  idPrefix="edit-expense"
+                  title={tItems('expensesTitle')}
+                  rows={editForm.expenses}
+                  onChange={(expenses) => setEditForm((prev) => ({ ...prev, expenses }))}
+                  disabled={!canEditEditingEntry}
+                />
 
                 {error && (
                   <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3">

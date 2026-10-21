@@ -69,6 +69,16 @@
     "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora",
     "commentLabel": "Osservazione (facoltativa)"
   },
+  "entryItems": {
+    "materialTitle": "Materiale",
+    "expensesTitle": "Spese",
+    "quantity": "Qtà",
+    "description": "Descrizione",
+    "unitPrice": "CHF/pz.",
+    "remove": "Rimuovi",
+    "total": "Totale",
+    "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi."
+  },
   "myEntries": {
     "title": "Voci",
     "titleManager": "Collaboratori",

@@ -69,6 +69,16 @@
     "noProjectsDialogAddProjectButton": "Add customer/project now",
     "commentLabel": "Comment (optional)"
   },
+  "entryItems": {
+    "materialTitle": "Material",
+    "expensesTitle": "Expenses",
+    "quantity": "Qty",
+    "description": "Description",
+    "unitPrice": "CHF/unit",
+    "remove": "Remove",
+    "total": "Total",
+    "invalid": "Please enter a description, a valid quantity and a price for each material and expense line."
+  },
   "myEntries": {
     "title": "Entries",
     "titleManager": "Employees",

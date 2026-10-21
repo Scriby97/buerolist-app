@@ -14,6 +14,8 @@ import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
 import { ProjectCombobox } from './ProjectCombobox';
+import { EntryItemsEditor } from './EntryItemsEditor';
+import { rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
 
 interface FormState {
@@ -23,6 +25,8 @@ interface FormState {
   startTime: string;
   endTime: string;
   comment: string;
+  materials: ItemRow[];
+  expenses: ItemRow[];
 }
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -75,6 +79,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   const { organizations, selectedOrgId, setSelectedOrgId, canManageSelectedOrganization } = useOrganization();
   const { toasts, showToast, removeToast } = useToast();
   const t = useTranslations('createTimeEntry');
+  const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
   const getApiErrorMessage = useApiErrorMessage();
 
@@ -85,6 +90,8 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     startTime: '',
     endTime: '',
     comment: '',
+    materials: withTrailingEmptyRow([]),
+    expenses: withTrailingEmptyRow([]),
   });
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
@@ -125,6 +132,8 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       startTime: draft?.startTime ?? '',
       endTime: draft?.endTime ?? '',
       comment: draft?.comment ?? '',
+      materials: withTrailingEmptyRow(draft?.materials ?? []),
+      expenses: withTrailingEmptyRow(draft?.expenses ?? []),
     });
     setActiveDraftOrgId(selectedOrgId);
   }, [selectedOrgId, canManageSelectedOrganization]);
@@ -217,7 +226,16 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     const today = getTodayDate();
     const startTime = savedDate === today ? savedEndTime : '';
     autoStartTimeRef.current = startTime;
-    setFormData({ projectId, categoryId, date: today, startTime, endTime: '', comment: '' });
+    setFormData({
+      projectId,
+      categoryId,
+      date: today,
+      startTime,
+      endTime: '',
+      comment: '',
+      materials: withTrailingEmptyRow([]),
+      expenses: withTrailingEmptyRow([]),
+    });
     showToast(t('saveSuccess'), 'success');
   };
 
@@ -245,6 +263,9 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
       const startAt = new Date(`${formData.date}T${formData.startTime}:00`).toISOString();
       const endAt = new Date(`${formData.date}T${formData.endTime}:00`).toISOString();
+      const materials = rowsToItems(formData.materials, 'material');
+      const expenses = rowsToItems(formData.expenses, 'expense');
+      if (!materials || !expenses) throw new Error(tItems('invalid'));
 
       await createTimeEntry({
         projectId: formData.projectId,
@@ -252,6 +273,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         startAt,
         endAt,
         comment: formData.comment.trim() || undefined,
+        items: [...materials, ...expenses],
       });
       handleSaveSuccess(formData.projectId, formData.categoryId, formData.date, formData.endTime);
     } catch (err) {
@@ -446,6 +468,20 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
+
+        {/* Material und Spesen (beliebig viele Positionen) */}
+        <EntryItemsEditor
+          idPrefix="material"
+          title={tItems('materialTitle')}
+          rows={formData.materials}
+          onChange={(materials) => setFormData((prev) => ({ ...prev, materials }))}
+        />
+        <EntryItemsEditor
+          idPrefix="expense"
+          title={tItems('expensesTitle')}
+          rows={formData.expenses}
+          onChange={(expenses) => setFormData((prev) => ({ ...prev, expenses }))}
+        />
 
         <button
           type="submit"

@@ -23,6 +23,17 @@ export interface TimeEntryCategory {
   name: string
 }
 
+export type TimeEntryItemType = 'material' | 'expense'
+
+/** Material- oder Spesen-Position (Preis in Rappen: CHF 10.40 = 1040) */
+export interface TimeEntryItem {
+  id: string
+  type: TimeEntryItemType
+  quantity: number
+  description: string
+  unitPriceRappen: number
+}
+
 export interface TimeEntry {
   id: string
   projectId: string
@@ -31,6 +42,8 @@ export interface TimeEntry {
   startAt: string
   endAt: string
   comment: string | null
+  /** Fehlt bei aelteren Backends */
+  items?: TimeEntryItem[]
   project: TimeEntryProject
   category: TimeEntryCategory | null
   creator: TimeEntryCreator
@@ -108,6 +121,7 @@ export async function createTimeEntry(data: {
   startAt: string
   endAt: string
   comment?: string
+  items?: Omit<TimeEntryItem, 'id'>[]
 }): Promise<TimeEntry> {
   const res = await authenticatedFetch(buildApiUrl('/time-entries'), {
     method: 'POST',
@@ -121,7 +135,13 @@ export async function createTimeEntry(data: {
 
 export async function updateTimeEntry(
   id: string,
-  data: { categoryId?: string | null; startAt?: string; endAt?: string; comment?: string | null },
+  data: {
+    categoryId?: string | null
+    startAt?: string
+    endAt?: string
+    comment?: string | null
+    items?: Omit<TimeEntryItem, 'id'>[]
+  },
 ): Promise<TimeEntry> {
   const res = await authenticatedFetch(buildApiUrl(`/time-entries/${id}`), {
     method: 'PUT',

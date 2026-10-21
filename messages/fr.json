@@ -69,6 +69,16 @@
     "noProjectsDialogAddProjectButton": "Créer un client/projet maintenant",
     "commentLabel": "Remarque (facultatif)"
   },
+  "entryItems": {
+    "materialTitle": "Matériel",
+    "expensesTitle": "Frais",
+    "quantity": "Qté",
+    "description": "Désignation",
+    "unitPrice": "CHF/pce",
+    "remove": "Supprimer",
+    "total": "Total",
+    "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides."
+  },
   "myEntries": {
     "title": "Entrées",
     "titleManager": "Collaborateurs",
