@@ -203,14 +203,17 @@ const MyEntries: FC = () => {
   const dateLocale = useDateLocale();
 
   // Mitarbeiterauswahl (nur Admin/Owner): '' = alle Personen der Organisation.
-  // Die Auswahl gilt nur fuer die Organisation, in der sie getroffen wurde -
-  // so faellt sie beim Organisationswechsel ohne zusaetzlichen Ladevorgang weg.
+  // Ohne eigene Auswahl sind die eigenen Eintraege vorausgewaehlt. Die Auswahl
+  // gilt nur fuer die Organisation, in der sie getroffen wurde - so faellt sie
+  // beim Organisationswechsel ohne zusaetzlichen Ladevorgang weg.
   const [members, setMembers] = useState<OrganizationMemberDetail[]>([]);
   const [creatorFilter, setCreatorFilter] = useState<{ orgId: string; creatorId: string } | null>(null);
-  const creatorId =
-    canManageSelectedOrganization && creatorFilter?.orgId === selectedOrgId
+  const hasExplicitCreatorFilter = canManageSelectedOrganization && creatorFilter?.orgId === selectedOrgId;
+  const creatorId = !canManageSelectedOrganization
+    ? undefined
+    : hasExplicitCreatorFilter
       ? creatorFilter.creatorId || undefined
-      : undefined;
+      : userProfile?.id;
 
   useEffect(() => {
     if (!canManageSelectedOrganization || !selectedOrgId || !getApiBaseUrlOrNull()) {
