@@ -4,6 +4,8 @@ import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import CreateCustomerModal from './createCustomer';
 import { formatCustomerNumber, formatProjectNumber } from '@/lib/format/numbers';
+import { customerColor, projectColor } from '@/lib/colors/entityColors';
+import { ColorDot } from './ColorDot';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -96,7 +98,8 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            <ColorDot color={customerColor(customer.number)} className="h-3.5 w-3.5" />
             {customer.number && (
               <span className="mr-2 font-mono font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
                 {formatCustomerNumber(customer.number)}
@@ -159,7 +162,8 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                     onClick={() => onSelectProject(project.id)}
                     className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2"
                   >
-                    <span className="min-w-0 font-medium text-zinc-900 dark:text-zinc-50">
+                    <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
+                      <ColorDot color={projectColor(customer.number, project.number)} />
                       {formatProjectNumber(customer.number, project.number) && (
                         <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
                           {formatProjectNumber(customer.number, project.number)}
@@ -185,7 +189,8 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                     onClick={() => onSelectProject(project.id)}
                     className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2 opacity-75"
                   >
-                    <span className="min-w-0 font-medium text-zinc-900 dark:text-zinc-50">
+                    <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
+                      <ColorDot color={projectColor(customer.number, project.number)} />
                       {formatProjectNumber(customer.number, project.number) && (
                         <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
                           {formatProjectNumber(customer.number, project.number)}

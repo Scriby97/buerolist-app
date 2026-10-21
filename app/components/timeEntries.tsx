@@ -18,6 +18,7 @@ import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
 import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
 import { formatProjectNumber } from '@/lib/format/numbers';
+import { colorVars, ENTITY_BORDER_LEFT, projectColor } from '@/lib/colors/entityColors';
 import { EntryItemsEditor } from './EntryItemsEditor';
 import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { formatChf, formatQuantity } from '@/lib/format/money';
@@ -119,7 +120,10 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
     : entry.creator.email;
 
   return (
-    <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 hover:shadow-md transition-shadow flex justify-between items-start">
+    <div
+      style={colorVars(projectColor(entry.project.customerNumber, entry.project.number))}
+      className={`rounded-lg border border-zinc-200 dark:border-zinc-700 border-l-4 ${ENTITY_BORDER_LEFT} p-4 hover:shadow-md transition-shadow flex justify-between items-start`}
+    >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2.5 mb-2">
           <svg className="w-8 h-8 shrink-0 text-blue-600 dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75}>
@@ -323,6 +327,7 @@ const MyEntries: FC = () => {
         title: `${entry.project.customerName} - ${entry.project.title}`,
         start: entry.startAt,
         end: entry.endAt,
+        color: projectColor(entry.project.customerNumber, entry.project.number),
       })),
     [calendarEntries],
   );

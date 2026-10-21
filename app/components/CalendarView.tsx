@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
+import { colorVars, ENTITY_BG, type EntityColor } from '@/lib/colors/entityColors';
 
 // Kalenderansicht (Monat/Woche) - urspruenglich aus FleetTrack portiert. Die
 // Tage zeigen nur eine Uebersicht (Tagestotal + Anzahl Eintraege) und sind
@@ -15,6 +16,8 @@ export interface CalendarEvent {
   title: string;
   start: string; // ISO
   end: string;
+  /** Erkennungsfarbe des Projekts (Punkt im Tagesfeld) */
+  color?: EntityColor;
 }
 
 interface Props {
@@ -103,13 +106,15 @@ export default function CalendarView({ events, selectedDate, onSelectDate, onVis
   // Pro Tag: Anzahl Eintraege und Summe der Minuten (Eintraege gehen nicht
   // ueber Mitternacht - der Starttag zaehlt).
   const summaryByDay = useMemo(() => {
-    const map = new Map<string, { count: number; minutes: number }>();
-    events.forEach((ev) => {
-      const key = new Date(ev.start).toDateString();
-      const minutes = Math.max(0, Math.round((new Date(ev.end).getTime() - new Date(ev.start).getTime()) / 60_000));
-      const current = map.get(key) ?? { count: 0, minutes: 0 };
-      map.set(key, { count: current.count + 1, minutes: current.minutes + minutes });
-    });
+    const map = new Map<string, { count: number; minutes: number; colors: (EntityColor | undefined)[] }>();
+    [...events]
+      .sort((a, b) => a.start.localeCompare(b.start))
+      .forEach((ev) => {
+        const key = new Date(ev.start).toDateString();
+        const minutes = Math.max(0, Math.round((new Date(ev.end).getTime() - new Date(ev.start).getTime()) / 60_000));
+        const current = map.get(key) ?? { count: 0, minutes: 0, colors: [] };
+        map.set(key, { count: current.count + 1, minutes: current.minutes + minutes, colors: [...current.colors, ev.color] });
+      });
     return map;
   }, [events]);
 
@@ -152,9 +157,15 @@ export default function CalendarView({ events, selectedDate, onSelectDate, onVis
               {formatTotal(summary.minutes)}
             </span>
             <span className="flex items-center gap-0.5" aria-hidden="true">
-              {Array.from({ length: Math.min(summary.count, 5) }, (_, i) => (
-                <span key={i} className="h-1.5 w-1.5 rounded-full bg-blue-500 dark:bg-blue-400" />
-              ))}
+              {/* Ein Punkt pro Eintrag in der Farbe seines Projekts - so sieht man
+                  auf einen Blick, an wie vielen Projekten gearbeitet wurde. */}
+              {summary.colors.slice(0, 5).map((color, i) =>
+                color ? (
+                  <span key={i} style={colorVars(color)} className={`h-1.5 w-1.5 rounded-full ${ENTITY_BG}`} />
+                ) : (
+                  <span key={i} className="h-1.5 w-1.5 rounded-full bg-blue-500 dark:bg-blue-400" />
+                ),
+              )}
               {summary.count > 5 && <span className="text-[9px] sm:text-[10px] leading-none text-zinc-500">+</span>}
             </span>
           </span>

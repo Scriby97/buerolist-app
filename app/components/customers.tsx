@@ -8,6 +8,8 @@ import { useAuth } from '@/lib/auth/AuthProvider';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { getCustomers, type Customer } from '@/lib/api/customers';
 import { formatCustomerNumber } from '@/lib/format/numbers';
+import { customerColor } from '@/lib/colors/entityColors';
+import { ColorDot } from './ColorDot';
 import CustomerDetail from './CustomerDetail';
 import ProjectDetail from './ProjectDetail';
 import CreateCustomerModal from './createCustomer';
@@ -32,13 +34,16 @@ const CustomerItem: FC<CustomerItemProps> = ({ customer, onSelect }) => (
       </svg>
     </span>
     <div className="min-w-0 flex-1">
-      <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 truncate">
+      <h3 className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-50 min-w-0">
+        <ColorDot color={customerColor(customer.number)} />
+        <span className="truncate">
         {customer.number && (
           <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
             {formatCustomerNumber(customer.number)}
           </span>
         )}
         {customer.name}
+        </span>
       </h3>
       {(customer.contactEmail || customer.contactPhone) && (
         <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-sm text-zinc-600 dark:text-zinc-400">
