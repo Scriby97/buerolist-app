@@ -16,6 +16,7 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { ToastContainer } from './Toast';
 import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
+import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 
@@ -83,9 +84,12 @@ interface EntryItemProps {
   onDelete: (id: string) => void;
   canManage: boolean;
   canEdit: boolean;
+  canDelete: boolean;
+  /** Eigener Eintrag aus einer frueheren Woche - fuer Mitarbeiter gesperrt. */
+  isLocked: boolean;
 }
 
-const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit }) => {
+const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit, canDelete, isLocked }) => {
   const t = useTranslations('myEntries');
   const tCommon = useTranslations('common');
   const creatorName = entry.creator.firstName || entry.creator.lastName
@@ -130,7 +134,20 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
         </div>
       </div>
 
-      {(canEdit || canManage) && (
+      {isLocked && (
+        <span
+          className="ml-4 flex-shrink-0 p-2 text-zinc-400 dark:text-zinc-500"
+          title={t('lockedHint')}
+          aria-label={t('lockedHint')}
+          role="img"
+        >
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 018 0v4" />
+          </svg>
+        </span>
+      )}
+      {(canEdit || canDelete) && (
         <div className="flex gap-2 ml-4 flex-shrink-0">
           {canEdit && (
             <button
@@ -143,7 +160,7 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
               </svg>
             </button>
           )}
-          {canManage && (
+          {canDelete && (
             <button
               onClick={() => onDelete(entry.id)}
               className="p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors"
@@ -166,8 +183,12 @@ const MyEntries: FC = () => {
   const t = useTranslations('myEntries');
   const tCommon = useTranslations('common');
   const getApiErrorMessage = useApiErrorMessage();
+  // Admin/Owner: alles. Mitarbeiter: eigene Eintraege nur in der laufenden
+  // Woche (aeltere sind gesperrt - siehe Backend assertCanModifyTimeEntry).
+  const isOwnLockedEntry = (entry: TimeEntry) =>
+    !canManageSelectedOrganization && entry.creatorId === userProfile?.id && !isInCurrentWeek(entry.startAt);
   const canEditEntry = (entry: TimeEntry) =>
-    canManageSelectedOrganization || entry.creatorId === userProfile?.id;
+    canManageSelectedOrganization || (entry.creatorId === userProfile?.id && isInCurrentWeek(entry.startAt));
   const { toasts, showToast, removeToast } = useToast();
 
   const [entries, setEntries] = useState<TimeEntry[]>([]);
@@ -564,6 +585,7 @@ const MyEntries: FC = () => {
                     onChange={(date) => setEditForm((prev) => ({ ...prev, date }))}
                     required
                     disabled={!canEditEditingEntry}
+                    min={canManageSelectedOrganization ? undefined : currentWeekStartKey()}
                   />
                 </div>
 
@@ -674,6 +696,8 @@ const MyEntries: FC = () => {
                       onDelete={(id) => setConfirmDeleteId(id)}
                       canManage={canManageSelectedOrganization}
                       canEdit={canEditEntry(entry)}
+                      canDelete={canEditEntry(entry)}
+                      isLocked={isOwnLockedEntry(entry)}
                     />
                   ))}
                 </div>

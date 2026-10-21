@@ -9,6 +9,8 @@ interface DateInputProps {
   onChange: (value: string) => void;
   required?: boolean;
   disabled?: boolean;
+  /** Fruehestes waehlbares Datum (YYYY-MM-DD) im nativen Kalender. */
+  min?: string;
 }
 
 // "2026-10-11" -> "11.10.2026". Bewusst ohne Date-Objekt, damit keine
@@ -26,7 +28,7 @@ export function formatDateCH(iso: string): string {
  * Feld unsichtbar ueber einer eigenen Anzeige - der native Kalender-Picker
  * bleibt erhalten.
  */
-export const DateInput: FC<DateInputProps> = ({ id, value, onChange, required, disabled }) => {
+export const DateInput: FC<DateInputProps> = ({ id, value, onChange, required, disabled, min }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const openPicker = () => {
@@ -70,6 +72,7 @@ export const DateInput: FC<DateInputProps> = ({ id, value, onChange, required, d
         className="absolute inset-0 h-full w-full opacity-0 [&::-webkit-calendar-picker-indicator]:hidden"
         required={required}
         disabled={disabled}
+        min={min}
       />
     </div>
   );
