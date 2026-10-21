@@ -43,6 +43,8 @@
   "createTimeEntry": {
     "title": "Registra tempo",
     "projectLabel": "Progetto",
+    "projectSearchPlaceholder": "Cerca numero, cliente o progetto …",
+    "projectSearchNoMatches": "Nessun progetto trovato.",
     "loadingProjects": "Caricamento progetti...",
     "noProjectsAvailable": "Nessun progetto disponibile",
     "categoryLabel": "Categoria",

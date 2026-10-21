@@ -6,6 +6,8 @@ import type { Note } from './notes'
 export interface Customer {
   id: string
   organizationId: string
+  /** Fortlaufende Kundennummer pro Organisation (Anzeige "001") */
+  number?: number
   name: string
   contactEmail?: string | null
   contactPhone?: string | null
@@ -16,6 +18,8 @@ export interface Customer {
 
 export interface CustomerProjectSummary {
   id: string
+  /** Fortlaufende Projektnummer pro Kunde */
+  number?: number
   title: string
   status: 'active' | 'completed'
   createdAt: string

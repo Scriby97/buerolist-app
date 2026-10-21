@@ -9,12 +9,15 @@ export type ProjectStatus = 'active' | 'completed'
 export interface ProjectCustomerSummary {
   id: string
   name: string
+  number?: number
 }
 
 export interface Project {
   id: string
   organizationId: string
   customerId: string
+  /** Fortlaufende Projektnummer pro Kunde (Anzeige mit Kundennummer "001-02") */
+  number?: number
   title: string
   status: ProjectStatus
   archivedAt: string | null

@@ -12,8 +12,10 @@ export interface TimeEntryCreator {
 export interface TimeEntryProject {
   id: string
   title: string
+  number?: number
   customerId: string
   customerName: string
+  customerNumber?: number
 }
 
 export interface TimeEntryCategory {

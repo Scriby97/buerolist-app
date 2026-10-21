@@ -43,6 +43,8 @@
   "createTimeEntry": {
     "title": "Saisir du temps",
     "projectLabel": "Projet",
+    "projectSearchPlaceholder": "Rechercher un numéro, client ou projet …",
+    "projectSearchNoMatches": "Aucun projet trouvé.",
     "loadingProjects": "Chargement des projets...",
     "noProjectsAvailable": "Aucun projet disponible",
     "categoryLabel": "Catégorie",

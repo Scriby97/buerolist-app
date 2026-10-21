@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
+import { formatCustomerNumber, formatProjectNumber } from '@/lib/format/numbers';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -93,7 +94,14 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">{customer.name}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            {customer.number && (
+              <span className="mr-2 font-mono font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+                {formatCustomerNumber(customer.number)}
+              </span>
+            )}
+            {customer.name}
+          </h1>
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-zinc-600 dark:text-zinc-400">
             {customer.contactEmail && <span>{customer.contactEmail}</span>}
             {customer.contactPhone && <span>{customer.contactPhone}</span>}
@@ -141,7 +149,14 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                     onClick={() => onSelectProject(project.id)}
                     className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2"
                   >
-                    <span className="font-medium text-zinc-900 dark:text-zinc-50">{project.title}</span>
+                    <span className="min-w-0 font-medium text-zinc-900 dark:text-zinc-50">
+                      {formatProjectNumber(customer.number, project.number) && (
+                        <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+                          {formatProjectNumber(customer.number, project.number)}
+                        </span>
+                      )}
+                      {project.title}
+                    </span>
                     <span className="text-xs text-zinc-500 dark:text-zinc-400">
                       {new Date(project.createdAt).toLocaleDateString(dateLocale)}
                     </span>
@@ -160,7 +175,14 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                     onClick={() => onSelectProject(project.id)}
                     className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2 opacity-75"
                   >
-                    <span className="font-medium text-zinc-900 dark:text-zinc-50">{project.title}</span>
+                    <span className="min-w-0 font-medium text-zinc-900 dark:text-zinc-50">
+                      {formatProjectNumber(customer.number, project.number) && (
+                        <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+                          {formatProjectNumber(customer.number, project.number)}
+                        </span>
+                      )}
+                      {project.title}
+                    </span>
                     <span className="text-xs text-zinc-500 dark:text-zinc-400">
                       {new Date(project.createdAt).toLocaleDateString(dateLocale)}
                     </span>

@@ -43,6 +43,8 @@
   "createTimeEntry": {
     "title": "Zeit erfassen",
     "projectLabel": "Projekt",
+    "projectSearchPlaceholder": "Nummer, Kunde oder Projekt suchen …",
+    "projectSearchNoMatches": "Kein Projekt gefunden.",
     "loadingProjects": "Lade Projekte...",
     "noProjectsAvailable": "Keine Projekte verfügbar",
     "categoryLabel": "Kategorie",

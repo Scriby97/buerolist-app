@@ -13,6 +13,7 @@ import type { Category } from '@/lib/api/categories';
 import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
+import { ProjectCombobox } from './ProjectCombobox';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
 
 interface FormState {
@@ -335,26 +336,28 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           <label htmlFor="project" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
             {t('projectLabel')}
           </label>
-          <select
-            id="project"
-            value={formData.projectId}
-            onChange={(e) => handleProjectChange(e.target.value)}
-            className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
-          >
-            {projectsLoading ? (
-              <option value="" disabled>{t('loadingProjects')}</option>
-            ) : projectsError ? (
-              <option value="" disabled>{projectsError}</option>
-            ) : projects.length === 0 ? (
-              <option value="" disabled>{t('noProjectsAvailable')}</option>
-            ) : (
-              projects.map((project) => (
-                <option key={project.id} value={project.id}>
-                  {project.customer?.name ? `${project.customer.name} - ${project.title}` : project.title}
-                </option>
-              ))
-            )}
-          </select>
+          {projectsLoading ? (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('loadingProjects')}</p>
+          ) : projectsError ? (
+            <p className="text-sm text-red-700 dark:text-red-300">{projectsError}</p>
+          ) : projects.length === 0 ? (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noProjectsAvailable')}</p>
+          ) : (
+            <ProjectCombobox
+              id="project"
+              value={formData.projectId}
+              onChange={handleProjectChange}
+              placeholder={t('projectSearchPlaceholder')}
+              noMatchesText={t('projectSearchNoMatches')}
+              options={projects.map((project) => ({
+                id: project.id,
+                title: project.title,
+                number: project.number,
+                customerName: project.customer?.name,
+                customerNumber: project.customer?.number,
+              }))}
+            />
+          )}
         </div>
 
         {/* Kategorie (nur, wenn das Projekt welche hat) */}

@@ -43,6 +43,8 @@
   "createTimeEntry": {
     "title": "Log time",
     "projectLabel": "Project",
+    "projectSearchPlaceholder": "Search number, customer or project …",
+    "projectSearchNoMatches": "No project found.",
     "loadingProjects": "Loading projects...",
     "noProjectsAvailable": "No projects available",
     "categoryLabel": "Category",

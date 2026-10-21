@@ -4,6 +4,7 @@ import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
+import { formatProjectNumber } from '@/lib/format/numbers';
 import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -156,7 +157,14 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">{project.title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            {formatProjectNumber(project.customer?.number, project.number) && (
+              <span className="mr-2 font-mono font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+                {formatProjectNumber(project.customer?.number, project.number)}
+              </span>
+            )}
+            {project.title}
+          </h1>
           <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
             {project.customer?.name}
           </p>

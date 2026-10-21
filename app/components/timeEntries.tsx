@@ -17,6 +17,7 @@ import { ToastContainer } from './Toast';
 import { ConfirmDialog } from './ConfirmDialog';
 import { DateInput } from './DateInput';
 import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
+import { formatProjectNumber } from '@/lib/format/numbers';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 
@@ -107,6 +108,11 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
             <path d="M21 20c0-2.8-1.9-5.1-4.5-5.8" />
           </svg>
           <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 truncate">
+            {formatProjectNumber(entry.project.customerNumber, entry.project.number) && (
+              <span className="mr-1.5 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+                {formatProjectNumber(entry.project.customerNumber, entry.project.number)}
+              </span>
+            )}
             {entry.project.customerName} - {entry.project.title}
           </h3>
         </div>
