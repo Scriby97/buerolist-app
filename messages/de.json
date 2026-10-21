@@ -103,14 +103,18 @@
     "editCommentLabel": "Bemerkung",
     "employeeLabel": "Mitarbeiter",
     "allEmployees": "Alle Mitarbeiter",
-    "lockedHint": "Gesperrt – Einträge aus früheren Wochen können nur Admins ändern."
+    "lockedHint": "Gesperrt – Einträge aus früheren Wochen können nur Admins ändern.",
+    "noEntriesOnDay": "Keine Einträge an diesem Tag.",
+    "selectDayHint": "Tippe auf einen Tag, um seine Einträge zu sehen."
   },
   "calendar": {
     "today": "Heute",
     "month": "Monat",
     "week": "Woche",
     "previous": "Zurück",
-    "next": "Weiter"
+    "next": "Weiter",
+    "dayEntries": "{count, plural, one {# Eintrag} other {# Einträge}}, {total} h",
+    "dayNoEntries": "keine Einträge"
   },
   "customersOverview": {
     "title": "Kunden",

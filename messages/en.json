@@ -103,14 +103,18 @@
     "editCommentLabel": "Comment",
     "employeeLabel": "Employee",
     "allEmployees": "All employees",
-    "lockedHint": "Locked – only admins can change entries from previous weeks."
+    "lockedHint": "Locked – only admins can change entries from previous weeks.",
+    "noEntriesOnDay": "No entries on this day.",
+    "selectDayHint": "Tap a day to see its entries."
   },
   "calendar": {
     "today": "Today",
     "month": "Month",
     "week": "Week",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "dayEntries": "{count, plural, one {# entry} other {# entries}}, {total} h",
+    "dayNoEntries": "no entries"
   },
   "customersOverview": {
     "title": "Customers",

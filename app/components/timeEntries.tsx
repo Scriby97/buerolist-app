@@ -242,12 +242,21 @@ const MyEntries: FC = () => {
     [members, dateLocale],
   );
 
-  const [view, setView] = useState<'list' | 'calendar'>('list');
+  // Kalender ist die Standardansicht; Umschalten auf die Liste bleibt moeglich.
+  const [view, setView] = useState<'list' | 'calendar'>('calendar');
+  // Im Kalender gewaehlter Tag - dessen Eintraege werden darunter vollstaendig
+  // aufgelistet (Standard: heute).
+  const [selectedDay, setSelectedDay] = useState<Date | null>(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  });
   // Kalenderansicht: laedt genau den sichtbaren Monat/die sichtbare Woche.
   const [calendarEntries, setCalendarEntries] = useState<TimeEntry[]>([]);
   const [calendarRange, setCalendarRange] = useState<{ start: string; end: string } | null>(null);
   const handleVisibleRangeChange = useCallback(({ start, end }: { start: Date; end: Date }) => {
     setCalendarRange({ start: start.toISOString(), end: end.toISOString() });
+    // Gewaehlten Tag verwerfen, wenn er nach dem Blaettern nicht mehr sichtbar ist.
+    setSelectedDay((day) => (day && day >= start && day <= end ? day : null));
   }, []);
 
   const dayGroups = useMemo(() => groupByDay(entries), [entries]);
@@ -457,10 +466,12 @@ const MyEntries: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, selectedOrgId, calendarRange, creatorId]);
 
-  const handleEventClick = (eventId: string | number) => {
-    const entry = calendarEntries.find((e) => e.id === String(eventId));
-    if (entry) handleEdit(entry);
-  };
+  const selectedDayGroup = useMemo(() => {
+    if (!selectedDay) return null;
+    const key = selectedDay.toDateString();
+    const dayEntries = calendarEntries.filter((entry) => new Date(entry.startAt).toDateString() === key);
+    return groupByDay(dayEntries)[0] ?? { key, date: selectedDay, entries: [], totalMinutes: 0 };
+  }, [selectedDay, calendarEntries]);
 
   return (
     <section className="space-y-4">
@@ -665,11 +676,48 @@ const MyEntries: FC = () => {
       {view === 'calendar' ? (
         // Immer gemountet (auch waehrend des Ladens), sonst ginge beim Blaettern
         // der gewaehlte Monat verloren.
-        <CalendarView
-          events={calendarEvents}
-          onEventClick={handleEventClick}
-          onVisibleRangeChange={handleVisibleRangeChange}
-        />
+        <div className="space-y-4">
+          <CalendarView
+            events={calendarEvents}
+            selectedDate={selectedDay}
+            onSelectDate={setSelectedDay}
+            onVisibleRangeChange={handleVisibleRangeChange}
+          />
+          {selectedDayGroup ? (
+            <div className="space-y-2">
+              <div className="flex items-baseline justify-between gap-3 border-b border-zinc-200 dark:border-zinc-700 pb-1">
+                <h2 className="min-w-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                  {selectedDayGroup.date.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                </h2>
+                {selectedDayGroup.entries.length > 0 && (
+                  <span className="shrink-0 text-sm text-zinc-600 dark:text-zinc-400">
+                    {t('dayTotal', { duration: formatMinutes(selectedDayGroup.totalMinutes) })}
+                  </span>
+                )}
+              </div>
+              {selectedDayGroup.entries.length === 0 ? (
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">{isLoading ? t('loadingEntriesEllipsis') : t('noEntriesOnDay')}</p>
+              ) : (
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedDayGroup.entries.map((entry) => (
+                    <EntryItem
+                      key={entry.id}
+                      entry={entry}
+                      onEdit={handleEdit}
+                      onDelete={(id) => setConfirmDeleteId(id)}
+                      canManage={canManageSelectedOrganization}
+                      canEdit={canEditEntry(entry)}
+                      canDelete={canEditEntry(entry)}
+                      isLocked={isOwnLockedEntry(entry)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('selectDayHint')}</p>
+          )}
+        </div>
       ) : isLoading ? (
         <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 p-4 text-center">
           <p className="text-zinc-600 dark:text-zinc-400">{t('loadingEntriesEllipsis')}</p>

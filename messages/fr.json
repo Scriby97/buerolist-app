@@ -103,14 +103,18 @@
     "editCommentLabel": "Remarque",
     "employeeLabel": "Collaborateur",
     "allEmployees": "Tous les collaborateurs",
-    "lockedHint": "Verrouillé – seuls les administrateurs peuvent modifier les saisies des semaines précédentes."
+    "lockedHint": "Verrouillé – seuls les administrateurs peuvent modifier les saisies des semaines précédentes.",
+    "noEntriesOnDay": "Aucune saisie ce jour-là.",
+    "selectDayHint": "Touche un jour pour voir ses saisies."
   },
   "calendar": {
     "today": "Aujourd'hui",
     "month": "Mois",
     "week": "Semaine",
     "previous": "Précédent",
-    "next": "Suivant"
+    "next": "Suivant",
+    "dayEntries": "{count, plural, one {# saisie} other {# saisies}}, {total} h",
+    "dayNoEntries": "aucune saisie"
   },
   "customersOverview": {
     "title": "Clients",

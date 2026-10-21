@@ -103,14 +103,18 @@
     "editCommentLabel": "Osservazione",
     "employeeLabel": "Collaboratore",
     "allEmployees": "Tutti i collaboratori",
-    "lockedHint": "Bloccato – solo gli amministratori possono modificare le registrazioni delle settimane precedenti."
+    "lockedHint": "Bloccato – solo gli amministratori possono modificare le registrazioni delle settimane precedenti.",
+    "noEntriesOnDay": "Nessuna registrazione in questo giorno.",
+    "selectDayHint": "Tocca un giorno per vedere le sue registrazioni."
   },
   "calendar": {
     "today": "Oggi",
     "month": "Mese",
     "week": "Settimana",
     "previous": "Indietro",
-    "next": "Avanti"
+    "next": "Avanti",
+    "dayEntries": "{count, plural, one {# registrazione} other {# registrazioni}}, {total} h",
+    "dayNoEntries": "nessuna registrazione"
   },
   "customersOverview": {
     "title": "Clienti",
