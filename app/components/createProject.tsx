@@ -4,22 +4,26 @@ import { useState, useEffect, type FC, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
-import { createProject, type Project } from '@/lib/api/projects';
+import { createProject, updateProject, type Project } from '@/lib/api/projects';
 import { getCategories, type Category } from '@/lib/api/categories';
 
 interface CreateProjectModalProps {
   customerId: string;
   onClose: () => void;
   onCreated: (project: Project) => void;
+  /** Gesetzt = bestehendes Projekt bearbeiten (Bezeichnung; Kategorien
+   * werden im Projektdetail selbst bearbeitet). */
+  project?: Pick<Project, 'id' | 'title'>;
 }
 
-const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, onCreated }) => {
+const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, onCreated, project }) => {
+  const isEdit = !!project;
   const t = useTranslations('createProject');
   const tCommon = useTranslations('common');
   const { selectedOrgId } = useOrganization();
   const getApiErrorMessage = useApiErrorMessage();
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(project?.title ?? '');
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -29,9 +33,9 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
   const [titleMissing, setTitleMissing] = useState(false);
 
   useEffect(() => {
-    if (!selectedOrgId) return;
+    if (!selectedOrgId || isEdit) return;
     getCategories(selectedOrgId).then(setCategories).catch(() => setCategories([]));
-  }, [selectedOrgId]);
+  }, [selectedOrgId, isEdit]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,19 +44,21 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
       document.getElementById('projectTitle')?.focus();
       return;
     }
-    if (!selectedOrgId) return;
+    if (!selectedOrgId && !isEdit) return;
     setSubmitting(true);
     setError(null);
     try {
-      const project = await createProject({
-        title: title.trim(),
-        customerId,
-        categoryIds: selectedCategoryIds,
-        organizationId: selectedOrgId,
-      });
-      onCreated(project);
+      const saved = isEdit
+        ? await updateProject(project.id, { title: title.trim() })
+        : await createProject({
+            title: title.trim(),
+            customerId,
+            categoryIds: selectedCategoryIds,
+            organizationId: selectedOrgId!,
+          });
+      onCreated(saved);
     } catch (err) {
-      setError(getApiErrorMessage(err, t('createError')));
+      setError(getApiErrorMessage(err, isEdit ? t('updateError') : t('createError')));
     } finally {
       setSubmitting(false);
     }
@@ -61,7 +67,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
       <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 max-w-md w-full shadow-xl space-y-4">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('title')}</h2>
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{isEdit ? t('editTitle') : t('title')}</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -143,7 +149,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
               disabled={submitting}
               className="px-4 py-2 text-sm rounded-lg bg-brown-600 hover:bg-brown-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? t('submitting') : t('submitButton')}
+              {submitting ? (isEdit ? t('saving') : t('submitting')) : isEdit ? t('saveButton') : t('submitButton')}
             </button>
           </div>
         </form>

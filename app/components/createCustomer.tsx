@@ -4,23 +4,26 @@ import { useState, type FC, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
-import { createCustomer, type Customer } from '@/lib/api/customers';
+import { createCustomer, updateCustomer, type Customer } from '@/lib/api/customers';
 
 interface CreateCustomerModalProps {
   onClose: () => void;
   onCreated: (customer: Customer) => void;
+  /** Gesetzt = bestehenden Kunden bearbeiten statt neu anlegen. */
+  customer?: Customer;
 }
 
-const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated }) => {
+const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated, customer }) => {
+  const isEdit = !!customer;
   const t = useTranslations('createCustomer');
   const tCommon = useTranslations('common');
   const { selectedOrgId } = useOrganization();
   const getApiErrorMessage = useApiErrorMessage();
 
-  const [name, setName] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState(customer?.name ?? '');
+  const [contactEmail, setContactEmail] = useState(customer?.contactEmail ?? '');
+  const [contactPhone, setContactPhone] = useState(customer?.contactPhone ?? '');
+  const [address, setAddress] = useState(customer?.address ?? '');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Pflichtfeld-Hinweis: der Speichern-Button bleibt bewusst aktiv, damit ein
@@ -34,20 +37,28 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
       document.getElementById('customerName')?.focus();
       return;
     }
-    if (!selectedOrgId) return;
+    if (!selectedOrgId && !isEdit) return;
     setSubmitting(true);
     setError(null);
     try {
-      const customer = await createCustomer({
-        name: name.trim(),
-        contactEmail: contactEmail.trim() || undefined,
-        contactPhone: contactPhone.trim() || undefined,
-        address: address.trim() || undefined,
-        organizationId: selectedOrgId,
-      });
-      onCreated(customer);
+      const saved = isEdit
+        ? await updateCustomer(customer.id, {
+            name: name.trim(),
+            // Leere Felder entfernen den Wert (null), statt '' zu speichern.
+            contactEmail: contactEmail.trim() || null,
+            contactPhone: contactPhone.trim() || null,
+            address: address.trim() || null,
+          })
+        : await createCustomer({
+            name: name.trim(),
+            contactEmail: contactEmail.trim() || undefined,
+            contactPhone: contactPhone.trim() || undefined,
+            address: address.trim() || undefined,
+            organizationId: selectedOrgId!,
+          });
+      onCreated(saved);
     } catch (err) {
-      setError(getApiErrorMessage(err, t('createError')));
+      setError(getApiErrorMessage(err, isEdit ? t('updateError') : t('createError')));
     } finally {
       setSubmitting(false);
     }
@@ -56,7 +67,7 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50" role="dialog" aria-modal="true">
       <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 max-w-md w-full shadow-xl space-y-4">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('title')}</h2>
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{isEdit ? t('editTitle') : t('title')}</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -141,7 +152,7 @@ const CreateCustomerModal: FC<CreateCustomerModalProps> = ({ onClose, onCreated 
               disabled={submitting}
               className="px-4 py-2 text-sm rounded-lg bg-brown-600 hover:bg-brown-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {submitting ? t('submitting') : t('submitButton')}
+              {submitting ? (isEdit ? t('saving') : t('submitting')) : isEdit ? t('saveButton') : t('submitButton')}
             </button>
           </div>
         </form>

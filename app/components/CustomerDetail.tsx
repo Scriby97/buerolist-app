@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
+import CreateCustomerModal from './createCustomer';
 import { formatCustomerNumber, formatProjectNumber } from '@/lib/format/numbers';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
@@ -33,6 +34,7 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -111,12 +113,20 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
           )}
         </div>
         {canManageSelectedOrganization && (
-          <button
-            onClick={() => setConfirmDelete(true)}
-            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors shrink-0"
-          >
-            {tCommon('delete')}
-          </button>
+          <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => setEditing(true)}
+              className="px-3 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+            >
+              {tCommon('edit')}
+            </button>
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="px-3 py-1.5 text-sm font-medium rounded-lg border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+            >
+              {tCommon('delete')}
+            </button>
+          </div>
         )}
       </div>
 
@@ -204,6 +214,18 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
       </div>
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
+
+      {editing && (
+        <CreateCustomerModal
+          customer={customer}
+          onClose={() => setEditing(false)}
+          onCreated={(updated) => {
+            setDetail((prev) => (prev ? { ...prev, customer: { ...prev.customer, ...updated } } : prev));
+            setEditing(false);
+            showToast(t('updateSuccess'), 'success');
+          }}
+        />
+      )}
 
       {confirmDelete && (
         <ConfirmDialog

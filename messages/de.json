@@ -146,7 +146,8 @@
     "completedProjectsLabel": "Abgeschlossen",
     "confirmDeleteTitle": "Kunde löschen",
     "confirmDeleteMessage": "Möchtest du diesen Kunden wirklich löschen? Das ist nur möglich, solange keine Projekte mehr bestehen.",
-    "deleteError": "Fehler beim Löschen des Kunden"
+    "deleteError": "Fehler beim Löschen des Kunden",
+    "updateSuccess": "Kunde gespeichert"
   },
   "projectTimeReport": {
     "title": "Zeitaufstellung",
@@ -199,7 +200,11 @@
     "createError": "Fehler beim Anlegen des Kunden",
     "submitting": "Wird erstellt...",
     "submitButton": "Kunde erstellen",
-    "nameRequired": "Bitte gib einen Namen für den Kunden ein."
+    "nameRequired": "Bitte gib einen Namen für den Kunden ein.",
+    "editTitle": "Kunde bearbeiten",
+    "saveButton": "Speichern",
+    "saving": "Wird gespeichert...",
+    "updateError": "Fehler beim Speichern des Kunden"
   },
   "createProject": {
     "title": "Projekt hinzufügen",
@@ -209,7 +214,11 @@
     "createError": "Fehler beim Anlegen des Projekts",
     "submitting": "Wird erstellt...",
     "submitButton": "Projekt erstellen",
-    "titleRequired": "Bitte gib eine Projektbezeichnung ein."
+    "titleRequired": "Bitte gib eine Projektbezeichnung ein.",
+    "editTitle": "Projekt bearbeiten",
+    "saveButton": "Speichern",
+    "saving": "Wird gespeichert...",
+    "updateError": "Fehler beim Speichern des Projekts"
   },
   "notesSection": {
     "title": "Notizen",

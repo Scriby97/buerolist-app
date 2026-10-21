@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
+import CreateProjectModal from './createProject';
 import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
 import { formatProjectNumber } from '@/lib/format/numbers';
@@ -45,6 +46,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showTimeReport, setShowTimeReport] = useState(false);
+  const [editingProject, setEditingProject] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -189,6 +191,12 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
 
       {canManageSelectedOrganization && (
         <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setEditingProject(true)}
+            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+          >
+            {tCommon('edit')}
+          </button>
           <button
             onClick={handleToggleStatus}
             disabled={togglingStatus}
@@ -460,6 +468,18 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       )}
+      {editingProject && (
+        <CreateProjectModal
+          customerId={project.customerId}
+          project={project}
+          onClose={() => setEditingProject(false)}
+          onCreated={(updated) => {
+            setDetail((prev) => (prev ? { ...prev, project: { ...prev.project, title: updated.title } } : prev));
+            setEditingProject(false);
+          }}
+        />
+      )}
+
       {showTimeReport && (
         <ProjectTimeReport
           projectId={project.id}

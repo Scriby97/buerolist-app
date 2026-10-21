@@ -146,7 +146,8 @@
     "completedProjectsLabel": "Terminés",
     "confirmDeleteTitle": "Supprimer le client",
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer ce client ? Cela n'est possible que s'il n'a plus de projets.",
-    "deleteError": "Erreur lors de la suppression du client"
+    "deleteError": "Erreur lors de la suppression du client",
+    "updateSuccess": "Client enregistré"
   },
   "projectTimeReport": {
     "title": "Décompte des heures",
@@ -199,7 +200,11 @@
     "createError": "Erreur lors de la création du client",
     "submitting": "Création...",
     "submitButton": "Créer le client",
-    "nameRequired": "Saisis un nom pour le client."
+    "nameRequired": "Saisis un nom pour le client.",
+    "editTitle": "Modifier le client",
+    "saveButton": "Enregistrer",
+    "saving": "Enregistrement...",
+    "updateError": "Erreur lors de l'enregistrement du client"
   },
   "createProject": {
     "title": "Ajouter un projet",
@@ -209,7 +214,11 @@
     "createError": "Erreur lors de la création du projet",
     "submitting": "Création...",
     "submitButton": "Créer le projet",
-    "titleRequired": "Saisis une désignation de projet."
+    "titleRequired": "Saisis une désignation de projet.",
+    "editTitle": "Modifier le projet",
+    "saveButton": "Enregistrer",
+    "saving": "Enregistrement...",
+    "updateError": "Erreur lors de l'enregistrement du projet"
   },
   "notesSection": {
     "title": "Notes",

@@ -146,7 +146,8 @@
     "completedProjectsLabel": "Completed",
     "confirmDeleteTitle": "Delete customer",
     "confirmDeleteMessage": "Are you sure you want to delete this customer? This is only possible while no projects remain.",
-    "deleteError": "Error deleting the customer"
+    "deleteError": "Error deleting the customer",
+    "updateSuccess": "Customer saved"
   },
   "projectTimeReport": {
     "title": "Time breakdown",
@@ -199,7 +200,11 @@
     "createError": "Error creating the customer",
     "submitting": "Creating...",
     "submitButton": "Create customer",
-    "nameRequired": "Please enter a name for the customer."
+    "nameRequired": "Please enter a name for the customer.",
+    "editTitle": "Edit customer",
+    "saveButton": "Save",
+    "saving": "Saving...",
+    "updateError": "Error saving the customer"
   },
   "createProject": {
     "title": "Add project",
@@ -209,7 +214,11 @@
     "createError": "Error creating the project",
     "submitting": "Creating...",
     "submitButton": "Create project",
-    "titleRequired": "Please enter a project name."
+    "titleRequired": "Please enter a project name.",
+    "editTitle": "Edit project",
+    "saveButton": "Save",
+    "saving": "Saving...",
+    "updateError": "Error saving the project"
   },
   "notesSection": {
     "title": "Notes",

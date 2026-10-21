@@ -146,7 +146,8 @@
     "completedProjectsLabel": "Completati",
     "confirmDeleteTitle": "Elimina cliente",
     "confirmDeleteMessage": "Vuoi davvero eliminare questo cliente? Ciò è possibile solo se non ha più progetti.",
-    "deleteError": "Errore durante l'eliminazione del cliente"
+    "deleteError": "Errore durante l'eliminazione del cliente",
+    "updateSuccess": "Cliente salvato"
   },
   "projectTimeReport": {
     "title": "Riepilogo ore",
@@ -199,7 +200,11 @@
     "createError": "Errore durante la creazione del cliente",
     "submitting": "Creazione in corso...",
     "submitButton": "Crea cliente",
-    "nameRequired": "Inserisci un nome per il cliente."
+    "nameRequired": "Inserisci un nome per il cliente.",
+    "editTitle": "Modifica cliente",
+    "saveButton": "Salva",
+    "saving": "Salvataggio...",
+    "updateError": "Errore durante il salvataggio del cliente"
   },
   "createProject": {
     "title": "Aggiungi progetto",
@@ -209,7 +214,11 @@
     "createError": "Errore durante la creazione del progetto",
     "submitting": "Creazione in corso...",
     "submitButton": "Crea progetto",
-    "titleRequired": "Inserisci una denominazione del progetto."
+    "titleRequired": "Inserisci una denominazione del progetto.",
+    "editTitle": "Modifica progetto",
+    "saveButton": "Salva",
+    "saving": "Salvataggio...",
+    "updateError": "Errore durante il salvataggio del progetto"
   },
   "notesSection": {
     "title": "Note",
