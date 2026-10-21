@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatChf, parseChfToRappen, parseQuantity } from './format/money'
+import { formatChf, parseChfToRappen, parseQuantity, sanitizeDecimalInput } from './format/money'
 import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow } from './timeEntryItems'
 
 describe('money', () => {
@@ -22,6 +22,23 @@ describe('money', () => {
     expect(parseQuantity('')).toBe(1)
     expect(parseQuantity('1,5')).toBe(1.5)
     expect(parseQuantity('0')).toBeNull()
+  })
+
+  it('Menge: max. eine Nachkommastelle', () => {
+    expect(parseQuantity('2')).toBe(2)
+    expect(parseQuantity('2.5')).toBe(2.5)
+    expect(parseQuantity('2.55')).toBeNull()
+  })
+
+  it.each([
+    ['10.405', 2, '10.40'],
+    ['1.55', 1, '1.5'],
+    ['abc12', 2, '12'],
+    ['1,2,3', 2, '1,23'],
+    ['.5', 1, '0.5'],
+    ['CHF 10.40', 2, '10.40'],
+  ])('sanitizeDecimalInput(%j, %i) = %j', (text, decimals, expected) => {
+    expect(sanitizeDecimalInput(text, decimals)).toBe(expected)
   })
 
   it('formatiert Rappen als CHF', () => {

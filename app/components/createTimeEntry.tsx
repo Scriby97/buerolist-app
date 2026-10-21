@@ -454,6 +454,20 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           <p className="text-sm text-red-700 dark:text-red-200">{timeError}</p>
         )}
 
+        {/* Material und Spesen (beliebig viele Positionen) */}
+        <EntryItemsEditor
+          idPrefix="material"
+          title={tItems('materialTitle')}
+          rows={formData.materials}
+          onChange={(materials) => setFormData((prev) => ({ ...prev, materials }))}
+        />
+        <EntryItemsEditor
+          idPrefix="expense"
+          title={tItems('expensesTitle')}
+          rows={formData.expenses}
+          onChange={(expenses) => setFormData((prev) => ({ ...prev, expenses }))}
+        />
+
         {/* Bemerkung (optional) */}
         <div className="space-y-2">
           <label htmlFor="entryComment" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -468,20 +482,6 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
             className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
-
-        {/* Material und Spesen (beliebig viele Positionen) */}
-        <EntryItemsEditor
-          idPrefix="material"
-          title={tItems('materialTitle')}
-          rows={formData.materials}
-          onChange={(materials) => setFormData((prev) => ({ ...prev, materials }))}
-        />
-        <EntryItemsEditor
-          idPrefix="expense"
-          title={tItems('expensesTitle')}
-          rows={formData.expenses}
-          onChange={(expenses) => setFormData((prev) => ({ ...prev, expenses }))}
-        />
 
         <button
           type="submit"

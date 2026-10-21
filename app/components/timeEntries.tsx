@@ -702,21 +702,6 @@ const MyEntries: FC = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="edit-comment" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    {t('editCommentLabel')}
-                  </label>
-                  <textarea
-                    id="edit-comment"
-                    rows={2}
-                    maxLength={1000}
-                    value={editForm.comment}
-                    onChange={(e) => setEditForm((prev) => ({ ...prev, comment: e.target.value }))}
-                    className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
-                    disabled={!canEditEditingEntry}
-                  />
-                </div>
-
                 <EntryItemsEditor
                   idPrefix="edit-material"
                   title={tItems('materialTitle')}
@@ -731,6 +716,21 @@ const MyEntries: FC = () => {
                   onChange={(expenses) => setEditForm((prev) => ({ ...prev, expenses }))}
                   disabled={!canEditEditingEntry}
                 />
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-comment" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {t('editCommentLabel')}
+                  </label>
+                  <textarea
+                    id="edit-comment"
+                    rows={2}
+                    maxLength={1000}
+                    value={editForm.comment}
+                    onChange={(e) => setEditForm((prev) => ({ ...prev, comment: e.target.value }))}
+                    className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
+                    disabled={!canEditEditingEntry}
+                  />
+                </div>
 
                 {error && (
                   <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3">

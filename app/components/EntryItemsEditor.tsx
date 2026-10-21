@@ -2,7 +2,7 @@
 
 import type { FC } from 'react';
 import { useTranslations } from 'next-intl';
-import { formatChf, parseChfToRappen, parseQuantity } from '@/lib/format/money';
+import { formatChf, parseChfToRappen, parseQuantity, sanitizeDecimalInput } from '@/lib/format/money';
 import { isRowEmpty, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 
 interface EntryItemsEditorProps {
@@ -13,6 +13,8 @@ interface EntryItemsEditorProps {
   onChange: (rows: ItemRow[]) => void;
   disabled?: boolean;
 }
+
+const invalidClass = 'border-red-500 dark:border-red-500';
 
 const inputClass =
   'block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-2.5 py-2 text-sm text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-60';
@@ -64,8 +66,9 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
               autoComplete="off"
               value={row.quantity}
               placeholder={empty ? '' : '1'}
-              onChange={(e) => updateRow(index, { quantity: e.target.value })}
-              className={`${inputClass} text-right tabular-nums`}
+              onChange={(e) => updateRow(index, { quantity: sanitizeDecimalInput(e.target.value, 1) })}
+              aria-invalid={!empty && parseQuantity(row.quantity) === null}
+              className={`${inputClass} text-right tabular-nums ${!empty && parseQuantity(row.quantity) === null ? invalidClass : ''}`}
             />,
             <input
               key={`${index}-d`}
@@ -84,8 +87,9 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
               inputMode="decimal"
               autoComplete="off"
               value={row.price}
-              onChange={(e) => updateRow(index, { price: e.target.value })}
-              className={`${inputClass} text-right tabular-nums`}
+              onChange={(e) => updateRow(index, { price: sanitizeDecimalInput(e.target.value, 2) })}
+              aria-invalid={!empty && row.price.trim() !== '' && parseChfToRappen(row.price) === null}
+              className={`${inputClass} text-right tabular-nums ${!empty && row.price.trim() !== '' && parseChfToRappen(row.price) === null ? invalidClass : ''}`}
             />,
             empty ? (
               <span key={`${index}-x`} />
