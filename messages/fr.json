@@ -22,9 +22,11 @@
   "nav": {
     "createTimeEntry": "Saisir du temps",
     "myEntries": "Entrées",
+    "employeesOverview": "Collaborateurs",
     "customersOverview": "Clients",
     "tabTimeEntry": "Saisir",
     "tabMyEntries": "Entrées",
+    "tabEmployees": "Collaborateurs",
     "tabCustomers": "Clients",
     "tabAccount": "Paramètres",
     "redirectingToOnboarding": "Redirection vers la configuration de l'organisation..."
@@ -67,6 +69,7 @@
   },
   "myEntries": {
     "title": "Entrées",
+    "titleManager": "Collaborateurs",
     "dateLabel": "Date",
     "timeRangeLabel": "Heure :",
     "categoryLabel": "Catégorie :",

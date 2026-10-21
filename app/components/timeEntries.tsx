@@ -466,7 +466,7 @@ const MyEntries: FC = () => {
     <section className="space-y-4">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-          {t('title')}
+          {canManageSelectedOrganization ? t('titleManager') : t('title')}
         </h1>
         <div className="flex flex-col gap-2 mt-2">
           {isAdmin && organizations.length > 0 && (

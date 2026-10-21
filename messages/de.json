@@ -22,9 +22,11 @@
   "nav": {
     "createTimeEntry": "Zeit erfassen",
     "myEntries": "Einträge",
+    "employeesOverview": "Mitarbeiter",
     "customersOverview": "Kunden",
     "tabTimeEntry": "Erfassen",
     "tabMyEntries": "Einträge",
+    "tabEmployees": "Mitarbeiter",
     "tabCustomers": "Kunden",
     "tabAccount": "Einstellungen",
     "redirectingToOnboarding": "Weiterleitung zur Organisationseinrichtung..."
@@ -67,6 +69,7 @@
   },
   "myEntries": {
     "title": "Einträge",
+    "titleManager": "Mitarbeiter",
     "dateLabel": "Datum",
     "timeRangeLabel": "Zeit:",
     "categoryLabel": "Kategorie:",

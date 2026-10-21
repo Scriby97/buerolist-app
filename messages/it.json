@@ -22,9 +22,11 @@
   "nav": {
     "createTimeEntry": "Registra tempo",
     "myEntries": "Voci",
+    "employeesOverview": "Collaboratori",
     "customersOverview": "Clienti",
     "tabTimeEntry": "Registra",
     "tabMyEntries": "Voci",
+    "tabEmployees": "Collaboratori",
     "tabCustomers": "Clienti",
     "tabAccount": "Impostazioni",
     "redirectingToOnboarding": "Reindirizzamento alla configurazione dell'organizzazione..."
@@ -67,6 +69,7 @@
   },
   "myEntries": {
     "title": "Voci",
+    "titleManager": "Collaboratori",
     "dateLabel": "Data",
     "timeRangeLabel": "Orario:",
     "categoryLabel": "Categoria:",

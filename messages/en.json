@@ -22,9 +22,11 @@
   "nav": {
     "createTimeEntry": "Log time",
     "myEntries": "Entries",
+    "employeesOverview": "Employees",
     "customersOverview": "Customers",
     "tabTimeEntry": "Log",
     "tabMyEntries": "Entries",
+    "tabEmployees": "Employees",
     "tabCustomers": "Customers",
     "tabAccount": "Settings",
     "redirectingToOnboarding": "Redirecting to organization setup..."
@@ -67,6 +69,7 @@
   },
   "myEntries": {
     "title": "Entries",
+    "titleManager": "Employees",
     "dateLabel": "Date",
     "timeRangeLabel": "Time:",
     "categoryLabel": "Category:",

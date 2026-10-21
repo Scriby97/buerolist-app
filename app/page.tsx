@@ -111,7 +111,8 @@ export default function Home() {
                 : "hover:bg-zinc-100 dark:hover:bg-zinc-900")
             }
           >
-            {t("myEntries")}
+            {/* Admin/Owner sehen hier die Eintraege aller Mitarbeiter */}
+            {canManageSelectedOrganization ? t("employeesOverview") : t("myEntries")}
           </button>
 
           {canManageSelectedOrganization && (

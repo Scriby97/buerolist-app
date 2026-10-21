@@ -60,7 +60,7 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 6h16M4 12h16M4 18h10" />
         </svg>
-        <span className={labelClass(active === "eintraege" && !accountActive)}>{t("tabMyEntries")}</span>
+        <span className={labelClass(active === "eintraege" && !accountActive)}>{canManageSelectedOrganization ? t("tabEmployees") : t("tabMyEntries")}</span>
       </button>
 
       {canManageSelectedOrganization && (
