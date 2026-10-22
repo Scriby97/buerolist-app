@@ -39,7 +39,10 @@ export function NotificationPermissionPrompt() {
     // Erst pruefen, wenn der User eingeloggt ist, sein Profil geladen ist und
     // er einer Organisation angehoert (nicht waehrend Onboarding/Redirects).
     if (!supabaseUser || !userProfile || !hasOrganization) return;
-    if (!isPushNotificationSupported() || Notification.permission !== 'default') {
+    // Auch fragen, wenn der Browser Benachrichtigungen schon erlaubt hat - die
+    // Erinnerung selbst ist standardmaessig aus und wird erst mit "Aktivieren"
+    // eingeschaltet. Nur bei blockierten Benachrichtigungen bringt Fragen nichts.
+    if (!isPushNotificationSupported() || Notification.permission === 'denied') {
       setChecked(true);
       return;
     }

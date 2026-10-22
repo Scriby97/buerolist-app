@@ -40,6 +40,20 @@ describe('NotificationPermissionPrompt', () => {
     expect(ensurePushSubscription).toHaveBeenCalled()
   })
 
+  it('fragt auch, wenn der Browser Benachrichtigungen schon erlaubt hat', async () => {
+    vi.stubGlobal('Notification', { permission: 'granted' })
+    renderWithIntl(<NotificationPermissionPrompt />)
+    expect(await screen.findByRole('button', { name: 'Aktivieren' })).toBeTruthy()
+  })
+
+  it('fragt nicht, wenn Benachrichtigungen blockiert sind', async () => {
+    vi.stubGlobal('Notification', { permission: 'denied' })
+    renderWithIntl(<NotificationPermissionPrompt />)
+    await new Promise((r) => setTimeout(r, 20))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(getReminderSettings).not.toHaveBeenCalled()
+  })
+
   it('fragt nicht, wenn der User schon geantwortet hat', async () => {
     getReminderSettings.mockResolvedValue({ id: 'r1', userId: 'u1', enabled: false, reminderTime: '17:30' })
     renderWithIntl(<NotificationPermissionPrompt />)
