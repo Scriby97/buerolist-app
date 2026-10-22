@@ -117,7 +117,8 @@
     "allEmployees": "Tutti i collaboratori",
     "lockedHint": "Bloccato – solo gli amministratori possono modificare le registrazioni delle settimane precedenti.",
     "noEntriesOnDay": "Nessuna registrazione in questo giorno.",
-    "selectDayHint": "Tocca un giorno per vedere le sue registrazioni."
+    "selectDayHint": "Tocca un giorno per vedere le sue registrazioni.",
+    "reportButton": "Rapporto"
   },
   "calendar": {
     "today": "Oggi",
@@ -271,6 +272,47 @@
     "applyLabel": "Modello:",
     "applyPlaceholder": "Applica categorie da un modello …"
   },
+  "reports": {
+    "title": "Rapporti",
+    "subtitle": "Crea, stampa o salva in PDF rapporti di lavoro per singoli collaboratori.",
+    "employeeReportTitle": "Rapporto di lavoro",
+    "employeeLabel": "Collaboratore",
+    "projectFilterLabel": "Progetto (facoltativo)",
+    "allProjects": "Tutti i progetti",
+    "allProjectsButton": "Tutti",
+    "noProjectMatches": "Nessun progetto trovato.",
+    "periodLabel": "Periodo",
+    "periodMonth": "Mese",
+    "periodRange": "Dal – al",
+    "monthLabel": "Mese",
+    "yearLabel": "Anno",
+    "fromLabel": "Dal",
+    "toLabel": "Al",
+    "contentLabel": "Contenuto",
+    "option_category": "Categoria",
+    "option_comment": "Osservazioni",
+    "option_items": "Materiale & spese",
+    "option_dayTotals": "Totali giornalieri",
+    "option_projectSummary": "Riepilogo per progetto",
+    "createButton": "Crea rapporto",
+    "creating": "Creazione...",
+    "printButton": "Stampa / PDF",
+    "printHint": "Nella finestra di stampa scegli «Salva come PDF» per ottenere un PDF.",
+    "loadError": "Impossibile caricare le registrazioni.",
+    "noEntries": "Nessuna registrazione in questo periodo.",
+    "createdOn": "Creato il {date}",
+    "colDate": "Data",
+    "colTime": "Ora",
+    "colHours": "Ore",
+    "colProject": "Progetto",
+    "colCategory": "Categoria",
+    "colComment": "Osservazione",
+    "dayTotal": "Giorno",
+    "totalHours": "Totale ore",
+    "projectSummaryTitle": "Riepilogo per progetto",
+    "signatureEmployee": "Data / firma collaboratore",
+    "signatureManager": "Data / firma responsabile"
+  },
   "settingsCategories": {
     "title": "Categorie",
     "subtitle": "La libreria di categorie riutilizzabili della tua organizzazione (es. ponteggi, levigatura, verniciatura) - per ogni progetto ne scegli un sottoinsieme.",
@@ -361,7 +403,9 @@
     "organizationProfileDescription": "Modifica il nome e il logo dell'organizzazione.",
     "infoSectionTitle": "Info",
     "impressumTitle": "Note legali",
-    "impressumDescription": "Informazioni legali sul fornitore di questa app."
+    "impressumDescription": "Informazioni legali sul fornitore di questa app.",
+    "reportsTitle": "Rapporti",
+    "reportsDescription": "Stampa rapporti di lavoro per collaboratore o salvali in PDF."
   },
   "impressum": {
     "title": "Note legali",

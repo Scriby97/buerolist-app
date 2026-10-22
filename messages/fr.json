@@ -117,7 +117,8 @@
     "allEmployees": "Tous les collaborateurs",
     "lockedHint": "Verrouillé – seuls les administrateurs peuvent modifier les saisies des semaines précédentes.",
     "noEntriesOnDay": "Aucune saisie ce jour-là.",
-    "selectDayHint": "Touche un jour pour voir ses saisies."
+    "selectDayHint": "Touche un jour pour voir ses saisies.",
+    "reportButton": "Rapport"
   },
   "calendar": {
     "today": "Aujourd'hui",
@@ -271,6 +272,47 @@
     "applyLabel": "Modèle :",
     "applyPlaceholder": "Reprendre les catégories d'un modèle …"
   },
+  "reports": {
+    "title": "Rapports",
+    "subtitle": "Créer, imprimer ou enregistrer en PDF des rapports de travail par collaborateur.",
+    "employeeReportTitle": "Rapport de travail",
+    "employeeLabel": "Collaborateur",
+    "projectFilterLabel": "Projet (facultatif)",
+    "allProjects": "Tous les projets",
+    "allProjectsButton": "Tous",
+    "noProjectMatches": "Aucun projet trouvé.",
+    "periodLabel": "Période",
+    "periodMonth": "Mois",
+    "periodRange": "Du – au",
+    "monthLabel": "Mois",
+    "yearLabel": "Année",
+    "fromLabel": "Du",
+    "toLabel": "Au",
+    "contentLabel": "Contenu",
+    "option_category": "Catégorie",
+    "option_comment": "Remarques",
+    "option_items": "Matériel & frais",
+    "option_dayTotals": "Totaux journaliers",
+    "option_projectSummary": "Résumé par projet",
+    "createButton": "Créer le rapport",
+    "creating": "Création...",
+    "printButton": "Imprimer / PDF",
+    "printHint": "Choisis « Enregistrer au format PDF » dans la boîte de dialogue d'impression.",
+    "loadError": "Les saisies n'ont pas pu être chargées.",
+    "noEntries": "Aucune saisie pendant cette période.",
+    "createdOn": "Créé le {date}",
+    "colDate": "Date",
+    "colTime": "Heure",
+    "colHours": "H",
+    "colProject": "Projet",
+    "colCategory": "Catégorie",
+    "colComment": "Remarque",
+    "dayTotal": "Jour",
+    "totalHours": "Total heures",
+    "projectSummaryTitle": "Résumé par projet",
+    "signatureEmployee": "Date / signature collaborateur",
+    "signatureManager": "Date / signature responsable"
+  },
   "settingsCategories": {
     "title": "Catégories",
     "subtitle": "La bibliothèque de catégories réutilisables de ton organisation (p. ex. échafaudage, ponçage, peinture) - tu en choisis un sous-ensemble pour chaque projet.",
@@ -361,7 +403,9 @@
     "organizationProfileDescription": "Modifier le nom et le logo de l'organisation.",
     "infoSectionTitle": "Infos",
     "impressumTitle": "Mentions légales",
-    "impressumDescription": "Informations légales sur l'éditeur de cette app."
+    "impressumDescription": "Informations légales sur l'éditeur de cette app.",
+    "reportsTitle": "Rapports",
+    "reportsDescription": "Imprimer des rapports de travail par collaborateur ou les enregistrer en PDF."
   },
   "impressum": {
     "title": "Mentions légales",

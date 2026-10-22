@@ -117,7 +117,8 @@
     "allEmployees": "All employees",
     "lockedHint": "Locked – only admins can change entries from previous weeks.",
     "noEntriesOnDay": "No entries on this day.",
-    "selectDayHint": "Tap a day to see its entries."
+    "selectDayHint": "Tap a day to see its entries.",
+    "reportButton": "Report"
   },
   "calendar": {
     "today": "Today",
@@ -271,6 +272,47 @@
     "applyLabel": "Template:",
     "applyPlaceholder": "Apply categories from a template …"
   },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Create, print or save work reports for individual employees as PDF.",
+    "employeeReportTitle": "Work report",
+    "employeeLabel": "Employee",
+    "projectFilterLabel": "Project (optional)",
+    "allProjects": "All projects",
+    "allProjectsButton": "All",
+    "noProjectMatches": "No project found.",
+    "periodLabel": "Period",
+    "periodMonth": "Month",
+    "periodRange": "From – to",
+    "monthLabel": "Month",
+    "yearLabel": "Year",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "contentLabel": "Content",
+    "option_category": "Category",
+    "option_comment": "Comments",
+    "option_items": "Material & expenses",
+    "option_dayTotals": "Daily totals",
+    "option_projectSummary": "Summary per project",
+    "createButton": "Create report",
+    "creating": "Creating...",
+    "printButton": "Print / PDF",
+    "printHint": "Choose \"Save as PDF\" in the print dialog to get a PDF.",
+    "loadError": "The entries could not be loaded.",
+    "noEntries": "No entries in this period.",
+    "createdOn": "Created on {date}",
+    "colDate": "Date",
+    "colTime": "Time",
+    "colHours": "Hrs",
+    "colProject": "Project",
+    "colCategory": "Category",
+    "colComment": "Comment",
+    "dayTotal": "Day",
+    "totalHours": "Total hours",
+    "projectSummaryTitle": "Summary per project",
+    "signatureEmployee": "Date / signature employee",
+    "signatureManager": "Date / signature supervisor"
+  },
   "settingsCategories": {
     "title": "Categories",
     "subtitle": "Your organization's reusable category library (e.g. scaffolding, sanding, painting) - you pick a subset of these for each project.",
@@ -361,7 +403,9 @@
     "organizationProfileDescription": "Change the organization's name and logo.",
     "infoSectionTitle": "Info",
     "impressumTitle": "Legal Notice",
-    "impressumDescription": "Legal information about the provider of this app."
+    "impressumDescription": "Legal information about the provider of this app.",
+    "reportsTitle": "Reports",
+    "reportsDescription": "Print work reports per employee or save them as PDF."
   },
   "impressum": {
     "title": "Legal Notice",

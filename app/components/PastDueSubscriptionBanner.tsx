@@ -66,7 +66,7 @@ export const PastDueSubscriptionBanner: FC = () => {
 
   return (
     <div
-      className="fixed z-40 top-20 inset-x-4 md:top-4 md:inset-x-auto md:right-4 md:w-96 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/90 shadow-lg p-4"
+      className="print:hidden fixed z-40 top-20 inset-x-4 md:top-4 md:inset-x-auto md:right-4 md:w-96 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/90 shadow-lg p-4"
       role="alert"
     >
       <div className="flex items-start justify-between gap-3">

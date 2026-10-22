@@ -45,7 +45,7 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
 
   return (
     <nav
-      className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-zinc-950 border-t border-zinc-800 flex items-stretch justify-between px-2 pt-1.5"
+      className="md:hidden print:hidden fixed inset-x-0 bottom-0 z-40 bg-zinc-950 border-t border-zinc-800 flex items-stretch justify-between px-2 pt-1.5"
       style={{ paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))" }}
     >
       <button type="button" onClick={() => handleTabClick("erfassen")} className={itemClass(active === "erfassen" && !accountActive)}>

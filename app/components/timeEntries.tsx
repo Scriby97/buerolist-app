@@ -557,9 +557,19 @@ const MyEntries: FC = () => {
   return (
     <section className="space-y-4">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-          {canManageSelectedOrganization ? t('titleManager') : t('title')}
-        </h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            {canManageSelectedOrganization ? t('titleManager') : t('title')}
+          </h1>
+          {canManageSelectedOrganization && (
+            <a
+              href={creatorId ? `/reports?creatorId=${creatorId}` : '/reports'}
+              className="shrink-0 px-3 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+            >
+              {t('reportButton')}
+            </a>
+          )}
+        </div>
         <div className="flex flex-col gap-2 mt-2">
           {isAdmin && organizations.length > 0 && (
             <div className="flex items-center gap-2">

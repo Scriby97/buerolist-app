@@ -117,7 +117,8 @@
     "allEmployees": "Alle Mitarbeiter",
     "lockedHint": "Gesperrt – Einträge aus früheren Wochen können nur Admins ändern.",
     "noEntriesOnDay": "Keine Einträge an diesem Tag.",
-    "selectDayHint": "Tippe auf einen Tag, um seine Einträge zu sehen."
+    "selectDayHint": "Tippe auf einen Tag, um seine Einträge zu sehen.",
+    "reportButton": "Rapport"
   },
   "calendar": {
     "today": "Heute",
@@ -271,6 +272,47 @@
     "applyLabel": "Vorlage:",
     "applyPlaceholder": "Kategorien aus Vorlage übernehmen …"
   },
+  "reports": {
+    "title": "Rapporte",
+    "subtitle": "Arbeitsrapporte für einzelne Mitarbeiter erstellen, drucken oder als PDF speichern.",
+    "employeeReportTitle": "Arbeitsrapport",
+    "employeeLabel": "Mitarbeiter",
+    "projectFilterLabel": "Projekt (optional)",
+    "allProjects": "Alle Projekte",
+    "allProjectsButton": "Alle",
+    "noProjectMatches": "Kein Projekt gefunden.",
+    "periodLabel": "Zeitraum",
+    "periodMonth": "Monat",
+    "periodRange": "Von – Bis",
+    "monthLabel": "Monat",
+    "yearLabel": "Jahr",
+    "fromLabel": "Von",
+    "toLabel": "Bis",
+    "contentLabel": "Inhalt",
+    "option_category": "Kategorie",
+    "option_comment": "Bemerkungen",
+    "option_items": "Material & Spesen",
+    "option_dayTotals": "Tagestotale",
+    "option_projectSummary": "Zusammenfassung pro Projekt",
+    "createButton": "Rapport erstellen",
+    "creating": "Wird erstellt...",
+    "printButton": "Drucken / PDF",
+    "printHint": "Im Druckdialog „Als PDF speichern“ wählen, um ein PDF zu erhalten.",
+    "loadError": "Die Einträge konnten nicht geladen werden.",
+    "noEntries": "Keine Einträge in diesem Zeitraum.",
+    "createdOn": "Erstellt am {date}",
+    "colDate": "Datum",
+    "colTime": "Zeit",
+    "colHours": "Std.",
+    "colProject": "Projekt",
+    "colCategory": "Kategorie",
+    "colComment": "Bemerkung",
+    "dayTotal": "Tag",
+    "totalHours": "Total Stunden",
+    "projectSummaryTitle": "Zusammenfassung pro Projekt",
+    "signatureEmployee": "Datum / Unterschrift Mitarbeiter",
+    "signatureManager": "Datum / Unterschrift Vorgesetzte(r)"
+  },
   "settingsCategories": {
     "title": "Kategorien",
     "subtitle": "Die wiederverwendbare Kategorien-Bibliothek deiner Organisation (z.B. Gerüstbau, Schleifen, Streichen) - bei jedem Projekt wählst du daraus eine Teilmenge aus.",
@@ -361,7 +403,9 @@
     "organizationProfileDescription": "Name und Logo der Organisation ändern.",
     "infoSectionTitle": "Info",
     "impressumTitle": "Impressum",
-    "impressumDescription": "Rechtliche Angaben zum Anbieter dieser App."
+    "impressumDescription": "Rechtliche Angaben zum Anbieter dieser App.",
+    "reportsTitle": "Rapporte",
+    "reportsDescription": "Arbeitsrapporte pro Mitarbeiter drucken oder als PDF speichern."
   },
   "impressum": {
     "title": "Impressum",

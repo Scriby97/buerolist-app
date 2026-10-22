@@ -93,7 +93,7 @@ interface ToastContainerProps {
 
 export const ToastContainer: FC<ToastContainerProps> = ({ toasts, onRemove }) => {
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+    <div className="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none print:hidden">
       {toasts.map((toast, index) => (
         <div key={toast.id} style={{ marginTop: index > 0 ? '8px' : '0' }} className="pointer-events-auto">
           <Toast
