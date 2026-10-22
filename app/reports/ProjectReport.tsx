@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import type { TimeEntry } from '@/lib/api/timeEntries';
 import type { ProjectDetail } from '@/lib/api/projects';
+import type { Note } from '@/lib/api/notes';
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { projectDisplayName } from '@/lib/format/numbers';
 import { buildCategoryMatrix, formatHoursMinutes, type SummaryRowInput } from '@/lib/timeReport/buildTimeMatrix';
@@ -23,6 +24,8 @@ export interface ProjectReportOptions {
 
 interface ProjectReportProps {
   detail: ProjectDetail;
+  /** Notizen (mit Fotos) beim Kunden des Projekts - erscheinen gekennzeichnet mit */
+  customerNotes?: Note[];
   entries: TimeEntry[];
   organizationName: string;
   /** z.B. "Ganzes Projekt" oder "01.10.2026 – 31.10.2026" */
@@ -62,11 +65,18 @@ export function entriesToSummaryRows(entries: TimeEntry[]): SummaryRowInput[] {
  * (wie Papier) und ohne Hell/Dunkel-Varianten, damit er auch im dunklen
  * App-Modus lesbar druckt.
  */
-export const ProjectReport: FC<ProjectReportProps> = ({ detail, entries, organizationName, periodLabel, options }) => {
+export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = [], entries, organizationName, periodLabel, options }) => {
   const t = useTranslations('reports');
   const tItems = useTranslations('entryItems');
   const dateLocale = useDateLocale();
-  const { project, notes } = detail;
+  const { project } = detail;
+  // Projekt- und Kunden-Notizen zusammen, chronologisch
+  const notes = [
+    ...detail.notes.map((note) => ({ note, fromCustomer: false })),
+    ...customerNotes.map((note) => ({ note, fromCustomer: true })),
+  ].sort((a, b) => a.note.createdAt.localeCompare(b.note.createdAt));
+  const noteMeta = (note: Note, fromCustomer: boolean) =>
+    new Date(note.createdAt).toLocaleDateString(dateLocale) + (fromCustomer ? ` · ${t('customerNote')}` : '');
   const matrix = buildCategoryMatrix(entriesToSummaryRows(entries), '?');
   const data = buildReportData(entries);
   const showTotalColumn = matrix.employees.length > 1;
@@ -81,7 +91,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, entries, organiz
       expense: itemsTotalRappen(own.filter((i) => i.type === 'expense')),
     };
   });
-  const photos = notes.flatMap((note) => note.photos.map((photo) => ({ photo, note })));
+  const photos = notes.flatMap(({ note, fromCustomer }) => note.photos.map((photo) => ({ photo, note, fromCustomer })));
 
   return (
     <article className="report-sheet bg-white text-zinc-900 rounded-lg border border-zinc-200 p-6 shadow-sm print:border-0 print:p-0 print:shadow-none">
@@ -273,9 +283,9 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, entries, organiz
         <section>
           <h2 className={sectionTitle}>{t('sectionNotes')}</h2>
           <ul className="space-y-2 text-sm">
-            {notes.map((note) => (
+            {notes.map(({ note, fromCustomer }) => (
               <li key={note.id} className="break-inside-avoid">
-                <p className="text-xs text-zinc-500">{new Date(note.createdAt).toLocaleDateString(dateLocale)}</p>
+                <p className="text-xs text-zinc-500">{noteMeta(note, fromCustomer)}</p>
                 <p className="whitespace-pre-wrap">{note.text}</p>
               </li>
             ))}
@@ -287,13 +297,11 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, entries, organiz
         <section>
           <h2 className={sectionTitle}>{t('sectionPhotos')}</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {photos.map(({ photo, note }) => (
+            {photos.map(({ photo, note, fromCustomer }) => (
               <figure key={photo.id} className="break-inside-avoid">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photo.url} alt="" className="w-full rounded border border-zinc-200 object-cover" />
-                <figcaption className="mt-0.5 text-xs text-zinc-500">
-                  {new Date(note.createdAt).toLocaleDateString(dateLocale)}
-                </figcaption>
+                <figcaption className="mt-0.5 text-xs text-zinc-500">{noteMeta(note, fromCustomer)}</figcaption>
               </figure>
             ))}
           </div>

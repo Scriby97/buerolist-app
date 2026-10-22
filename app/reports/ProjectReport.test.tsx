@@ -71,6 +71,30 @@ describe('ProjectReport', () => {
     expect(container.querySelector('img')?.getAttribute('src')).toBe('https://example.com/a.jpg')
   })
 
+  it('zeigt auch Notizen und Fotos beim Kunden, gekennzeichnet', () => {
+    const customerNotes = [
+      {
+        id: 'cn',
+        text: 'Kunde in den Ferien',
+        createdAt: '2026-10-01T10:00:00Z',
+        photos: [{ id: 'cph', noteId: 'cn', url: 'https://example.com/k.jpg', createdAt: '2026-10-01T10:00:00Z' }],
+      },
+    ] as unknown as ProjectDetail['notes']
+    const { container } = renderWithIntl(
+      <ProjectReport
+        detail={{ ...detail, notes: [] }}
+        customerNotes={customerNotes}
+        entries={entries}
+        organizationName="3xGermann"
+        periodLabel="Ganzes Projekt"
+        options={all}
+      />,
+    )
+    expect(screen.getByText('Kunde in den Ferien')).toBeTruthy()
+    expect(container.querySelector('img')?.getAttribute('src')).toBe('https://example.com/k.jpg')
+    expect(screen.getAllByText(/Notiz zum Kunden/).length).toBe(2)
+  })
+
   it('laesst abgewaehlte Abschnitte weg', () => {
     const { container } = renderWithIntl(
       <ProjectReport detail={detail} entries={entries} organizationName="3xGermann" periodLabel="Ganzes Projekt" options={none} />,

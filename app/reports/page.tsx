@@ -13,6 +13,8 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
 import { getOrganizationMembers } from '@/lib/api/organizationMembers'
 import { getProjectDetail, getProjects, type Project, type ProjectDetail } from '@/lib/api/projects'
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries'
+import { getCustomerDetail } from '@/lib/api/customers'
+import type { Note } from '@/lib/api/notes'
 import type { OrganizationMemberDetail } from '@/lib/types/user'
 import { projectDisplayName } from '@/lib/format/numbers'
 import { monthRange, rangeToIso } from '@/lib/reports/reportData'
@@ -66,7 +68,12 @@ function ReportsPageContent() {
   })
   // Ergebnis gehoert zu einer bestimmten Auswahl - aendert sich die Auswahl,
   // verschwindet die alte Vorschau automatisch.
-  const [result, setResult] = useState<{ key: string; entries: TimeEntry[]; detail?: ProjectDetail } | null>(null)
+  const [result, setResult] = useState<{
+    key: string
+    entries: TimeEntry[]
+    detail?: ProjectDetail
+    customerNotes?: Note[]
+  } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -124,11 +131,14 @@ function ReportsPageContent() {
         const page = await getTimeEntries(selectedOrgId, { creatorId, ...range, projectId: projectId || undefined })
         setResult({ key: selectionKey, entries: page.timeEntries })
       } else {
-        const [detail, page] = await Promise.all([
+        const customerId = projects.find((p) => p.id === projectId)?.customerId
+        const [detail, page, customer] = await Promise.all([
           getProjectDetail(projectId),
           getTimeEntries(selectedOrgId, { projectId, ...range }),
+          // Kunden-Notizen/Fotos sind optional - fehlen sie, kommt der Rapport trotzdem
+          customerId ? getCustomerDetail(customerId).catch(() => null) : null,
         ])
-        setResult({ key: selectionKey, entries: page.timeEntries, detail })
+        setResult({ key: selectionKey, entries: page.timeEntries, detail, customerNotes: customer?.notes ?? [] })
       }
     } catch (err) {
       setError(getApiErrorMessage(err, t('loadError')))
@@ -348,6 +358,7 @@ function ReportsPageContent() {
         {current?.detail && (
           <ProjectReport
             detail={current.detail}
+            customerNotes={current.customerNotes}
             entries={current.entries}
             organizationName={organizationName}
             periodLabel={periodLabel}

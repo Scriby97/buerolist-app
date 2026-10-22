@@ -339,7 +339,8 @@
     "projectOption_entries": "Liste de toutes les saisies",
     "projectOption_comments": "Remarques",
     "projectOption_notes": "Notes",
-    "projectOption_photos": "Photos"
+    "projectOption_photos": "Photos",
+    "customerNote": "Note sur le client"
   },
   "settingsCategories": {
     "title": "Catégories",

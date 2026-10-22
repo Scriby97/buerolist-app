@@ -339,7 +339,8 @@
     "projectOption_entries": "Liste aller Einträge",
     "projectOption_comments": "Bemerkungen",
     "projectOption_notes": "Notizen",
-    "projectOption_photos": "Fotos"
+    "projectOption_photos": "Fotos",
+    "customerNote": "Notiz zum Kunden"
   },
   "settingsCategories": {
     "title": "Kategorien",
