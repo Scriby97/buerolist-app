@@ -344,7 +344,7 @@
   "settingsCategories": {
     "title": "Categories",
     "subtitle": "Your organization's reusable category library (e.g. scaffolding, sanding, painting) - you pick a subset of these for each project.",
-    "newCategoryPlaceholder": "New category, e.g. Scaffolding",
+    "newCategoryPlaceholder": "New category",
     "addButton": "Add",
     "loadError": "Error loading categories",
     "noCategories": "No categories yet.",
@@ -357,7 +357,7 @@
     "confirmDeleteTitle": "Delete category",
     "confirmDeleteMessage": "Are you sure you want to delete this category? It will also be removed from all projects that had it selected.",
     "subtitleGroups": "Organise your business activities into main categories (e.g. painting, flooring, miscellaneous). For each project you pick the matching categories.",
-    "newGroupPlaceholder": "New main category, e.g. Painting",
+    "newGroupPlaceholder": "New main category",
     "addGroupButton": "Add main category",
     "noGroups": "No main categories yet.",
     "noCategoriesInGroup": "No categories in this main category yet.",

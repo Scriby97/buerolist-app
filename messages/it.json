@@ -344,7 +344,7 @@
   "settingsCategories": {
     "title": "Categorie",
     "subtitle": "La libreria di categorie riutilizzabili della tua organizzazione (es. ponteggi, levigatura, verniciatura) - per ogni progetto ne scegli un sottoinsieme.",
-    "newCategoryPlaceholder": "Nuova categoria, es. Ponteggi",
+    "newCategoryPlaceholder": "Nuova categoria",
     "addButton": "Aggiungi",
     "loadError": "Errore durante il caricamento delle categorie",
     "noCategories": "Nessuna categoria creata ancora.",
@@ -357,7 +357,7 @@
     "confirmDeleteTitle": "Elimina categoria",
     "confirmDeleteMessage": "Vuoi davvero eliminare questa categoria? Verrà rimossa anche da tutti i progetti che l'avevano selezionata.",
     "subtitleGroups": "Organizza le attività della tua azienda in categorie principali (ad es. pittura, pavimenti, varie). Per ogni progetto scegli le categorie adatte.",
-    "newGroupPlaceholder": "Nuova categoria principale, ad es. Pittura",
+    "newGroupPlaceholder": "Nuova categoria principale",
     "addGroupButton": "Aggiungi categoria principale",
     "noGroups": "Nessuna categoria principale.",
     "noCategoriesInGroup": "Nessuna categoria in questa categoria principale.",

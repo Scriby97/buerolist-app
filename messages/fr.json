@@ -344,7 +344,7 @@
   "settingsCategories": {
     "title": "Catégories",
     "subtitle": "La bibliothèque de catégories réutilisables de ton organisation (p. ex. échafaudage, ponçage, peinture) - tu en choisis un sous-ensemble pour chaque projet.",
-    "newCategoryPlaceholder": "Nouvelle catégorie, p. ex. Échafaudage",
+    "newCategoryPlaceholder": "Nouvelle catégorie",
     "addButton": "Ajouter",
     "loadError": "Erreur lors du chargement des catégories",
     "noCategories": "Aucune catégorie créée pour l'instant.",
@@ -357,7 +357,7 @@
     "confirmDeleteTitle": "Supprimer la catégorie",
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette catégorie ? Elle sera également retirée de tous les projets qui l'avaient sélectionnée.",
     "subtitleGroups": "Organise les activités de ton entreprise en catégories principales (p. ex. peinture, revêtements de sol, divers). Pour chaque projet, tu choisis les catégories correspondantes.",
-    "newGroupPlaceholder": "Nouvelle catégorie principale, p. ex. Peinture",
+    "newGroupPlaceholder": "Nouvelle catégorie principale",
     "addGroupButton": "Ajouter une catégorie principale",
     "noGroups": "Aucune catégorie principale.",
     "noCategoriesInGroup": "Aucune catégorie dans cette catégorie principale.",

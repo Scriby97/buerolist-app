@@ -344,7 +344,7 @@
   "settingsCategories": {
     "title": "Kategorien",
     "subtitle": "Die wiederverwendbare Kategorien-Bibliothek deiner Organisation (z.B. Gerüstbau, Schleifen, Streichen) - bei jedem Projekt wählst du daraus eine Teilmenge aus.",
-    "newCategoryPlaceholder": "Neue Kategorie, z.B. Gerüstbau",
+    "newCategoryPlaceholder": "Neue Kategorie",
     "addButton": "Hinzufügen",
     "loadError": "Fehler beim Laden der Kategorien",
     "noCategories": "Noch keine Kategorien angelegt.",
@@ -357,7 +357,7 @@
     "confirmDeleteTitle": "Kategorie löschen",
     "confirmDeleteMessage": "Möchtest du diese Kategorie wirklich löschen? Sie wird dadurch auch von allen Projekten entfernt, die sie ausgewählt hatten.",
     "subtitleGroups": "Gliedere die Tätigkeiten deines Betriebs in Hauptkategorien (z.B. Malerarbeiten, Bodenbelagsarbeiten, Diverses). Bei jedem Projekt wählst du daraus die passenden Kategorien aus.",
-    "newGroupPlaceholder": "Neue Hauptkategorie, z.B. Malerarbeiten",
+    "newGroupPlaceholder": "Neue Hauptkategorie",
     "addGroupButton": "Hauptkategorie hinzufügen",
     "noGroups": "Noch keine Hauptkategorien angelegt.",
     "noCategoriesInGroup": "Noch keine Kategorien in dieser Hauptkategorie.",

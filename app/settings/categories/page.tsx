@@ -235,7 +235,7 @@ export default function SettingsCategoriesPage() {
             onChange={(e) => setNewGroupName(e.target.value)}
             placeholder={t('newGroupPlaceholder')}
             aria-label={t('newGroupPlaceholder')}
-            className={`flex-1 ${inputClass}`}
+            className={`min-w-0 flex-1 ${inputClass}`}
           />
           <button type="submit" disabled={submitting || !newGroupName.trim()} className={primaryButton}>
             {t('addGroupButton')}
@@ -270,7 +270,7 @@ export default function SettingsCategoriesPage() {
                         onChange={(e) => setEditing({ ...editing, name: e.target.value })}
                         aria-label={t('groupNameLabel')}
                         autoFocus
-                        className={`flex-1 ${inputClass} py-1`}
+                        className={`min-w-0 flex-1 ${inputClass} py-1`}
                       />
                     ) : (
                       <button
@@ -416,7 +416,7 @@ export default function SettingsCategoriesPage() {
                           onChange={(e) => setNewCategoryNames((prev) => ({ ...prev, [group.id]: e.target.value }))}
                           placeholder={t('newCategoryPlaceholder')}
                           aria-label={t('newCategoryInGroupLabel', { group: group.name })}
-                          className={`flex-1 ${inputClass}`}
+                          className={`min-w-0 flex-1 ${inputClass}`}
                         />
                         <button
                           type="submit"
