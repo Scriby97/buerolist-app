@@ -23,6 +23,7 @@ vi.mock('@/lib/api/projects', () => ({
 vi.mock('@/lib/api/categories', () => ({
   getCategories: () => Promise.resolve([]),
   getCategoryGroups: () => Promise.resolve([]),
+  getCategoryTemplates: () => Promise.resolve([]),
 }))
 
 beforeEach(() => vi.clearAllMocks())

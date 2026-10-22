@@ -7,6 +7,7 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { createProject, updateProject, type Project } from '@/lib/api/projects';
 import { getCategoryGroups, type CategoryGroup } from '@/lib/api/categories';
 import { CategoryPicker } from './CategoryPicker';
+import { CategoryTemplateSelect } from './CategoryTemplateSelect';
 
 interface CreateProjectModalProps {
   customerId: string;
@@ -100,6 +101,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
               <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 {t('categoriesLabel')}
               </span>
+              <CategoryTemplateSelect organizationId={selectedOrgId} onApply={setSelectedCategoryIds} />
               <div className="max-h-72 overflow-y-auto">
                 <CategoryPicker groups={categoryGroups} selectedIds={selectedCategoryIds} onChange={setSelectedCategoryIds} />
               </div>

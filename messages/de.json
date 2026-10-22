@@ -248,6 +248,25 @@
     "empty": "Noch keine Kategorien angelegt (Einstellungen → Kategorien).",
     "selectAllInGroup": "Alle Kategorien in {group} auswählen"
   },
+  "categoryTemplates": {
+    "title": "Kategorievorlagen",
+    "subtitle": "Häufige Zusammenstellungen von Kategorien, die du einem Projekt in einem Schritt zuweist.",
+    "newButton": "Neue Vorlage",
+    "empty": "Noch keine Vorlagen angelegt.",
+    "categoryCount": "{count, plural, one {# Kategorie} other {# Kategorien}}",
+    "newTitle": "Neue Vorlage",
+    "editTitle": "Vorlage bearbeiten",
+    "nameLabel": "Name der Vorlage",
+    "namePlaceholder": "z.B. Holzwerkrenovation",
+    "saveSuccess": "Vorlage gespeichert",
+    "saveError": "Fehler beim Speichern der Vorlage",
+    "deleteSuccess": "Vorlage gelöscht",
+    "deleteError": "Fehler beim Löschen der Vorlage",
+    "confirmDeleteTitle": "Vorlage löschen",
+    "confirmDeleteMessage": "Möchtest du die Vorlage „{name}“ wirklich löschen? Bestehende Projekte behalten ihre Kategorien.",
+    "applyLabel": "Vorlage:",
+    "applyPlaceholder": "Kategorien aus Vorlage übernehmen …"
+  },
   "settingsCategories": {
     "title": "Kategorien",
     "subtitle": "Die wiederverwendbare Kategorien-Bibliothek deiner Organisation (z.B. Gerüstbau, Schleifen, Streichen) - bei jedem Projekt wählst du daraus eine Teilmenge aus.",

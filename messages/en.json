@@ -248,6 +248,25 @@
     "empty": "No categories yet (Settings → Categories).",
     "selectAllInGroup": "Select all categories in {group}"
   },
+  "categoryTemplates": {
+    "title": "Category templates",
+    "subtitle": "Common sets of categories that you assign to a project in one step.",
+    "newButton": "New template",
+    "empty": "No templates yet.",
+    "categoryCount": "{count, plural, one {# category} other {# categories}}",
+    "newTitle": "New template",
+    "editTitle": "Edit template",
+    "nameLabel": "Template name",
+    "namePlaceholder": "e.g. Woodwork renovation",
+    "saveSuccess": "Template saved",
+    "saveError": "Error saving the template",
+    "deleteSuccess": "Template deleted",
+    "deleteError": "Error deleting the template",
+    "confirmDeleteTitle": "Delete template",
+    "confirmDeleteMessage": "Do you really want to delete the template “{name}”? Existing projects keep their categories.",
+    "applyLabel": "Template:",
+    "applyPlaceholder": "Apply categories from a template …"
+  },
   "settingsCategories": {
     "title": "Categories",
     "subtitle": "Your organization's reusable category library (e.g. scaffolding, sanding, painting) - you pick a subset of these for each project.",

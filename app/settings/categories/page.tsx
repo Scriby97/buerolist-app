@@ -22,6 +22,7 @@ import {
   type CategoryGroup,
 } from '@/lib/api/categories'
 import { formatCategoryNumber } from '@/lib/categories'
+import { CategoryTemplatesSection } from '@/app/components/CategoryTemplatesSection'
 
 const inputClass =
   'px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-sm bg-white dark:bg-zinc-800 dark:text-zinc-100 focus:border-blue-500 focus:ring-blue-500'
@@ -433,6 +434,12 @@ export default function SettingsCategoriesPage() {
           </div>
         )}
       </div>
+
+      {!isLoading && selectedOrgId && (
+        <div className="max-w-2xl mx-auto mt-10">
+          <CategoryTemplatesSection organizationId={selectedOrgId} groups={groups} showToast={showToast} />
+        </div>
+      )}
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
 

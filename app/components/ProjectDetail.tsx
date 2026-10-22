@@ -21,6 +21,7 @@ import {
 } from '@/lib/api/projects';
 import { getCategoryGroups, type CategoryGroup } from '@/lib/api/categories';
 import { CategoryPicker } from './CategoryPicker';
+import { CategoryTemplateSelect } from './CategoryTemplateSelect';
 import { formatCategoryNumber, groupCategories } from '@/lib/categories';
 import { NotesSection } from './NotesSection';
 import { ConfirmDialog } from './ConfirmDialog';
@@ -411,6 +412,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
 
         {editingCategories ? (
           <div className="space-y-3">
+            <CategoryTemplateSelect organizationId={selectedOrgId} onApply={setSelectedCategoryIds} />
             <CategoryPicker groups={categoryGroups} selectedIds={selectedCategoryIds} onChange={setSelectedCategoryIds} />
             <div className="flex gap-2">
               <button

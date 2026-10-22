@@ -127,3 +127,62 @@ export async function deleteCategory(id: string): Promise<void> {
     await throwApiError(res, 'Fehler beim Löschen der Kategorie')
   }
 }
+
+/** Kategorievorlage, z.B. "Holzwerkrenovation" */
+export interface CategoryTemplate {
+  id: string
+  organizationId: string
+  name: string
+  categoryIds: string[]
+}
+
+export async function getCategoryTemplates(
+  organizationId: string,
+  options: { signal?: AbortSignal } = {},
+): Promise<CategoryTemplate[]> {
+  const url = new URL(buildApiUrl('/categories/templates'))
+  url.searchParams.set('organizationId', organizationId)
+  const res = await authenticatedFetch(url.toString(), { signal: options.signal })
+  if (!res.ok) {
+    await throwApiError(res, `HTTP ${res.status}`)
+  }
+  return res.json()
+}
+
+export async function createCategoryTemplate(data: {
+  name: string
+  categoryIds: string[]
+  organizationId?: string
+}): Promise<CategoryTemplate> {
+  const res = await authenticatedFetch(buildApiUrl('/categories/templates'), {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    await throwApiError(res, 'Fehler beim Anlegen der Vorlage')
+  }
+  return res.json()
+}
+
+export async function updateCategoryTemplate(
+  id: string,
+  data: { name?: string; categoryIds?: string[] },
+): Promise<CategoryTemplate> {
+  const res = await authenticatedFetch(buildApiUrl(`/categories/templates/${id}`), {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    await throwApiError(res, 'Fehler beim Speichern der Vorlage')
+  }
+  return res.json()
+}
+
+export async function deleteCategoryTemplate(id: string): Promise<void> {
+  const res = await authenticatedFetch(buildApiUrl(`/categories/templates/${id}`), {
+    method: 'DELETE',
+  })
+  if (!res.ok) {
+    await throwApiError(res, 'Fehler beim Löschen der Vorlage')
+  }
+}

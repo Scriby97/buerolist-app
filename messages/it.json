@@ -248,6 +248,25 @@
     "empty": "Nessuna categoria (Impostazioni → Categorie).",
     "selectAllInGroup": "Seleziona tutte le categorie in {group}"
   },
+  "categoryTemplates": {
+    "title": "Modelli di categorie",
+    "subtitle": "Insiemi frequenti di categorie da assegnare a un progetto in un solo passaggio.",
+    "newButton": "Nuovo modello",
+    "empty": "Nessun modello.",
+    "categoryCount": "{count, plural, one {# categoria} other {# categorie}}",
+    "newTitle": "Nuovo modello",
+    "editTitle": "Modifica modello",
+    "nameLabel": "Nome del modello",
+    "namePlaceholder": "ad es. Rinnovo opere in legno",
+    "saveSuccess": "Modello salvato",
+    "saveError": "Errore durante il salvataggio del modello",
+    "deleteSuccess": "Modello eliminato",
+    "deleteError": "Errore durante l'eliminazione del modello",
+    "confirmDeleteTitle": "Elimina modello",
+    "confirmDeleteMessage": "Vuoi davvero eliminare il modello «{name}»? I progetti esistenti mantengono le loro categorie.",
+    "applyLabel": "Modello:",
+    "applyPlaceholder": "Applica categorie da un modello …"
+  },
   "settingsCategories": {
     "title": "Categorie",
     "subtitle": "La libreria di categorie riutilizzabili della tua organizzazione (es. ponteggi, levigatura, verniciatura) - per ogni progetto ne scegli un sottoinsieme.",

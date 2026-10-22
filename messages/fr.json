@@ -248,6 +248,25 @@
     "empty": "Aucune catégorie (Paramètres → Catégories).",
     "selectAllInGroup": "Sélectionner toutes les catégories de {group}"
   },
+  "categoryTemplates": {
+    "title": "Modèles de catégories",
+    "subtitle": "Ensembles fréquents de catégories que tu attribues à un projet en une étape.",
+    "newButton": "Nouveau modèle",
+    "empty": "Aucun modèle.",
+    "categoryCount": "{count, plural, one {# catégorie} other {# catégories}}",
+    "newTitle": "Nouveau modèle",
+    "editTitle": "Modifier le modèle",
+    "nameLabel": "Nom du modèle",
+    "namePlaceholder": "p. ex. Rénovation des boiseries",
+    "saveSuccess": "Modèle enregistré",
+    "saveError": "Erreur lors de l'enregistrement du modèle",
+    "deleteSuccess": "Modèle supprimé",
+    "deleteError": "Erreur lors de la suppression du modèle",
+    "confirmDeleteTitle": "Supprimer le modèle",
+    "confirmDeleteMessage": "Veux-tu vraiment supprimer le modèle « {name} » ? Les projets existants gardent leurs catégories.",
+    "applyLabel": "Modèle :",
+    "applyPlaceholder": "Reprendre les catégories d'un modèle …"
+  },
   "settingsCategories": {
     "title": "Catégories",
     "subtitle": "La bibliothèque de catégories réutilisables de ton organisation (p. ex. échafaudage, ponçage, peinture) - tu en choisis un sous-ensemble pour chaque projet.",
