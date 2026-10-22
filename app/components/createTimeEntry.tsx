@@ -14,6 +14,7 @@ import { ToastContainer } from './Toast';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
 import { ProjectCombobox } from './ProjectCombobox';
+import { CategoryOptions } from './CategoryOptions';
 import { EntryItemsEditor } from './EntryItemsEditor';
 import { rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
@@ -396,11 +397,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
               disabled={categoriesLoading}
             >
               <option value="">{t('noCategoryOption')}</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              <CategoryOptions categories={categories} />
             </select>
           </div>
         )}

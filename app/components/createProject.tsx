@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { createProject, updateProject, type Project } from '@/lib/api/projects';
-import { getCategories, type Category } from '@/lib/api/categories';
+import { getCategoryGroups, type CategoryGroup } from '@/lib/api/categories';
+import { CategoryPicker } from './CategoryPicker';
 
 interface CreateProjectModalProps {
   customerId: string;
@@ -24,7 +25,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
   const getApiErrorMessage = useApiErrorMessage();
 
   const [title, setTitle] = useState(project?.title ?? '');
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryGroups, setCategoryGroups] = useState<CategoryGroup[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +35,7 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
 
   useEffect(() => {
     if (!selectedOrgId || isEdit) return;
-    getCategories(selectedOrgId).then(setCategories).catch(() => setCategories([]));
+    getCategoryGroups(selectedOrgId).then(setCategoryGroups).catch(() => setCategoryGroups([]));
   }, [selectedOrgId, isEdit]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -94,38 +95,13 @@ const CreateProjectModal: FC<CreateProjectModalProps> = ({ customerId, onClose, 
             )}
           </div>
 
-          {categories.length > 0 && (
+          {categoryGroups.some((g) => g.categories.length > 0) && (
             <div className="space-y-1.5">
               <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 {t('categoriesLabel')}
               </span>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => {
-                  const checked = selectedCategoryIds.includes(category.id);
-                  return (
-                    <label
-                      key={category.id}
-                      className={[
-                        'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer border transition-colors',
-                        checked
-                          ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
-                          : 'border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700',
-                      ].join(' ')}
-                    >
-                      <input
-                        type="checkbox"
-                        className="sr-only"
-                        checked={checked}
-                        onChange={() =>
-                          setSelectedCategoryIds((prev) =>
-                            checked ? prev.filter((id) => id !== category.id) : [...prev, category.id],
-                          )
-                        }
-                      />
-                      {category.name}
-                    </label>
-                  );
-                })}
+              <div className="max-h-72 overflow-y-auto">
+                <CategoryPicker groups={categoryGroups} selectedIds={selectedCategoryIds} onChange={setSelectedCategoryIds} />
               </div>
             </div>
           )}

@@ -19,7 +19,9 @@ import {
   deleteProject,
   type ProjectDetail as ProjectDetailData,
 } from '@/lib/api/projects';
-import { getCategories, type Category } from '@/lib/api/categories';
+import { getCategoryGroups, type CategoryGroup } from '@/lib/api/categories';
+import { CategoryPicker } from './CategoryPicker';
+import { formatCategoryNumber, groupCategories } from '@/lib/categories';
 import { NotesSection } from './NotesSection';
 import { ConfirmDialog } from './ConfirmDialog';
 import { useToast } from '@/lib/hooks/useToast';
@@ -41,7 +43,8 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const [detail, setDetail] = useState<ProjectDetailData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [categoryGroups, setCategoryGroups] = useState<CategoryGroup[]>([]);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [editingCategories, setEditingCategories] = useState(false);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
   const [savingCategories, setSavingCategories] = useState(false);
@@ -71,7 +74,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
 
   useEffect(() => {
     if (!editingCategories || !selectedOrgId) return;
-    getCategories(selectedOrgId).then(setAllCategories).catch(() => setAllCategories([]));
+    getCategoryGroups(selectedOrgId).then(setCategoryGroups).catch(() => setCategoryGroups([]));
   }, [editingCategories, selectedOrgId]);
 
   const handleSaveCategories = async () => {
@@ -216,88 +219,6 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           </button>
         </div>
       )}
-
-      {/* Kategorien */}
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('categoriesTitle')}</h2>
-          {canManageSelectedOrganization && !editingCategories && (
-            <button
-              onClick={() => setEditingCategories(true)}
-              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              {tCommon('edit')}
-            </button>
-          )}
-        </div>
-
-        {editingCategories ? (
-          <div className="space-y-3">
-            <div className="flex flex-wrap gap-2">
-              {allCategories.map((category) => {
-                const checked = selectedCategoryIds.includes(category.id);
-                return (
-                  <label
-                    key={category.id}
-                    className={[
-                      'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm cursor-pointer border transition-colors',
-                      checked
-                        ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
-                        : 'border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-700',
-                    ].join(' ')}
-                  >
-                    <input
-                      type="checkbox"
-                      className="sr-only"
-                      checked={checked}
-                      onChange={() =>
-                        setSelectedCategoryIds((prev) =>
-                          checked ? prev.filter((id) => id !== category.id) : [...prev, category.id],
-                        )
-                      }
-                    />
-                    {category.name}
-                  </label>
-                );
-              })}
-              {allCategories.length === 0 && (
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noCategoriesInOrg')}</p>
-              )}
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleSaveCategories}
-                disabled={savingCategories}
-                className="px-4 py-1.5 text-sm font-medium rounded-lg bg-brown-600 hover:bg-brown-700 text-white disabled:opacity-50 transition-colors"
-              >
-                {savingCategories ? t('saving') : tCommon('save')}
-              </button>
-              <button
-                onClick={() => {
-                  setEditingCategories(false);
-                  setSelectedCategoryIds(categories.map((c) => c.id));
-                }}
-                className="px-4 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
-              >
-                {tCommon('cancel')}
-              </button>
-            </div>
-          </div>
-        ) : categories.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <span
-                key={category.id}
-                className="px-3 py-1 rounded-full text-sm bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300"
-              >
-                {category.name}
-              </span>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noCategoriesSelected')}</p>
-        )}
-      </div>
 
       {/* Zeit-Zusammenfassung */}
       {/* Ganze Karte klickbar (oeffnet die Zeitaufstellung), der Button daneben
@@ -456,6 +377,88 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           notes={notes}
           onChanged={(next) => setDetail((prev) => (prev ? { ...prev, notes: next } : prev))}
         />
+      </div>
+
+      {/* Kategorien - weiter unten und zugeklappt: werden meist einmal
+          gewaehlt und danach kaum mehr angefasst; es koennen viele sein. */}
+      <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => setCategoriesOpen((o) => !o)}
+            aria-expanded={categoriesOpen || editingCategories}
+            className="flex flex-1 items-center gap-2 text-left"
+          >
+            <svg className={`h-4 w-4 shrink-0 text-zinc-500 transition-transform ${categoriesOpen || editingCategories ? 'rotate-90' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+              {t('categoriesTitle')} <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">({categories.length})</span>
+            </h2>
+          </button>
+          {canManageSelectedOrganization && !editingCategories && (
+            <button
+              onClick={() => {
+                setEditingCategories(true);
+                setCategoriesOpen(true);
+              }}
+              className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              {tCommon('edit')}
+            </button>
+          )}
+        </div>
+
+        {editingCategories ? (
+          <div className="space-y-3">
+            <CategoryPicker groups={categoryGroups} selectedIds={selectedCategoryIds} onChange={setSelectedCategoryIds} />
+            <div className="flex gap-2">
+              <button
+                onClick={handleSaveCategories}
+                disabled={savingCategories}
+                className="px-4 py-1.5 text-sm font-medium rounded-lg bg-brown-600 hover:bg-brown-700 text-white disabled:opacity-50 transition-colors"
+              >
+                {savingCategories ? t('saving') : tCommon('save')}
+              </button>
+              <button
+                onClick={() => {
+                  setEditingCategories(false);
+                  setSelectedCategoryIds(categories.map((c) => c.id));
+                }}
+                className="px-4 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+              >
+                {tCommon('cancel')}
+              </button>
+            </div>
+          </div>
+        ) : categoriesOpen ? (
+          categories.length > 0 ? (
+            <div className="space-y-3">
+              {groupCategories(categories).map(({ group, categories: list }) => (
+                <div key={group?.id ?? 'none'}>
+                  {group && (
+                    <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                      <span className="mr-1.5 font-mono tabular-nums text-zinc-500 dark:text-zinc-400">{group.number}</span>
+                      {group.name}
+                    </p>
+                  )}
+                  <ul className="mt-1 space-y-0.5 pl-1">
+                    {list.map((category) => (
+                      <li key={category.id} className="text-sm text-zinc-700 dark:text-zinc-300">
+                        <span className="mr-2 font-mono text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                          {formatCategoryNumber(group?.number, category.number)}
+                        </span>
+                        {category.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('noCategoriesSelected')}</p>
+          )
+        ) : null}
       </div>
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />

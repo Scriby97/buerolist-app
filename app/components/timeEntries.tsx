@@ -20,6 +20,7 @@ import { currentWeekStartKey, isInCurrentWeek } from '@/lib/time/workWeek';
 import { formatProjectNumber } from '@/lib/format/numbers';
 import { colorVars, ENTITY_BORDER_LEFT, projectColor } from '@/lib/colors/entityColors';
 import { EntryItemsEditor } from './EntryItemsEditor';
+import { CategoryOptions } from './CategoryOptions';
 import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
@@ -657,11 +658,7 @@ const MyEntries: FC = () => {
                       disabled={!canEditEditingEntry}
                     >
                       <option value="">{t('noCategoryOption')}</option>
-                      {editCategories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
+                      <CategoryOptions categories={editCategories} />
                     </select>
                   </div>
                 )}

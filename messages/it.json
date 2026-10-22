@@ -244,6 +244,10 @@
     "previousPhoto": "Foto precedente",
     "nextPhoto": "Foto successiva"
   },
+  "categoryPicker": {
+    "empty": "Nessuna categoria (Impostazioni → Categorie).",
+    "selectAllInGroup": "Seleziona tutte le categorie in {group}"
+  },
   "settingsCategories": {
     "title": "Categorie",
     "subtitle": "La libreria di categorie riutilizzabili della tua organizzazione (es. ponteggi, levigatura, verniciatura) - per ogni progetto ne scegli un sottoinsieme.",
@@ -258,7 +262,25 @@
     "deleteSuccess": "Categoria eliminata",
     "deleteError": "Errore durante l'eliminazione della categoria",
     "confirmDeleteTitle": "Elimina categoria",
-    "confirmDeleteMessage": "Vuoi davvero eliminare questa categoria? Verrà rimossa anche da tutti i progetti che l'avevano selezionata."
+    "confirmDeleteMessage": "Vuoi davvero eliminare questa categoria? Verrà rimossa anche da tutti i progetti che l'avevano selezionata.",
+    "subtitleGroups": "Organizza le attività della tua azienda in categorie principali (ad es. pittura, pavimenti, varie). Per ogni progetto scegli le categorie adatte.",
+    "newGroupPlaceholder": "Nuova categoria principale, ad es. Pittura",
+    "addGroupButton": "Aggiungi categoria principale",
+    "noGroups": "Nessuna categoria principale.",
+    "noCategoriesInGroup": "Nessuna categoria in questa categoria principale.",
+    "groupNameLabel": "Nome della categoria principale",
+    "categoryNameLabel": "Nome della categoria",
+    "moveToGroupLabel": "Categoria principale",
+    "renameGroup": "Rinomina categoria principale",
+    "deleteGroup": "Elimina categoria principale",
+    "groupNotEmptyHint": "Si possono eliminare solo categorie principali vuote. Sposta o elimina prima le sue categorie.",
+    "newCategoryInGroupLabel": "Nuova categoria in {group}",
+    "groupCreateSuccess": "Categoria principale creata",
+    "groupCreateError": "Errore durante la creazione della categoria principale",
+    "groupUpdateSuccess": "Categoria principale salvata",
+    "groupDeleteSuccess": "Categoria principale eliminata",
+    "confirmDeleteGroupTitle": "Elimina categoria principale",
+    "confirmDeleteGroupMessage": "Vuoi davvero eliminare questa categoria principale?"
   },
   "login": {
     "title": "Bürolist",

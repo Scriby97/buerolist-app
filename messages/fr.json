@@ -244,6 +244,10 @@
     "previousPhoto": "Photo précédente",
     "nextPhoto": "Photo suivante"
   },
+  "categoryPicker": {
+    "empty": "Aucune catégorie (Paramètres → Catégories).",
+    "selectAllInGroup": "Sélectionner toutes les catégories de {group}"
+  },
   "settingsCategories": {
     "title": "Catégories",
     "subtitle": "La bibliothèque de catégories réutilisables de ton organisation (p. ex. échafaudage, ponçage, peinture) - tu en choisis un sous-ensemble pour chaque projet.",
@@ -258,7 +262,25 @@
     "deleteSuccess": "Catégorie supprimée",
     "deleteError": "Erreur lors de la suppression de la catégorie",
     "confirmDeleteTitle": "Supprimer la catégorie",
-    "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette catégorie ? Elle sera également retirée de tous les projets qui l'avaient sélectionnée."
+    "confirmDeleteMessage": "Voulez-vous vraiment supprimer cette catégorie ? Elle sera également retirée de tous les projets qui l'avaient sélectionnée.",
+    "subtitleGroups": "Organise les activités de ton entreprise en catégories principales (p. ex. peinture, revêtements de sol, divers). Pour chaque projet, tu choisis les catégories correspondantes.",
+    "newGroupPlaceholder": "Nouvelle catégorie principale, p. ex. Peinture",
+    "addGroupButton": "Ajouter une catégorie principale",
+    "noGroups": "Aucune catégorie principale.",
+    "noCategoriesInGroup": "Aucune catégorie dans cette catégorie principale.",
+    "groupNameLabel": "Nom de la catégorie principale",
+    "categoryNameLabel": "Nom de la catégorie",
+    "moveToGroupLabel": "Catégorie principale",
+    "renameGroup": "Renommer la catégorie principale",
+    "deleteGroup": "Supprimer la catégorie principale",
+    "groupNotEmptyHint": "Seules les catégories principales vides peuvent être supprimées. Déplace ou supprime d'abord ses catégories.",
+    "newCategoryInGroupLabel": "Nouvelle catégorie dans {group}",
+    "groupCreateSuccess": "Catégorie principale créée",
+    "groupCreateError": "Erreur lors de la création de la catégorie principale",
+    "groupUpdateSuccess": "Catégorie principale enregistrée",
+    "groupDeleteSuccess": "Catégorie principale supprimée",
+    "confirmDeleteGroupTitle": "Supprimer la catégorie principale",
+    "confirmDeleteGroupMessage": "Veux-tu vraiment supprimer cette catégorie principale ?"
   },
   "login": {
     "title": "Bürolist",

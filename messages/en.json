@@ -244,6 +244,10 @@
     "previousPhoto": "Previous photo",
     "nextPhoto": "Next photo"
   },
+  "categoryPicker": {
+    "empty": "No categories yet (Settings → Categories).",
+    "selectAllInGroup": "Select all categories in {group}"
+  },
   "settingsCategories": {
     "title": "Categories",
     "subtitle": "Your organization's reusable category library (e.g. scaffolding, sanding, painting) - you pick a subset of these for each project.",
@@ -258,7 +262,25 @@
     "deleteSuccess": "Category deleted",
     "deleteError": "Error deleting the category",
     "confirmDeleteTitle": "Delete category",
-    "confirmDeleteMessage": "Are you sure you want to delete this category? It will also be removed from all projects that had it selected."
+    "confirmDeleteMessage": "Are you sure you want to delete this category? It will also be removed from all projects that had it selected.",
+    "subtitleGroups": "Organise your business activities into main categories (e.g. painting, flooring, miscellaneous). For each project you pick the matching categories.",
+    "newGroupPlaceholder": "New main category, e.g. Painting",
+    "addGroupButton": "Add main category",
+    "noGroups": "No main categories yet.",
+    "noCategoriesInGroup": "No categories in this main category yet.",
+    "groupNameLabel": "Main category name",
+    "categoryNameLabel": "Category name",
+    "moveToGroupLabel": "Main category",
+    "renameGroup": "Rename main category",
+    "deleteGroup": "Delete main category",
+    "groupNotEmptyHint": "Only empty main categories can be deleted. Move or delete its categories first.",
+    "newCategoryInGroupLabel": "New category in {group}",
+    "groupCreateSuccess": "Main category created",
+    "groupCreateError": "Error creating the main category",
+    "groupUpdateSuccess": "Main category saved",
+    "groupDeleteSuccess": "Main category deleted",
+    "confirmDeleteGroupTitle": "Delete main category",
+    "confirmDeleteGroupMessage": "Do you really want to delete this main category?"
   },
   "login": {
     "title": "Bürolist",

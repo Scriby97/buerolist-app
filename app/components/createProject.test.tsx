@@ -12,6 +12,7 @@ vi.mock('@/lib/contexts/OrganizationContext', () => ({
 }))
 vi.mock('@/lib/api/categories', () => ({
   getCategories: () => Promise.resolve([]),
+  getCategoryGroups: () => Promise.resolve([]),
 }))
 vi.mock('@/lib/api/projects', () => ({
   createProject: (...args: unknown[]) => createProjectMock(...args),

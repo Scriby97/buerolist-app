@@ -244,6 +244,10 @@
     "previousPhoto": "Vorheriges Foto",
     "nextPhoto": "Nächstes Foto"
   },
+  "categoryPicker": {
+    "empty": "Noch keine Kategorien angelegt (Einstellungen → Kategorien).",
+    "selectAllInGroup": "Alle Kategorien in {group} auswählen"
+  },
   "settingsCategories": {
     "title": "Kategorien",
     "subtitle": "Die wiederverwendbare Kategorien-Bibliothek deiner Organisation (z.B. Gerüstbau, Schleifen, Streichen) - bei jedem Projekt wählst du daraus eine Teilmenge aus.",
@@ -258,7 +262,25 @@
     "deleteSuccess": "Kategorie gelöscht",
     "deleteError": "Fehler beim Löschen der Kategorie",
     "confirmDeleteTitle": "Kategorie löschen",
-    "confirmDeleteMessage": "Möchtest du diese Kategorie wirklich löschen? Sie wird dadurch auch von allen Projekten entfernt, die sie ausgewählt hatten."
+    "confirmDeleteMessage": "Möchtest du diese Kategorie wirklich löschen? Sie wird dadurch auch von allen Projekten entfernt, die sie ausgewählt hatten.",
+    "subtitleGroups": "Gliedere die Tätigkeiten deines Betriebs in Hauptkategorien (z.B. Malerarbeiten, Bodenbelagsarbeiten, Diverses). Bei jedem Projekt wählst du daraus die passenden Kategorien aus.",
+    "newGroupPlaceholder": "Neue Hauptkategorie, z.B. Malerarbeiten",
+    "addGroupButton": "Hauptkategorie hinzufügen",
+    "noGroups": "Noch keine Hauptkategorien angelegt.",
+    "noCategoriesInGroup": "Noch keine Kategorien in dieser Hauptkategorie.",
+    "groupNameLabel": "Name der Hauptkategorie",
+    "categoryNameLabel": "Name der Kategorie",
+    "moveToGroupLabel": "Hauptkategorie",
+    "renameGroup": "Hauptkategorie umbenennen",
+    "deleteGroup": "Hauptkategorie löschen",
+    "groupNotEmptyHint": "Nur leere Hauptkategorien lassen sich löschen. Verschiebe oder lösche zuerst die Kategorien.",
+    "newCategoryInGroupLabel": "Neue Kategorie in {group}",
+    "groupCreateSuccess": "Hauptkategorie erstellt",
+    "groupCreateError": "Fehler beim Anlegen der Hauptkategorie",
+    "groupUpdateSuccess": "Hauptkategorie gespeichert",
+    "groupDeleteSuccess": "Hauptkategorie gelöscht",
+    "confirmDeleteGroupTitle": "Hauptkategorie löschen",
+    "confirmDeleteGroupMessage": "Möchtest du diese Hauptkategorie wirklich löschen?"
   },
   "login": {
     "title": "Bürolist",
