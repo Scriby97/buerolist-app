@@ -4,12 +4,12 @@ import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import CreateCustomerModal from './createCustomer';
 import { formatCustomerNumber, formatProjectNumber } from '@/lib/format/numbers';
-import { customerColor, projectColor } from '@/lib/colors/entityColors';
+import { colorVars, customerColor, ENTITY_BORDER, projectColor } from '@/lib/colors/entityColors';
 import { ColorDot } from './ColorDot';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
-import { getCustomerDetail, deleteCustomer, type CustomerDetail as CustomerDetailData } from '@/lib/api/customers';
+import { getCustomerDetail, deleteCustomer, type CustomerDetail as CustomerDetailData, type CustomerProjectSummary } from '@/lib/api/customers';
 import { NotesSection } from './NotesSection';
 import { ConfirmDialog } from './ConfirmDialog';
 import { useToast } from '@/lib/hooks/useToast';
@@ -90,6 +90,32 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
   const activeProjects = projects.filter((p) => p.status === 'active');
   const completedProjects = projects.filter((p) => p.status === 'completed');
 
+  // Projekt-Karte mit Rand in der Projektfarbe (links breiter), damit die
+  // Projekte eines Kunden auf einen Blick erkennbar sind - reine Anzeige.
+  const renderProjectCard = (project: CustomerProjectSummary, completed = false) => {
+    const color = projectColor(customer.number, project.number);
+    return (
+      <button
+        key={project.id}
+        onClick={() => onSelectProject(project.id)}
+        style={colorVars(color)}
+        className={`w-full text-left rounded-lg border-2 border-l-8 ${ENTITY_BORDER} bg-white dark:bg-zinc-800 p-3 hover:shadow-md transition-all flex items-center justify-between gap-2 ${completed ? 'opacity-75' : ''}`}
+      >
+        <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
+          {formatProjectNumber(customer.number, project.number) && (
+            <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
+              {formatProjectNumber(customer.number, project.number)}
+            </span>
+          )}
+          {project.title}
+        </span>
+        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          {new Date(project.createdAt).toLocaleDateString(dateLocale)}
+        </span>
+      </button>
+    );
+  };
+
   return (
     <section className="space-y-6">
       <button onClick={onBack} className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
@@ -150,26 +176,7 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   {t('activeProjectsLabel')}
                 </h3>
-                {activeProjects.map((project) => (
-                  <button
-                    key={project.id}
-                    onClick={() => onSelectProject(project.id)}
-                    className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2"
-                  >
-                    <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
-                      <ColorDot color={projectColor(customer.number, project.number)} />
-                      {formatProjectNumber(customer.number, project.number) && (
-                        <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
-                          {formatProjectNumber(customer.number, project.number)}
-                        </span>
-                      )}
-                      {project.title}
-                    </span>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {new Date(project.createdAt).toLocaleDateString(dateLocale)}
-                    </span>
-                  </button>
-                ))}
+                {activeProjects.map((project) => renderProjectCard(project))}
               </div>
             )}
             {completedProjects.length > 0 && (
@@ -177,26 +184,7 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   {t('completedProjectsLabel')}
                 </h3>
-                {completedProjects.map((project) => (
-                  <button
-                    key={project.id}
-                    onClick={() => onSelectProject(project.id)}
-                    className="w-full text-left rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-sm transition-all flex items-center justify-between gap-2 opacity-75"
-                  >
-                    <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
-                      <ColorDot color={projectColor(customer.number, project.number)} />
-                      {formatProjectNumber(customer.number, project.number) && (
-                        <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
-                          {formatProjectNumber(customer.number, project.number)}
-                        </span>
-                      )}
-                      {project.title}
-                    </span>
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {new Date(project.createdAt).toLocaleDateString(dateLocale)}
-                    </span>
-                  </button>
-                ))}
+                {completedProjects.map((project) => renderProjectCard(project, true))}
               </div>
             )}
           </div>

@@ -91,3 +91,6 @@ export const ENTITY_BG = 'bg-[color:var(--entity-color-light)] dark:bg-[color:va
 
 /** Linker Rand in Erkennungsfarbe (fuer Karten). */
 export const ENTITY_BORDER_LEFT = 'border-l-[color:var(--entity-color-light)] dark:border-l-[color:var(--entity-color-dark)]'
+
+/** Rahmen rundum in Erkennungsfarbe (fuer Projekt-Karten). */
+export const ENTITY_BORDER = 'border-[color:var(--entity-color-light)] dark:border-[color:var(--entity-color-dark)]'
