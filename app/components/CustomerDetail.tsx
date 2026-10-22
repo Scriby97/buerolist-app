@@ -123,12 +123,6 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
             >
               {tCommon('edit')}
             </button>
-            <button
-              onClick={() => setConfirmDelete(true)}
-              className="px-3 py-1.5 text-sm font-medium rounded-lg border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-            >
-              {tCommon('delete')}
-            </button>
           </div>
         )}
       </div>
@@ -217,6 +211,19 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
           onChanged={(next) => setDetail((prev) => (prev ? { ...prev, notes: next } : prev))}
         />
       </div>
+
+      {/* Loeschen bewusst ganz unten und dezent - wird selten gebraucht. */}
+      {canManageSelectedOrganization && (
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-200 dark:border-zinc-700 pt-6">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t('deleteCustomerHint')}</p>
+          <button
+            onClick={() => setConfirmDelete(true)}
+            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          >
+            {t('deleteCustomerButton')}
+          </button>
+        </div>
+      )}
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
 

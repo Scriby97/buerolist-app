@@ -147,7 +147,9 @@
     "confirmDeleteTitle": "Kunde löschen",
     "confirmDeleteMessage": "Möchtest du diesen Kunden wirklich löschen? Das ist nur möglich, solange keine Projekte mehr bestehen.",
     "deleteError": "Fehler beim Löschen des Kunden",
-    "updateSuccess": "Kunde gespeichert"
+    "updateSuccess": "Kunde gespeichert",
+    "deleteCustomerButton": "Kunde löschen",
+    "deleteCustomerHint": "Kunde inkl. Notizen endgültig löschen (nur möglich, wenn er keine Projekte mehr hat)."
   },
   "projectTimeReport": {
     "title": "Zeitaufstellung",
@@ -191,7 +193,9 @@
     "noCategoryLabel": "Ohne Kategorie",
     "confirmDeleteTitle": "Projekt löschen",
     "confirmDeleteMessage": "Möchtest du dieses Projekt wirklich löschen? Das ist nur möglich, solange keine Zeiteinträge bestehen - sonst als abgeschlossen markieren.",
-    "deleteError": "Fehler beim Löschen des Projekts"
+    "deleteError": "Fehler beim Löschen des Projekts",
+    "deleteProjectButton": "Projekt löschen",
+    "deleteProjectHint": "Projekt inkl. aller Zeiteinträge und Notizen endgültig löschen."
   },
   "createCustomer": {
     "title": "Kunde hinzufügen",

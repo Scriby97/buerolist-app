@@ -147,7 +147,9 @@
     "confirmDeleteTitle": "Supprimer le client",
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer ce client ? Cela n'est possible que s'il n'a plus de projets.",
     "deleteError": "Erreur lors de la suppression du client",
-    "updateSuccess": "Client enregistré"
+    "updateSuccess": "Client enregistré",
+    "deleteCustomerButton": "Supprimer le client",
+    "deleteCustomerHint": "Supprimer définitivement le client et ses notes (seulement sans projets)."
   },
   "projectTimeReport": {
     "title": "Décompte des heures",
@@ -191,7 +193,9 @@
     "noCategoryLabel": "Sans catégorie",
     "confirmDeleteTitle": "Supprimer le projet",
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer ce projet ? Cela n'est possible que s'il n'a pas d'entrées de temps - sinon, marque-le comme terminé.",
-    "deleteError": "Erreur lors de la suppression du projet"
+    "deleteError": "Erreur lors de la suppression du projet",
+    "deleteProjectButton": "Supprimer le projet",
+    "deleteProjectHint": "Supprimer définitivement le projet avec toutes ses saisies et notes."
   },
   "createCustomer": {
     "title": "Ajouter un client",

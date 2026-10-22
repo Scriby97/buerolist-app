@@ -147,7 +147,9 @@
     "confirmDeleteTitle": "Delete customer",
     "confirmDeleteMessage": "Are you sure you want to delete this customer? This is only possible while no projects remain.",
     "deleteError": "Error deleting the customer",
-    "updateSuccess": "Customer saved"
+    "updateSuccess": "Customer saved",
+    "deleteCustomerButton": "Delete customer",
+    "deleteCustomerHint": "Permanently delete the customer incl. notes (only possible without projects)."
   },
   "projectTimeReport": {
     "title": "Time breakdown",
@@ -191,7 +193,9 @@
     "noCategoryLabel": "No category",
     "confirmDeleteTitle": "Delete project",
     "confirmDeleteMessage": "Are you sure you want to delete this project? This is only possible while no time entries exist - otherwise mark it as completed instead.",
-    "deleteError": "Error deleting the project"
+    "deleteError": "Error deleting the project",
+    "deleteProjectButton": "Delete project",
+    "deleteProjectHint": "Permanently delete the project incl. all time entries and notes."
   },
   "createCustomer": {
     "title": "Add customer",

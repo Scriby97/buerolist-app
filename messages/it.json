@@ -147,7 +147,9 @@
     "confirmDeleteTitle": "Elimina cliente",
     "confirmDeleteMessage": "Vuoi davvero eliminare questo cliente? Ciò è possibile solo se non ha più progetti.",
     "deleteError": "Errore durante l'eliminazione del cliente",
-    "updateSuccess": "Cliente salvato"
+    "updateSuccess": "Cliente salvato",
+    "deleteCustomerButton": "Elimina cliente",
+    "deleteCustomerHint": "Elimina definitivamente il cliente e le sue note (solo senza progetti)."
   },
   "projectTimeReport": {
     "title": "Riepilogo ore",
@@ -191,7 +193,9 @@
     "noCategoryLabel": "Senza categoria",
     "confirmDeleteTitle": "Elimina progetto",
     "confirmDeleteMessage": "Vuoi davvero eliminare questo progetto? Ciò è possibile solo se non ha voci di tempo - altrimenti segnalo come completato.",
-    "deleteError": "Errore durante l'eliminazione del progetto"
+    "deleteError": "Errore durante l'eliminazione del progetto",
+    "deleteProjectButton": "Elimina progetto",
+    "deleteProjectHint": "Elimina definitivamente il progetto con tutte le registrazioni e note."
   },
   "createCustomer": {
     "title": "Aggiungi cliente",
