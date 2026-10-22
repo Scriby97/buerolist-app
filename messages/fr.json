@@ -196,7 +196,8 @@
     "confirmDeleteMessage": "Voulez-vous vraiment supprimer ce projet ? Cela n'est possible que s'il n'a pas d'entrées de temps - sinon, marque-le comme terminé.",
     "deleteError": "Erreur lors de la suppression du projet",
     "deleteProjectButton": "Supprimer le projet",
-    "deleteProjectHint": "Supprimer définitivement le projet avec toutes ses saisies et notes."
+    "deleteProjectHint": "Supprimer définitivement le projet avec toutes ses saisies et notes.",
+    "reportButton": "Rapport"
   },
   "createCustomer": {
     "title": "Ajouter un client",
@@ -274,7 +275,7 @@
   },
   "reports": {
     "title": "Rapports",
-    "subtitle": "Créer, imprimer ou enregistrer en PDF des rapports de travail par collaborateur.",
+    "subtitle": "Créer des rapports de travail par collaborateur ou des rapports de projet, les imprimer ou les enregistrer en PDF.",
     "employeeReportTitle": "Rapport de travail",
     "employeeLabel": "Collaborateur",
     "projectFilterLabel": "Projet (facultatif)",
@@ -311,7 +312,30 @@
     "totalHours": "Total heures",
     "projectSummaryTitle": "Résumé par projet",
     "signatureEmployee": "Date / signature collaborateur",
-    "signatureManager": "Date / signature responsable"
+    "signatureManager": "Date / signature responsable",
+    "typeEmployee": "Collaborateur",
+    "typeProject": "Projet",
+    "projectLabel": "Projet",
+    "projectPlaceholder": "Rechercher un projet...",
+    "periodAll": "Projet entier",
+    "periodAllLabel": "Projet entier",
+    "projectReportTitle": "Rapport de projet",
+    "noCategory": "Sans catégorie",
+    "colTotal": "Total",
+    "sectionSummary": "Résumé du temps",
+    "sectionChart": "Effort par catégorie",
+    "sectionCosts": "Matériel & frais",
+    "sectionEntries": "Saisies",
+    "sectionComments": "Remarques",
+    "sectionNotes": "Notes",
+    "sectionPhotos": "Photos",
+    "projectOption_summary": "Résumé du temps (catégorie × collaborateur)",
+    "projectOption_chart": "Graphique : effort par catégorie",
+    "projectOption_costs": "Matériel & frais",
+    "projectOption_entries": "Liste de toutes les saisies",
+    "projectOption_comments": "Remarques",
+    "projectOption_notes": "Notes",
+    "projectOption_photos": "Photos"
   },
   "settingsCategories": {
     "title": "Catégories",

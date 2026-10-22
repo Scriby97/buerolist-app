@@ -196,7 +196,8 @@
     "confirmDeleteMessage": "Möchtest du dieses Projekt wirklich löschen? Das ist nur möglich, solange keine Zeiteinträge bestehen - sonst als abgeschlossen markieren.",
     "deleteError": "Fehler beim Löschen des Projekts",
     "deleteProjectButton": "Projekt löschen",
-    "deleteProjectHint": "Projekt inkl. aller Zeiteinträge und Notizen endgültig löschen."
+    "deleteProjectHint": "Projekt inkl. aller Zeiteinträge und Notizen endgültig löschen.",
+    "reportButton": "Rapport"
   },
   "createCustomer": {
     "title": "Kunde hinzufügen",
@@ -274,7 +275,7 @@
   },
   "reports": {
     "title": "Rapporte",
-    "subtitle": "Arbeitsrapporte für einzelne Mitarbeiter erstellen, drucken oder als PDF speichern.",
+    "subtitle": "Arbeitsrapporte für Mitarbeiter oder Projektrapporte erstellen, drucken oder als PDF speichern.",
     "employeeReportTitle": "Arbeitsrapport",
     "employeeLabel": "Mitarbeiter",
     "projectFilterLabel": "Projekt (optional)",
@@ -311,7 +312,30 @@
     "totalHours": "Total Stunden",
     "projectSummaryTitle": "Zusammenfassung pro Projekt",
     "signatureEmployee": "Datum / Unterschrift Mitarbeiter",
-    "signatureManager": "Datum / Unterschrift Vorgesetzte(r)"
+    "signatureManager": "Datum / Unterschrift Vorgesetzte(r)",
+    "typeEmployee": "Mitarbeiter",
+    "typeProject": "Projekt",
+    "projectLabel": "Projekt",
+    "projectPlaceholder": "Projekt suchen...",
+    "periodAll": "Ganzes Projekt",
+    "periodAllLabel": "Ganzes Projekt",
+    "projectReportTitle": "Projektrapport",
+    "noCategory": "Ohne Kategorie",
+    "colTotal": "Total",
+    "sectionSummary": "Zeit-Zusammenfassung",
+    "sectionChart": "Aufwand nach Kategorie",
+    "sectionCosts": "Material & Spesen",
+    "sectionEntries": "Einträge",
+    "sectionComments": "Bemerkungen",
+    "sectionNotes": "Notizen",
+    "sectionPhotos": "Fotos",
+    "projectOption_summary": "Zeit-Zusammenfassung (Kategorie × Mitarbeiter)",
+    "projectOption_chart": "Grafik: Aufwand nach Kategorie",
+    "projectOption_costs": "Material & Spesen",
+    "projectOption_entries": "Liste aller Einträge",
+    "projectOption_comments": "Bemerkungen",
+    "projectOption_notes": "Notizen",
+    "projectOption_photos": "Fotos"
   },
   "settingsCategories": {
     "title": "Kategorien",

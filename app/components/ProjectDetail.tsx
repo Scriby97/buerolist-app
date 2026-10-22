@@ -2,6 +2,7 @@
 
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import CreateProjectModal from './createProject';
 import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
@@ -212,6 +213,12 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           >
             {project.status === 'active' ? t('markCompletedButton') : t('markActiveButton')}
           </button>
+          <Link
+            href={`/reports?type=project&projectId=${project.id}`}
+            className="px-3 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+          >
+            {t('reportButton')}
+          </Link>
         </div>
       )}
 

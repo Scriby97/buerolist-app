@@ -196,7 +196,8 @@
     "confirmDeleteMessage": "Vuoi davvero eliminare questo progetto? Ciò è possibile solo se non ha voci di tempo - altrimenti segnalo come completato.",
     "deleteError": "Errore durante l'eliminazione del progetto",
     "deleteProjectButton": "Elimina progetto",
-    "deleteProjectHint": "Elimina definitivamente il progetto con tutte le registrazioni e note."
+    "deleteProjectHint": "Elimina definitivamente il progetto con tutte le registrazioni e note.",
+    "reportButton": "Rapporto"
   },
   "createCustomer": {
     "title": "Aggiungi cliente",
@@ -274,7 +275,7 @@
   },
   "reports": {
     "title": "Rapporti",
-    "subtitle": "Crea, stampa o salva in PDF rapporti di lavoro per singoli collaboratori.",
+    "subtitle": "Crea rapporti di lavoro per collaboratori o rapporti di progetto, stampali o salvali come PDF.",
     "employeeReportTitle": "Rapporto di lavoro",
     "employeeLabel": "Collaboratore",
     "projectFilterLabel": "Progetto (facoltativo)",
@@ -311,7 +312,30 @@
     "totalHours": "Totale ore",
     "projectSummaryTitle": "Riepilogo per progetto",
     "signatureEmployee": "Data / firma collaboratore",
-    "signatureManager": "Data / firma responsabile"
+    "signatureManager": "Data / firma responsabile",
+    "typeEmployee": "Collaboratore",
+    "typeProject": "Progetto",
+    "projectLabel": "Progetto",
+    "projectPlaceholder": "Cerca progetto...",
+    "periodAll": "Intero progetto",
+    "periodAllLabel": "Intero progetto",
+    "projectReportTitle": "Rapporto di progetto",
+    "noCategory": "Senza categoria",
+    "colTotal": "Totale",
+    "sectionSummary": "Riepilogo ore",
+    "sectionChart": "Impegno per categoria",
+    "sectionCosts": "Materiale & spese",
+    "sectionEntries": "Registrazioni",
+    "sectionComments": "Osservazioni",
+    "sectionNotes": "Note",
+    "sectionPhotos": "Foto",
+    "projectOption_summary": "Riepilogo ore (categoria × collaboratore)",
+    "projectOption_chart": "Grafico: impegno per categoria",
+    "projectOption_costs": "Materiale & spese",
+    "projectOption_entries": "Elenco di tutte le registrazioni",
+    "projectOption_comments": "Osservazioni",
+    "projectOption_notes": "Note",
+    "projectOption_photos": "Foto"
   },
   "settingsCategories": {
     "title": "Categorie",

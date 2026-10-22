@@ -11,13 +11,14 @@ import { useOrganization } from '@/lib/contexts/OrganizationContext'
 import { useDateLocale } from '@/lib/i18n/formatDate'
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
 import { getOrganizationMembers } from '@/lib/api/organizationMembers'
-import { getProjects, type Project } from '@/lib/api/projects'
+import { getProjectDetail, getProjects, type Project, type ProjectDetail } from '@/lib/api/projects'
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries'
 import type { OrganizationMemberDetail } from '@/lib/types/user'
 import { projectDisplayName } from '@/lib/format/numbers'
 import { monthRange, rangeToIso } from '@/lib/reports/reportData'
 import { formatDateCH } from '@/app/components/DateInput'
 import { EmployeeReport, type EmployeeReportOptions } from './EmployeeReport'
+import { ProjectReport, type ProjectReportOptions } from './ProjectReport'
 
 const fieldClass =
   'px-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'
@@ -37,13 +38,17 @@ function ReportsPageContent() {
   const now = new Date()
   const [members, setMembers] = useState<OrganizationMemberDetail[]>([])
   const [projects, setProjects] = useState<Project[]>([])
+  const [reportType, setReportType] = useState<'employee' | 'project'>(
+    searchParams.get('type') === 'project' ? 'project' : 'employee',
+  )
   const [creatorId, setCreatorId] = useState(searchParams.get('creatorId') ?? '')
-  const [periodMode, setPeriodMode] = useState<'month' | 'range'>('month')
+  // 'all' (ganzes Projekt) gibt es nur beim Projekt-Rapport
+  const [periodMode, setPeriodMode] = useState<'all' | 'month' | 'range'>(reportType === 'project' ? 'all' : 'month')
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth() + 1)
   const [from, setFrom] = useState(monthRange(now.getFullYear(), now.getMonth() + 1).from)
   const [to, setTo] = useState(monthRange(now.getFullYear(), now.getMonth() + 1).to)
-  const [projectId, setProjectId] = useState('')
+  const [projectId, setProjectId] = useState(searchParams.get('projectId') ?? '')
   const [options, setOptions] = useState<EmployeeReportOptions>({
     category: true,
     comment: true,
@@ -51,9 +56,18 @@ function ReportsPageContent() {
     dayTotals: true,
     projectSummary: true,
   })
+  const [projectOptions, setProjectOptions] = useState<ProjectReportOptions>({
+    summary: true,
+    chart: true,
+    costs: true,
+    entries: true,
+    comments: true,
+    notes: false,
+    photos: false,
+  })
   // Ergebnis gehoert zu einer bestimmten Auswahl - aendert sich die Auswahl,
   // verschwindet die alte Vorschau automatisch.
-  const [result, setResult] = useState<{ key: string; entries: TimeEntry[] } | null>(null)
+  const [result, setResult] = useState<{ key: string; entries: TimeEntry[]; detail?: ProjectDetail } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -77,11 +91,14 @@ function ReportsPageContent() {
       .catch(() => setProjects([]))
   }, [selectedOrgId, canManageSelectedOrganization])
 
-  const period = periodMode === 'month' ? monthRange(year, month) : { from, to }
+  const effectiveMode = reportType === 'employee' && periodMode === 'all' ? 'month' : periodMode
+  const period = effectiveMode === 'all' ? null : effectiveMode === 'month' ? monthRange(year, month) : { from, to }
   const periodLabel =
-    periodMode === 'month'
-      ? new Date(year, month - 1, 1).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })
-      : `${formatDateCH(from)} – ${formatDateCH(to)}`
+    effectiveMode === 'all'
+      ? t('periodAllLabel')
+      : effectiveMode === 'month'
+        ? new Date(year, month - 1, 1).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })
+        : `${formatDateCH(from)} – ${formatDateCH(to)}`
   const member = members.find((m) => m.userId === creatorId)
   const project = projects.find((p) => p.id === projectId)
   const organizationName = organizations.find((o) => o.id === selectedOrgId)?.name ?? ''
@@ -91,22 +108,29 @@ function ReportsPageContent() {
     [dateLocale],
   )
 
-  const selectionKey = [creatorId, period.from, period.to, projectId].join('|')
-  const entries = result?.key === selectionKey ? result.entries : null
+  const selectionKey = [reportType, reportType === 'employee' ? creatorId : '', period?.from, period?.to, projectId].join('|')
+  const current = result?.key === selectionKey ? result : null
+  const entries = current?.entries ?? null
+  const canCreate =
+    (reportType === 'employee' ? Boolean(creatorId) : Boolean(projectId)) &&
+    (effectiveMode !== 'range' || (Boolean(from) && Boolean(to) && to >= from))
 
   const createReport = async () => {
-    if (!selectedOrgId || !creatorId) return
+    if (!selectedOrgId || !canCreate) return
     setLoading(true)
     setError(null)
     try {
-      const { startDate, endDate } = rangeToIso(period.from, period.to)
-      const page = await getTimeEntries(selectedOrgId, {
-        creatorId,
-        startDate,
-        endDate,
-        projectId: projectId || undefined,
-      })
-      setResult({ key: selectionKey, entries: page.timeEntries })
+      const range = period ? rangeToIso(period.from, period.to) : {}
+      if (reportType === 'employee') {
+        const page = await getTimeEntries(selectedOrgId, { creatorId, ...range, projectId: projectId || undefined })
+        setResult({ key: selectionKey, entries: page.timeEntries })
+      } else {
+        const [detail, page] = await Promise.all([
+          getProjectDetail(projectId),
+          getTimeEntries(selectedOrgId, { projectId, ...range }),
+        ])
+        setResult({ key: selectionKey, entries: page.timeEntries, detail })
+      }
     } catch (err) {
       setError(getApiErrorMessage(err, t('loadError')))
     } finally {
@@ -119,6 +143,18 @@ function ReportsPageContent() {
   }
 
   const optionKeys: (keyof EmployeeReportOptions)[] = ['category', 'comment', 'items', 'dayTotals', 'projectSummary']
+  const projectOptionKeys: (keyof ProjectReportOptions)[] = ['summary', 'chart', 'costs', 'entries', 'comments', 'notes', 'photos']
+  const projectComboboxOptions = projects.map((p) => ({
+    id: p.id,
+    title: p.title,
+    number: p.number,
+    customerName: p.customer?.name,
+    customerNumber: p.customer?.number,
+  }))
+  const switchType = (type: 'employee' | 'project') => {
+    setReportType(type)
+    setPeriodMode(type === 'project' ? 'all' : 'month')
+  }
 
   return (
     <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 pt-20 pb-24 md:pt-8 md:pb-8 print:bg-white print:p-0">
@@ -137,6 +173,40 @@ function ReportsPageContent() {
           </div>
 
           <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-5 space-y-5">
+            <div className="inline-flex rounded-lg border border-zinc-300 dark:border-zinc-600 p-0.5 text-sm" role="tablist">
+              {(['employee', 'project'] as const).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  role="tab"
+                  aria-selected={reportType === type}
+                  onClick={() => switchType(type)}
+                  className={`px-3 py-1.5 rounded-md font-medium ${
+                    reportType === type
+                      ? 'bg-brown-600 text-white'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700'
+                  }`}
+                >
+                  {t(type === 'employee' ? 'typeEmployee' : 'typeProject')}
+                </button>
+              ))}
+            </div>
+
+            {reportType === 'project' ? (
+              <div className="space-y-1.5">
+                <label htmlFor="reportProjectMain" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  {t('projectLabel')}
+                </label>
+                <ProjectCombobox
+                  id="reportProjectMain"
+                  value={projectId}
+                  onChange={setProjectId}
+                  placeholder={t('projectPlaceholder')}
+                  noMatchesText={t('noProjectMatches')}
+                  options={projectComboboxOptions}
+                />
+              </div>
+            ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <label htmlFor="reportEmployee" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -162,13 +232,7 @@ function ReportsPageContent() {
                       onChange={setProjectId}
                       placeholder={t('allProjects')}
                       noMatchesText={t('noProjectMatches')}
-                      options={projects.map((p) => ({
-                        id: p.id,
-                        title: p.title,
-                        number: p.number,
-                        customerName: p.customer?.name,
-                        customerNumber: p.customer?.number,
-                      }))}
+                      options={projectComboboxOptions}
                     />
                   </div>
                   {projectId && (
@@ -179,20 +243,27 @@ function ReportsPageContent() {
                 </div>
               </div>
             </div>
+            )}
 
             <fieldset className="space-y-3">
               <legend className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('periodLabel')}</legend>
-              <div className="flex gap-4 text-sm text-zinc-700 dark:text-zinc-300">
+              <div className="flex flex-wrap gap-4 text-sm text-zinc-700 dark:text-zinc-300">
+                {reportType === 'project' && (
+                  <label className="flex items-center gap-2">
+                    <input type="radio" name="periodMode" checked={effectiveMode === 'all'} onChange={() => setPeriodMode('all')} />
+                    {t('periodAll')}
+                  </label>
+                )}
                 <label className="flex items-center gap-2">
-                  <input type="radio" name="periodMode" checked={periodMode === 'month'} onChange={() => setPeriodMode('month')} />
+                  <input type="radio" name="periodMode" checked={effectiveMode === 'month'} onChange={() => setPeriodMode('month')} />
                   {t('periodMonth')}
                 </label>
                 <label className="flex items-center gap-2">
-                  <input type="radio" name="periodMode" checked={periodMode === 'range'} onChange={() => setPeriodMode('range')} />
+                  <input type="radio" name="periodMode" checked={effectiveMode === 'range'} onChange={() => setPeriodMode('range')} />
                   {t('periodRange')}
                 </label>
               </div>
-              {periodMode === 'month' ? (
+              {effectiveMode === 'all' ? null : effectiveMode === 'month' ? (
                 <div className="flex gap-2">
                   <select aria-label={t('monthLabel')} value={month} onChange={(e) => setMonth(Number(e.target.value))} className={fieldClass}>
                     {monthNames.map((name, i) => (
@@ -226,17 +297,29 @@ function ReportsPageContent() {
             <fieldset className="space-y-2">
               <legend className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('contentLabel')}</legend>
               <div className="grid gap-2 sm:grid-cols-2">
-                {optionKeys.map((key) => (
-                  <label key={key} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
-                    <input
-                      type="checkbox"
-                      checked={options[key]}
-                      onChange={() => setOptions((prev) => ({ ...prev, [key]: !prev[key] }))}
-                      className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
-                    />
-                    {t(`option_${key}`)}
-                  </label>
-                ))}
+                {reportType === 'employee'
+                  ? optionKeys.map((key) => (
+                      <label key={key} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                        <input
+                          type="checkbox"
+                          checked={options[key]}
+                          onChange={() => setOptions((prev) => ({ ...prev, [key]: !prev[key] }))}
+                          className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
+                        />
+                        {t(`option_${key}`)}
+                      </label>
+                    ))
+                  : projectOptionKeys.map((key) => (
+                      <label key={key} className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+                        <input
+                          type="checkbox"
+                          checked={projectOptions[key]}
+                          onChange={() => setProjectOptions((prev) => ({ ...prev, [key]: !prev[key] }))}
+                          className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
+                        />
+                        {t(`projectOption_${key}`)}
+                      </label>
+                    ))}
               </div>
             </fieldset>
 
@@ -244,7 +327,7 @@ function ReportsPageContent() {
               <button
                 type="button"
                 onClick={createReport}
-                disabled={loading || !creatorId || (periodMode === 'range' && (!from || !to || to < from))}
+                disabled={loading || !canCreate}
                 className="px-4 py-2 text-sm font-semibold rounded-lg bg-brown-600 hover:bg-brown-700 text-white disabled:opacity-50"
               >
                 {loading ? t('creating') : t('createButton')}
@@ -264,7 +347,17 @@ function ReportsPageContent() {
           </div>
         </div>
 
-        {entries && (
+        {current?.detail && (
+          <ProjectReport
+            detail={current.detail}
+            entries={current.entries}
+            organizationName={organizationName}
+            periodLabel={periodLabel}
+            options={projectOptions}
+          />
+        )}
+
+        {entries && !current?.detail && (
           <EmployeeReport
             entries={entries}
             organizationName={organizationName}

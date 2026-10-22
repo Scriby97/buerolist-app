@@ -196,7 +196,8 @@
     "confirmDeleteMessage": "Are you sure you want to delete this project? This is only possible while no time entries exist - otherwise mark it as completed instead.",
     "deleteError": "Error deleting the project",
     "deleteProjectButton": "Delete project",
-    "deleteProjectHint": "Permanently delete the project incl. all time entries and notes."
+    "deleteProjectHint": "Permanently delete the project incl. all time entries and notes.",
+    "reportButton": "Report"
   },
   "createCustomer": {
     "title": "Add customer",
@@ -274,7 +275,7 @@
   },
   "reports": {
     "title": "Reports",
-    "subtitle": "Create, print or save work reports for individual employees as PDF.",
+    "subtitle": "Create work reports for employees or project reports, print them or save them as PDF.",
     "employeeReportTitle": "Work report",
     "employeeLabel": "Employee",
     "projectFilterLabel": "Project (optional)",
@@ -311,7 +312,30 @@
     "totalHours": "Total hours",
     "projectSummaryTitle": "Summary per project",
     "signatureEmployee": "Date / signature employee",
-    "signatureManager": "Date / signature supervisor"
+    "signatureManager": "Date / signature supervisor",
+    "typeEmployee": "Employee",
+    "typeProject": "Project",
+    "projectLabel": "Project",
+    "projectPlaceholder": "Search project...",
+    "periodAll": "Entire project",
+    "periodAllLabel": "Entire project",
+    "projectReportTitle": "Project report",
+    "noCategory": "No category",
+    "colTotal": "Total",
+    "sectionSummary": "Time summary",
+    "sectionChart": "Effort by category",
+    "sectionCosts": "Material & expenses",
+    "sectionEntries": "Entries",
+    "sectionComments": "Comments",
+    "sectionNotes": "Notes",
+    "sectionPhotos": "Photos",
+    "projectOption_summary": "Time summary (category × employee)",
+    "projectOption_chart": "Chart: effort by category",
+    "projectOption_costs": "Material & expenses",
+    "projectOption_entries": "List of all entries",
+    "projectOption_comments": "Comments",
+    "projectOption_notes": "Notes",
+    "projectOption_photos": "Photos"
   },
   "settingsCategories": {
     "title": "Categories",
