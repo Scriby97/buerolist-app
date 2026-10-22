@@ -429,7 +429,9 @@
     "impressumTitle": "Note legali",
     "impressumDescription": "Informazioni legali sul fornitore di questa app.",
     "reportsTitle": "Rapporti",
-    "reportsDescription": "Stampa rapporti di lavoro per collaboratore o salvali in PDF."
+    "reportsDescription": "Stampa rapporti di lavoro per collaboratore o salvali in PDF.",
+    "remindersTitle": "Promemoria",
+    "remindersDescription": "Promemoria giornaliero per registrare le tue ore."
   },
   "impressum": {
     "title": "Note legali",
@@ -933,5 +935,29 @@
     "deleteConfirmCancelLabel": "Annulla",
     "deleting": "Eliminazione...",
     "deleteErrorGeneric": "Non è stato possibile eliminare l'organizzazione."
+  },
+  "settingsReminders": {
+    "title": "Promemoria di registrazione",
+    "subtitle": "Ricevi una notifica giornaliera se non hai ancora registrato le voci di oggi.",
+    "unsupportedMessage": "Il tuo browser non supporta le notifiche qui. Su iPhone funziona solo se Bürolist è stato installato come app tramite \"Aggiungi alla schermata Home\" - apri poi l'app da lì invece che da Safari.",
+    "enableLabel": "Attiva promemoria giornaliero",
+    "enableHint": "Inviato solo se oggi non hai ancora registrato nulla.",
+    "timeLabel": "Ora",
+    "saveButton": "Salva",
+    "saving": "Salvataggio...",
+    "permissionBlockedError": "Le notifiche sono bloccate per questo sito. Consentile nelle impostazioni del browser.",
+    "permissionDeniedError": "Senza autorizzazione per le notifiche non è possibile inviare promemoria.",
+    "notConfiguredError": "Le notifiche push non sono configurate sul server.",
+    "loadError": "Errore nel caricamento del promemoria",
+    "saveSuccess": "Promemoria salvato",
+    "saveErrorGeneric": "Errore nel salvataggio del promemoria"
+  },
+  "notificationPrompt": {
+    "title": "Attivare il promemoria?",
+    "body": "Ricevi ogni giorno alle 17:30 un promemoria per registrare le tue ore. Inviato solo se oggi non hai ancora registrato nulla.",
+    "laterHint": "Puoi modificarlo in qualsiasi momento nelle impostazioni.",
+    "enableButton": "Attiva",
+    "dismissButton": "Non ora",
+    "genericError": "Qualcosa è andato storto. Puoi riprovare in qualsiasi momento nelle impostazioni."
   }
 }

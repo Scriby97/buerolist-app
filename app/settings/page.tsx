@@ -103,6 +103,20 @@ export default function SettingsPage() {
             </Link>
 
             <Link
+              href="/settings/reminders"
+              className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
+            >
+              <SettingsIcon>
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </SettingsIcon>
+              <div className="mt-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('remindersTitle')}</div>
+              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                {t('remindersDescription')}
+              </p>
+            </Link>
+
+            <Link
               href="/onboarding/invitations"
               className="relative rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
             >

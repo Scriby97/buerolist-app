@@ -429,7 +429,9 @@
     "impressumTitle": "Impressum",
     "impressumDescription": "Rechtliche Angaben zum Anbieter dieser App.",
     "reportsTitle": "Rapporte",
-    "reportsDescription": "Arbeitsrapporte pro Mitarbeiter drucken oder als PDF speichern."
+    "reportsDescription": "Arbeitsrapporte pro Mitarbeiter drucken oder als PDF speichern.",
+    "remindersTitle": "Erinnerung",
+    "remindersDescription": "Tägliche Erinnerung, deine Zeiten zu erfassen."
   },
   "impressum": {
     "title": "Impressum",
@@ -933,5 +935,29 @@
     "deleteConfirmCancelLabel": "Abbrechen",
     "deleting": "Wird gelöscht...",
     "deleteErrorGeneric": "Die Organisation konnte nicht gelöscht werden."
+  },
+  "settingsReminders": {
+    "title": "Erfassungserinnerung",
+    "subtitle": "Erhalte täglich eine Benachrichtigung, falls du deine heutigen Einträge noch nicht erfasst hast.",
+    "unsupportedMessage": "Dein Browser unterstützt hier keine Benachrichtigungen. Auf dem iPhone funktioniert das nur, wenn Bürolist über \"Zum Home-Bildschirm\" als App installiert wurde - öffne die App dann von dort statt über Safari.",
+    "enableLabel": "Tägliche Erinnerung aktivieren",
+    "enableHint": "Kommt nur, wenn du heute noch nichts erfasst hast.",
+    "timeLabel": "Uhrzeit",
+    "saveButton": "Speichern",
+    "saving": "Wird gespeichert...",
+    "permissionBlockedError": "Benachrichtigungen sind für diese Seite blockiert. Bitte in den Browser-Einstellungen erlauben.",
+    "permissionDeniedError": "Ohne Erlaubnis für Benachrichtigungen kann keine Erinnerung gesendet werden.",
+    "notConfiguredError": "Push-Benachrichtigungen sind serverseitig nicht konfiguriert.",
+    "loadError": "Fehler beim Laden der Erinnerung",
+    "saveSuccess": "Erinnerung gespeichert",
+    "saveErrorGeneric": "Fehler beim Speichern der Erinnerung"
+  },
+  "notificationPrompt": {
+    "title": "Erinnerung aktivieren?",
+    "body": "Erhalte jeden Tag um 17:30 eine Erinnerung, deine Zeiten zu erfassen. Kommt nur, wenn du heute noch nichts eingetragen hast.",
+    "laterHint": "Du kannst das jederzeit in den Einstellungen ändern.",
+    "enableButton": "Aktivieren",
+    "dismissButton": "Nicht jetzt",
+    "genericError": "Etwas ist schiefgelaufen. Du kannst es jederzeit in den Einstellungen erneut versuchen."
   }
 }

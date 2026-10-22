@@ -18,6 +18,7 @@ import { CategoryOptions } from './CategoryOptions';
 import { EntryItemsEditor } from './EntryItemsEditor';
 import { rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
+import { NotificationPermissionPrompt } from './NotificationPermissionPrompt';
 
 interface FormState {
   projectId: string;
@@ -94,6 +95,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     materials: withTrailingEmptyRow([]),
     expenses: withTrailingEmptyRow([]),
   });
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [projectsError, setProjectsError] = useState<string | null>(null);
@@ -238,6 +240,9 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       expenses: withTrailingEmptyRow([]),
     });
     showToast(t('saveSuccess'), 'success');
+    // Erst nach dem ersten gespeicherten Eintrag nach der Erlaubnis fuer die
+    // Erfassungserinnerung fragen (die Komponente fragt pro User nur einmal).
+    setShowNotificationPrompt(true);
   };
 
   const handleSaveError = (err: unknown) => {
@@ -489,6 +494,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         </button>
       </form>
       <ToastContainer toasts={toasts} onRemove={removeToast} />
+      {showNotificationPrompt && <NotificationPermissionPrompt />}
 
       {showNoProjectsDialog && (
         <div

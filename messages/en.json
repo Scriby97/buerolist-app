@@ -429,7 +429,9 @@
     "impressumTitle": "Legal Notice",
     "impressumDescription": "Legal information about the provider of this app.",
     "reportsTitle": "Reports",
-    "reportsDescription": "Print work reports per employee or save them as PDF."
+    "reportsDescription": "Print work reports per employee or save them as PDF.",
+    "remindersTitle": "Reminder",
+    "remindersDescription": "Daily reminder to record your time."
   },
   "impressum": {
     "title": "Legal Notice",
@@ -933,5 +935,29 @@
     "deleteConfirmCancelLabel": "Cancel",
     "deleting": "Deleting...",
     "deleteErrorGeneric": "The organization could not be deleted."
+  },
+  "settingsReminders": {
+    "title": "Entry reminder",
+    "subtitle": "Get a daily notification if you haven't recorded today's entries yet.",
+    "unsupportedMessage": "Your browser doesn't support notifications here. On iPhone this only works if Bürolist was installed as an app via \"Add to Home Screen\" - then open the app from there instead of Safari.",
+    "enableLabel": "Enable daily reminder",
+    "enableHint": "Only sent if you haven't recorded anything today.",
+    "timeLabel": "Time",
+    "saveButton": "Save",
+    "saving": "Saving...",
+    "permissionBlockedError": "Notifications are blocked for this site. Please allow them in your browser settings.",
+    "permissionDeniedError": "Without permission for notifications no reminder can be sent.",
+    "notConfiguredError": "Push notifications are not configured on the server.",
+    "loadError": "Failed to load the reminder",
+    "saveSuccess": "Reminder saved",
+    "saveErrorGeneric": "Failed to save the reminder"
+  },
+  "notificationPrompt": {
+    "title": "Enable reminder?",
+    "body": "Get a reminder every day at 17:30 to record your time. Only sent if you haven't recorded anything today.",
+    "laterHint": "You can change this anytime in the settings.",
+    "enableButton": "Enable",
+    "dismissButton": "Not now",
+    "genericError": "Something went wrong. You can try again anytime in the settings."
   }
 }

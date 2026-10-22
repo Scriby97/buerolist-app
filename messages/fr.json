@@ -429,7 +429,9 @@
     "impressumTitle": "Mentions légales",
     "impressumDescription": "Informations légales sur l'éditeur de cette app.",
     "reportsTitle": "Rapports",
-    "reportsDescription": "Imprimer des rapports de travail par collaborateur ou les enregistrer en PDF."
+    "reportsDescription": "Imprimer des rapports de travail par collaborateur ou les enregistrer en PDF.",
+    "remindersTitle": "Rappel",
+    "remindersDescription": "Rappel quotidien pour saisir tes heures."
   },
   "impressum": {
     "title": "Mentions légales",
@@ -933,5 +935,29 @@
     "deleteConfirmCancelLabel": "Annuler",
     "deleting": "Suppression...",
     "deleteErrorGeneric": "L'organisation n'a pas pu être supprimée."
+  },
+  "settingsReminders": {
+    "title": "Rappel de saisie",
+    "subtitle": "Reçois une notification quotidienne si tu n'as pas encore saisi tes entrées du jour.",
+    "unsupportedMessage": "Ton navigateur ne prend pas en charge les notifications ici. Sur iPhone, cela fonctionne uniquement si Bürolist a été installé comme app via « Sur l'écran d'accueil » - ouvre alors l'app depuis là plutôt que via Safari.",
+    "enableLabel": "Activer le rappel quotidien",
+    "enableHint": "Envoyé uniquement si tu n'as encore rien saisi aujourd'hui.",
+    "timeLabel": "Heure",
+    "saveButton": "Enregistrer",
+    "saving": "Enregistrement...",
+    "permissionBlockedError": "Les notifications sont bloquées pour ce site. Autorise-les dans les réglages du navigateur.",
+    "permissionDeniedError": "Sans autorisation pour les notifications, aucun rappel ne peut être envoyé.",
+    "notConfiguredError": "Les notifications push ne sont pas configurées sur le serveur.",
+    "loadError": "Erreur lors du chargement du rappel",
+    "saveSuccess": "Rappel enregistré",
+    "saveErrorGeneric": "Erreur lors de l'enregistrement du rappel"
+  },
+  "notificationPrompt": {
+    "title": "Activer le rappel ?",
+    "body": "Reçois chaque jour à 17:30 un rappel pour saisir tes heures. Envoyé uniquement si tu n'as encore rien saisi aujourd'hui.",
+    "laterHint": "Tu peux modifier cela à tout moment dans les réglages.",
+    "enableButton": "Activer",
+    "dismissButton": "Pas maintenant",
+    "genericError": "Une erreur s'est produite. Tu peux réessayer à tout moment dans les réglages."
   }
 }

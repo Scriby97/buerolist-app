@@ -1,7 +1,6 @@
 // Bürolist Service Worker
 // Conservative caching strategy for Render Free Tier compatibility - ported
-// from FleetTrack's sw.js, ohne den Push-/Notification-Teil (siehe Plan
-// "Nicht im Scope" - Push-Erinnerungen sind fuer v1 zurueckgestellt).
+// from FleetTrack's sw.js, inkl. Push fuer die taegliche Erfassungserinnerung.
 
 // Version hochzaehlen, wenn sich gecachte statische Dateien (Logos, Icons)
 // aendern - beim Aktivieren werden die alten Caches geloescht. Icon-Dateinamen
@@ -99,5 +98,42 @@ self.addEventListener('fetch', (event) => {
           }
         });
       })
+  );
+});
+
+// Push-Nachricht (Erfassungserinnerung) anzeigen
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { body: event.data ? event.data.text() : '' };
+  }
+
+  const title = data.title || 'Bürolist';
+  const options = {
+    body: data.body || '',
+    icon: '/icon-192x192-v2.png',
+    data: { url: data.url || '/' },
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Notification-Klick - vorhandenes Fenster fokussieren statt ein neues zu oeffnen
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          client.navigate(targetUrl);
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(targetUrl);
+    })
   );
 });
