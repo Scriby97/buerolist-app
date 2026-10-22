@@ -96,10 +96,10 @@ export const CategoryTemplatesSection: FC<CategoryTemplatesSectionProps> = ({ or
         <ul className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 divide-y divide-zinc-200 dark:divide-zinc-700">
           {templates.map((template) => (
             <li key={template.id} className="flex items-center justify-between gap-3 px-4 py-3">
-              <span className="text-sm text-zinc-900 dark:text-zinc-50">
-                {template.name}{' '}
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  ({t('categoryCount', { count: template.categoryIds.length })})
+              <span className="min-w-0">
+                <span className="block text-sm text-zinc-900 dark:text-zinc-50">{template.name}</span>
+                <span className="block text-xs text-zinc-500 dark:text-zinc-400">
+                  {t('categoryCount', { count: template.categoryIds.length })}
                 </span>
               </span>
               <div className="flex gap-1 shrink-0">
