@@ -135,7 +135,9 @@
     "loadingCustomers": "Caricamento clienti...",
     "noCustomersFound": "Nessun cliente disponibile",
     "addCustomerButton": "Aggiungi cliente",
-    "loadError": "Errore durante il caricamento dei clienti"
+    "loadError": "Errore durante il caricamento dei clienti",
+    "searchPlaceholder": "Cerca cliente (nome, numero, indirizzo...)",
+    "noSearchMatches": "Nessun cliente trovato."
   },
   "customerDetail": {
     "backLink": "← Torna ai clienti",

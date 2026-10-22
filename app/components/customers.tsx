@@ -10,6 +10,7 @@ import { getCustomers, type Customer } from '@/lib/api/customers';
 import { formatCustomerNumber } from '@/lib/format/numbers';
 import { customerColor } from '@/lib/colors/entityColors';
 import { ColorDot } from './ColorDot';
+import { filterCustomers } from '@/lib/search';
 import CustomerDetail from './CustomerDetail';
 import ProjectDetail from './ProjectDetail';
 import CreateCustomerModal from './createCustomer';
@@ -71,6 +72,7 @@ const Customers: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [search, setSearch] = useState('');
   const [showCreateCustomer, setShowCreateCustomer] = useState(false);
   const [addingProjectForCustomerId, setAddingProjectForCustomerId] = useState<string | null>(null);
 
@@ -148,6 +150,8 @@ const Customers: FC = () => {
     );
   }
 
+  const filteredCustomers = filterCustomers(customers, search);
+
   return (
     <section className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -220,12 +224,48 @@ const Customers: FC = () => {
         </div>
       )}
 
-      {!isLoading && customers.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3">
-          {customers.map((customer) => (
-            <CustomerItem key={customer.id} customer={customer} onSelect={selectCustomer} />
-          ))}
+      {!isLoading && customers.length > 0 && (
+        <div className="relative">
+          <svg
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="M21 21l-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              // Enter oeffnet den Kunden, wenn die Suche eindeutig ist
+              if (e.key === 'Enter' && filteredCustomers.length === 1) selectCustomer(filteredCustomers[0].id);
+            }}
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchPlaceholder')}
+            className="w-full pl-9 pr-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500"
+          />
         </div>
+      )}
+
+      {!isLoading && customers.length > 0 ? (
+        filteredCustomers.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3">
+            {filteredCustomers.map((customer) => (
+              <CustomerItem key={customer.id} customer={customer} onSelect={selectCustomer} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 p-8 text-center">
+            <p className="text-zinc-600 dark:text-zinc-400">{t('noSearchMatches')}</p>
+          </div>
+        )
       ) : (
         !isLoading && (
           <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 p-8 text-center">

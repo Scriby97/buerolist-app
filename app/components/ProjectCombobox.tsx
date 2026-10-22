@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useRef, useState, type FC } from 'react';
 import { formatProjectNumber } from '@/lib/format/numbers';
 import { projectColor } from '@/lib/colors/entityColors';
 import { ColorDot } from './ColorDot';
+import { normalizeSearchText as normalize, searchTokens } from '@/lib/search';
 
 export interface ProjectOption {
   id: string;
@@ -23,8 +24,6 @@ interface ProjectComboboxProps {
   disabled?: boolean;
 }
 
-const normalize = (text: string) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-
 function searchText(option: ProjectOption): string {
   const number = formatProjectNumber(option.customerNumber, option.number);
   const parts = [option.customerName ?? '', option.title];
@@ -37,7 +36,7 @@ function searchText(option: ProjectOption): string {
 
 /** Alle Suchwoerter muessen in Nummer, Kundenname oder Projektbezeichnung vorkommen. */
 export function filterProjectOptions(options: ProjectOption[], query: string): ProjectOption[] {
-  const tokens = normalize(query).split(/\s+/).filter(Boolean);
+  const tokens = searchTokens(query);
   if (tokens.length === 0) return options;
   return options.filter((option) => {
     const haystack = searchText(option);

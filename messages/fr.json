@@ -135,7 +135,9 @@
     "loadingCustomers": "Chargement des clients...",
     "noCustomersFound": "Aucun client disponible",
     "addCustomerButton": "Ajouter un client",
-    "loadError": "Erreur lors du chargement des clients"
+    "loadError": "Erreur lors du chargement des clients",
+    "searchPlaceholder": "Rechercher un client (nom, numéro, adresse...)",
+    "noSearchMatches": "Aucun client trouvé."
   },
   "customerDetail": {
     "backLink": "← Retour aux clients",

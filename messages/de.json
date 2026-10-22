@@ -135,7 +135,9 @@
     "loadingCustomers": "Lade Kunden...",
     "noCustomersFound": "Keine Kunden vorhanden",
     "addCustomerButton": "Kunde hinzufügen",
-    "loadError": "Fehler beim Laden der Kunden"
+    "loadError": "Fehler beim Laden der Kunden",
+    "searchPlaceholder": "Kunde suchen (Name, Nummer, Adresse...)",
+    "noSearchMatches": "Kein Kunde gefunden."
   },
   "customerDetail": {
     "backLink": "← Zurück zu Kunden",
