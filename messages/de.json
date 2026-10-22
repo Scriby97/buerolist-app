@@ -29,7 +29,9 @@
     "tabEmployees": "Mitarbeiter",
     "tabCustomers": "Kunden",
     "tabAccount": "Einstellungen",
-    "redirectingToOnboarding": "Weiterleitung zur Organisationseinrichtung..."
+    "redirectingToOnboarding": "Weiterleitung zur Organisationseinrichtung...",
+    "reports": "Rapporte",
+    "tabReports": "Rapporte"
   },
   "userMenu": {
     "language": "Sprache",
@@ -430,8 +432,6 @@
     "infoSectionTitle": "Info",
     "impressumTitle": "Impressum",
     "impressumDescription": "Rechtliche Angaben zum Anbieter dieser App.",
-    "reportsTitle": "Rapporte",
-    "reportsDescription": "Arbeitsrapporte pro Mitarbeiter drucken oder als PDF speichern.",
     "remindersTitle": "Erinnerung",
     "remindersDescription": "Tägliche Erinnerung, deine Zeiten zu erfassen."
   },

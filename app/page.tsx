@@ -128,6 +128,15 @@ export default function Home() {
               {t("customersOverview")}
             </button>
           )}
+
+          {canManageSelectedOrganization && (
+            <button
+              onClick={() => router.push("/reports")}
+              className="text-left px-4 py-3 rounded-md transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            >
+              {t("reports")}
+            </button>
+          )}
         </nav>
 
         {/* User Menu at bottom */}

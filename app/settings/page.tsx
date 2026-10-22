@@ -178,21 +178,6 @@ export default function SettingsPage() {
               </Link>
             )}
 
-            {isOrganizationManager && (
-              <Link
-                href="/reports"
-                className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
-              >
-                <SettingsIcon>
-                  <path d="M6 3h9l3 3v15H6z" />
-                  <path d="M9 10h6M9 14h6M9 18h4" />
-                </SettingsIcon>
-                <div className="mt-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('reportsTitle')}</div>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                  {t('reportsDescription')}
-                </p>
-              </Link>
-            )}
 
             {isOrganizationManager && (
               <Link

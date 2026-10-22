@@ -29,6 +29,8 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
   const t = useTranslations("nav");
   const { canManageSelectedOrganization } = useOrganization();
   const accountActive = pathname.startsWith("/settings") || pathname.startsWith("/admin");
+  const reportsActive = pathname.startsWith("/reports");
+  const otherRouteActive = accountActive || reportsActive;
 
   const handleTabClick = (key: MenuKey) => {
     if (onNavigate) {
@@ -39,7 +41,7 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
   };
 
   const itemClass = (isActive: boolean) =>
-    `flex flex-col items-center gap-1 py-1.5 px-3 ${isActive ? "text-brown-600" : "text-zinc-400"}`;
+    `flex flex-col items-center gap-1 py-1.5 px-1.5 ${isActive ? "text-brown-600" : "text-zinc-400"}`;
   const labelClass = (isActive: boolean) =>
     `text-[10px] tracking-wide ${isActive ? "font-semibold" : "font-medium"}`;
 
@@ -48,30 +50,40 @@ export function BottomNav({ active, onNavigate }: BottomNavProps) {
       className="md:hidden print:hidden fixed inset-x-0 bottom-0 z-40 bg-zinc-950 border-t border-zinc-800 flex items-stretch justify-between px-2 pt-1.5"
       style={{ paddingBottom: "max(0.375rem, env(safe-area-inset-bottom))" }}
     >
-      <button type="button" onClick={() => handleTabClick("erfassen")} className={itemClass(active === "erfassen" && !accountActive)}>
+      <button type="button" onClick={() => handleTabClick("erfassen")} className={itemClass(active === "erfassen" && !otherRouteActive)}>
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
           <path d="M12 7v5l3 3" />
         </svg>
-        <span className={labelClass(active === "erfassen" && !accountActive)}>{t("tabTimeEntry")}</span>
+        <span className={labelClass(active === "erfassen" && !otherRouteActive)}>{t("tabTimeEntry")}</span>
       </button>
 
-      <button type="button" onClick={() => handleTabClick("eintraege")} className={itemClass(active === "eintraege" && !accountActive)}>
+      <button type="button" onClick={() => handleTabClick("eintraege")} className={itemClass(active === "eintraege" && !otherRouteActive)}>
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 6h16M4 12h16M4 18h10" />
         </svg>
-        <span className={labelClass(active === "eintraege" && !accountActive)}>{canManageSelectedOrganization ? t("tabEmployees") : t("tabMyEntries")}</span>
+        <span className={labelClass(active === "eintraege" && !otherRouteActive)}>{canManageSelectedOrganization ? t("tabEmployees") : t("tabMyEntries")}</span>
       </button>
 
       {canManageSelectedOrganization && (
-        <button type="button" onClick={() => handleTabClick("kunden")} className={itemClass(active === "kunden" && !accountActive)}>
+        <button type="button" onClick={() => handleTabClick("kunden")} className={itemClass(active === "kunden" && !otherRouteActive)}>
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <circle cx="9" cy="8" r="3" />
             <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" />
             <path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3" />
             <path d="M21 20c0-2.8-1.9-5.1-4.5-5.8" />
           </svg>
-          <span className={labelClass(active === "kunden" && !accountActive)}>{t("tabCustomers")}</span>
+          <span className={labelClass(active === "kunden" && !otherRouteActive)}>{t("tabCustomers")}</span>
+        </button>
+      )}
+
+      {canManageSelectedOrganization && (
+        <button type="button" onClick={() => router.push("/reports")} className={itemClass(reportsActive)}>
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z" />
+            <path d="M14 3v6h6M8 13h8M8 17h5" />
+          </svg>
+          <span className={labelClass(reportsActive)}>{t("tabReports")}</span>
         </button>
       )}
 

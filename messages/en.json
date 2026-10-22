@@ -29,7 +29,9 @@
     "tabEmployees": "Employees",
     "tabCustomers": "Customers",
     "tabAccount": "Settings",
-    "redirectingToOnboarding": "Redirecting to organization setup..."
+    "redirectingToOnboarding": "Redirecting to organization setup...",
+    "reports": "Reports",
+    "tabReports": "Reports"
   },
   "userMenu": {
     "language": "Language",
@@ -430,8 +432,6 @@
     "infoSectionTitle": "Info",
     "impressumTitle": "Legal Notice",
     "impressumDescription": "Legal information about the provider of this app.",
-    "reportsTitle": "Reports",
-    "reportsDescription": "Print work reports per employee or save them as PDF.",
     "remindersTitle": "Reminder",
     "remindersDescription": "Daily reminder to record your time."
   },

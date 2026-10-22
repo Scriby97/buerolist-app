@@ -31,7 +31,6 @@ function ReportsPageContent() {
   const { loading: authLoading } = useAuth()
   const { organizations, selectedOrgId, canManageSelectedOrganization, isLoading: orgLoading } = useOrganization()
   const t = useTranslations('reports')
-  const tSettings = useTranslations('settings')
   const dateLocale = useDateLocale()
   const getApiErrorMessage = useApiErrorMessage()
 
@@ -74,7 +73,7 @@ function ReportsPageContent() {
   // Nur Admin/Owner
   useEffect(() => {
     if (authLoading || orgLoading) return
-    if (!canManageSelectedOrganization) router.push('/settings')
+    if (!canManageSelectedOrganization) router.push('/')
   }, [authLoading, orgLoading, canManageSelectedOrganization, router])
 
   useEffect(() => {
@@ -163,7 +162,6 @@ function ReportsPageContent() {
           <Breadcrumbs
             items={[
               { label: 'Dashboard', href: '/' },
-              { label: tSettings('title'), href: '/settings' },
               { label: t('title') },
             ]}
           />

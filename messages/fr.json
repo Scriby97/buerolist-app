@@ -29,7 +29,9 @@
     "tabEmployees": "Collaborateurs",
     "tabCustomers": "Clients",
     "tabAccount": "Paramètres",
-    "redirectingToOnboarding": "Redirection vers la configuration de l'organisation..."
+    "redirectingToOnboarding": "Redirection vers la configuration de l'organisation...",
+    "reports": "Rapports",
+    "tabReports": "Rapports"
   },
   "userMenu": {
     "language": "Langue",
@@ -430,8 +432,6 @@
     "infoSectionTitle": "Infos",
     "impressumTitle": "Mentions légales",
     "impressumDescription": "Informations légales sur l'éditeur de cette app.",
-    "reportsTitle": "Rapports",
-    "reportsDescription": "Imprimer des rapports de travail par collaborateur ou les enregistrer en PDF.",
     "remindersTitle": "Rappel",
     "remindersDescription": "Rappel quotidien pour saisir tes heures."
   },

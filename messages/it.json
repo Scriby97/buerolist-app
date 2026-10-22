@@ -29,7 +29,9 @@
     "tabEmployees": "Collaboratori",
     "tabCustomers": "Clienti",
     "tabAccount": "Impostazioni",
-    "redirectingToOnboarding": "Reindirizzamento alla configurazione dell'organizzazione..."
+    "redirectingToOnboarding": "Reindirizzamento alla configurazione dell'organizzazione...",
+    "reports": "Rapporti",
+    "tabReports": "Rapporti"
   },
   "userMenu": {
     "language": "Lingua",
@@ -430,8 +432,6 @@
     "infoSectionTitle": "Info",
     "impressumTitle": "Note legali",
     "impressumDescription": "Informazioni legali sul fornitore di questa app.",
-    "reportsTitle": "Rapporti",
-    "reportsDescription": "Stampa rapporti di lavoro per collaboratore o salvali in PDF.",
     "remindersTitle": "Promemoria",
     "remindersDescription": "Promemoria giornaliero per registrare le tue ore."
   },
