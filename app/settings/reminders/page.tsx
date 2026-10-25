@@ -12,6 +12,15 @@ import { ensurePushSubscription, PushPermissionError } from '@/lib/notifications
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
 import { TimeInput } from '@/app/components/TimeInput'
 
+const minutesToHhMm = (minutes: number) =>
+  `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`
+
+/** "08:30" -> 510; leer/ungueltig -> 0 */
+const hhMmToMinutes = (value: string) => {
+  const match = /^(\d{1,2}):(\d{2})$/.exec(value)
+  return match ? Number(match[1]) * 60 + Number(match[2]) : 0
+}
+
 export default function SettingsRemindersPage() {
   const router = useRouter()
   const { supabaseUser, loading: authLoading } = useAuth()
@@ -27,6 +36,8 @@ export default function SettingsRemindersPage() {
   // gleich darauf vom Server ueberschrieben.
   const [enabled, setEnabled] = useState(false)
   const [time, setTime] = useState('17:30')
+  // Arbeitstag als "HH:MM" (Dauer) - Erinnerung nur, wenn heute weniger erfasst ist
+  const [workday, setWorkday] = useState('08:00')
   const [supported, setSupported] = useState(true)
 
   useEffect(() => {
@@ -52,6 +63,7 @@ export default function SettingsRemindersPage() {
         const settings = await getReminderSettings()
         setEnabled(settings.enabled)
         setTime(settings.reminderTime)
+        if (settings.workdayMinutes) setWorkday(minutesToHhMm(settings.workdayMinutes))
       } catch (err) {
         const message = getApiErrorMessage(err, t('loadError'))
         showToast(message, 'error')
@@ -76,7 +88,7 @@ export default function SettingsRemindersPage() {
       if (enabled) {
         await ensurePushSubscription()
       }
-      await updateReminderSettings(enabled, time)
+      await updateReminderSettings(enabled, time, hhMmToMinutes(workday))
       showToast(t('saveSuccess'), 'success')
     } catch (err) {
       const message =
@@ -168,9 +180,19 @@ export default function SettingsRemindersPage() {
                 </div>
               </div>
 
+              <div>
+                <label htmlFor="workdayDuration" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                  {t('workdayLabel')}
+                </label>
+                <div className="w-full sm:w-48">
+                  <TimeInput id="workdayDuration" value={workday} onChange={setWorkday} disabled={!enabled} />
+                </div>
+                <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">{t('workdayHint')}</p>
+              </div>
+
               <button
                 onClick={handleSave}
-                disabled={saving || (enabled && !time)}
+                disabled={saving || (enabled && (!time || !hhMmToMinutes(workday)))}
                 className="px-5 py-2.5 bg-brown-600 text-white font-semibold rounded-lg hover:bg-brown-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? t('saving') : t('saveButton')}

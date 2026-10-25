@@ -941,10 +941,10 @@
   },
   "settingsReminders": {
     "title": "Rappel de saisie",
-    "subtitle": "Reçois une notification quotidienne si tu n'as pas encore saisi tes entrées du jour.",
+    "subtitle": "Reçois une notification quotidienne si tu as saisi moins d'une journée de travail aujourd'hui.",
     "unsupportedMessage": "Ton navigateur ne prend pas en charge les notifications ici. Sur iPhone, cela fonctionne uniquement si Bürolist a été installé comme app via « Sur l'écran d'accueil » - ouvre alors l'app depuis là plutôt que via Safari.",
     "enableLabel": "Activer le rappel quotidien",
-    "enableHint": "Envoyé uniquement si tu n'as encore rien saisi aujourd'hui.",
+    "enableHint": "Envoyé uniquement si tu as saisi moins d'une journée de travail aujourd'hui.",
     "timeLabel": "Heure",
     "saveButton": "Enregistrer",
     "saving": "Enregistrement...",
@@ -953,11 +953,13 @@
     "notConfiguredError": "Les notifications push ne sont pas configurées sur le serveur.",
     "loadError": "Erreur lors du chargement du rappel",
     "saveSuccess": "Rappel enregistré",
-    "saveErrorGeneric": "Erreur lors de l'enregistrement du rappel"
+    "saveErrorGeneric": "Erreur lors de l'enregistrement du rappel",
+    "workdayLabel": "Journée de travail (heures)",
+    "workdayHint": "Utilisé uniquement pour le rappel : si tu as déjà saisi au moins autant d'heures aujourd'hui, aucun rappel n'est envoyé."
   },
   "notificationPrompt": {
     "title": "Activer le rappel ?",
-    "body": "Reçois chaque jour à 17:30 un rappel pour saisir tes heures. Envoyé uniquement si tu n'as encore rien saisi aujourd'hui.",
+    "body": "Reçois chaque jour à 17:30 un rappel pour saisir tes heures. Envoyé uniquement si tu as saisi moins d'une journée de travail aujourd'hui.",
     "laterHint": "Tu peux modifier cela à tout moment dans les réglages.",
     "enableButton": "Activer",
     "dismissButton": "Pas maintenant",

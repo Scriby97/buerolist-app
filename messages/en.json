@@ -941,10 +941,10 @@
   },
   "settingsReminders": {
     "title": "Entry reminder",
-    "subtitle": "Get a daily notification if you haven't recorded today's entries yet.",
+    "subtitle": "Get a daily notification if you've recorded less than a workday today.",
     "unsupportedMessage": "Your browser doesn't support notifications here. On iPhone this only works if Bürolist was installed as an app via \"Add to Home Screen\" - then open the app from there instead of Safari.",
     "enableLabel": "Enable daily reminder",
-    "enableHint": "Only sent if you haven't recorded anything today.",
+    "enableHint": "Only sent if you've recorded less than a workday today.",
     "timeLabel": "Time",
     "saveButton": "Save",
     "saving": "Saving...",
@@ -953,11 +953,13 @@
     "notConfiguredError": "Push notifications are not configured on the server.",
     "loadError": "Failed to load the reminder",
     "saveSuccess": "Reminder saved",
-    "saveErrorGeneric": "Failed to save the reminder"
+    "saveErrorGeneric": "Failed to save the reminder",
+    "workdayLabel": "Workday (hours)",
+    "workdayHint": "Only used for the reminder: if you've already recorded at least this many hours today, no reminder is sent."
   },
   "notificationPrompt": {
     "title": "Enable reminder?",
-    "body": "Get a reminder every day at 17:30 to record your time. Only sent if you haven't recorded anything today.",
+    "body": "Get a reminder every day at 17:30 to record your time. Only sent if you've recorded less than a workday today.",
     "laterHint": "You can change this anytime in the settings.",
     "enableButton": "Enable",
     "dismissButton": "Not now",

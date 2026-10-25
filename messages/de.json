@@ -941,10 +941,10 @@
   },
   "settingsReminders": {
     "title": "Erfassungserinnerung",
-    "subtitle": "Erhalte täglich eine Benachrichtigung, falls du deine heutigen Einträge noch nicht erfasst hast.",
+    "subtitle": "Erhalte täglich eine Benachrichtigung, falls du heute weniger als einen Arbeitstag erfasst hast.",
     "unsupportedMessage": "Dein Browser unterstützt hier keine Benachrichtigungen. Auf dem iPhone funktioniert das nur, wenn Bürolist über \"Zum Home-Bildschirm\" als App installiert wurde - öffne die App dann von dort statt über Safari.",
     "enableLabel": "Tägliche Erinnerung aktivieren",
-    "enableHint": "Kommt nur, wenn du heute noch nichts erfasst hast.",
+    "enableHint": "Kommt nur, wenn du heute weniger als einen Arbeitstag erfasst hast.",
     "timeLabel": "Uhrzeit",
     "saveButton": "Speichern",
     "saving": "Wird gespeichert...",
@@ -953,11 +953,13 @@
     "notConfiguredError": "Push-Benachrichtigungen sind serverseitig nicht konfiguriert.",
     "loadError": "Fehler beim Laden der Erinnerung",
     "saveSuccess": "Erinnerung gespeichert",
-    "saveErrorGeneric": "Fehler beim Speichern der Erinnerung"
+    "saveErrorGeneric": "Fehler beim Speichern der Erinnerung",
+    "workdayLabel": "Arbeitstag (Stunden)",
+    "workdayHint": "Wird nur für die Erinnerung verwendet: Hast du heute schon mindestens so viele Stunden erfasst, kommt keine Erinnerung."
   },
   "notificationPrompt": {
     "title": "Erinnerung aktivieren?",
-    "body": "Erhalte jeden Tag um 17:30 eine Erinnerung, deine Zeiten zu erfassen. Kommt nur, wenn du heute noch nichts eingetragen hast.",
+    "body": "Erhalte jeden Tag um 17:30 eine Erinnerung, deine Zeiten zu erfassen. Kommt nur, wenn du heute weniger als einen Arbeitstag eingetragen hast.",
     "laterHint": "Du kannst das jederzeit in den Einstellungen ändern.",
     "enableButton": "Aktivieren",
     "dismissButton": "Nicht jetzt",

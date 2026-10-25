@@ -941,10 +941,10 @@
   },
   "settingsReminders": {
     "title": "Promemoria di registrazione",
-    "subtitle": "Ricevi una notifica giornaliera se non hai ancora registrato le voci di oggi.",
+    "subtitle": "Ricevi una notifica giornaliera se oggi hai registrato meno di una giornata lavorativa.",
     "unsupportedMessage": "Il tuo browser non supporta le notifiche qui. Su iPhone funziona solo se Bürolist è stato installato come app tramite \"Aggiungi alla schermata Home\" - apri poi l'app da lì invece che da Safari.",
     "enableLabel": "Attiva promemoria giornaliero",
-    "enableHint": "Inviato solo se oggi non hai ancora registrato nulla.",
+    "enableHint": "Inviato solo se oggi hai registrato meno di una giornata lavorativa.",
     "timeLabel": "Ora",
     "saveButton": "Salva",
     "saving": "Salvataggio...",
@@ -953,11 +953,13 @@
     "notConfiguredError": "Le notifiche push non sono configurate sul server.",
     "loadError": "Errore nel caricamento del promemoria",
     "saveSuccess": "Promemoria salvato",
-    "saveErrorGeneric": "Errore nel salvataggio del promemoria"
+    "saveErrorGeneric": "Errore nel salvataggio del promemoria",
+    "workdayLabel": "Giornata lavorativa (ore)",
+    "workdayHint": "Usato solo per il promemoria: se oggi hai già registrato almeno queste ore, non viene inviato alcun promemoria."
   },
   "notificationPrompt": {
     "title": "Attivare il promemoria?",
-    "body": "Ricevi ogni giorno alle 17:30 un promemoria per registrare le tue ore. Inviato solo se oggi non hai ancora registrato nulla.",
+    "body": "Ricevi ogni giorno alle 17:30 un promemoria per registrare le tue ore. Inviato solo se oggi hai registrato meno di una giornata lavorativa.",
     "laterHint": "Puoi modificarlo in qualsiasi momento nelle impostazioni.",
     "enableButton": "Attiva",
     "dismissButton": "Non ora",
