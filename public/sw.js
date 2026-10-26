@@ -114,6 +114,10 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body || '',
     icon: '/icon-192x192-v2.png',
+    // Android zeigt in der Statusleiste nur den Alphakanal des Badges (weiss
+    // eingefaerbt) - deshalb eine transparente Logo-Silhouette statt des
+    // vollflaechigen App-Icons (das sonst als Glocke/Quadrat erscheint).
+    badge: '/notification-badge.png',
     data: { url: data.url || '/' },
   };
 
