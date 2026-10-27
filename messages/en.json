@@ -955,7 +955,14 @@
     "saveSuccess": "Reminder saved",
     "saveErrorGeneric": "Failed to save the reminder",
     "workdayLabel": "Workday (hours)",
-    "workdayHint": "Only used for the reminder: if you've already recorded at least this many hours today, no reminder is sent."
+    "workdayHint": "Only used for the reminder: if you've already recorded at least this many hours today, no reminder is sent.",
+    "testButton": "Send test notification",
+    "testTitle": "Record your time",
+    "testBody": "This is what your entry reminder looks like.",
+    "testStatus_sent": "Sent - the notification should appear shortly.",
+    "testStatus_outdated": "This device is still running an old app version. Close Bürolist completely (also from recent apps), reopen it and try again.",
+    "testStatus_noPermission": "Notifications are not allowed on this device. Enable the reminder and save first.",
+    "testStatus_failed": "The notification could not be shown. Check that notifications for Bürolist are allowed in the system settings."
   },
   "notificationPrompt": {
     "title": "Enable reminder?",

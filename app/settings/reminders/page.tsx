@@ -31,6 +31,7 @@ export default function SettingsRemindersPage() {
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [testStatus, setTestStatus] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'outdated' | 'noPermission'>('idle')
   // Default fuer einen User, der die Einstellungen noch nie gespeichert hat
   // (siehe NotificationsService.getReminder im Backend: aus, 17:30) - wird
   // gleich darauf vom Server ueberschrieben.
@@ -80,6 +81,38 @@ export default function SettingsRemindersPage() {
     if (code === 'blocked') return t('permissionBlockedError')
     if (code === 'denied') return t('permissionDeniedError')
     return t('notConfiguredError')
+  }
+
+  // Zeigt eine Erinnerung ueber den Service Worker an (gleicher Code wie bei
+  // echten Pushes). Vorher nach einer neuen SW-Version suchen; antwortet der
+  // Service Worker nicht, laeuft noch eine alte Version.
+  const handleTest = async () => {
+    if (Notification.permission !== 'granted') {
+      setTestStatus('noPermission')
+      return
+    }
+    setTestStatus('sending')
+    try {
+      const registration = await navigator.serviceWorker.ready
+      await registration.update().catch(() => {})
+      const worker = registration.active
+      const result = await new Promise<'sent' | 'failed' | 'outdated'>((resolve) => {
+        if (!worker) return resolve('outdated')
+        const channel = new MessageChannel()
+        const timer = setTimeout(() => resolve('outdated'), 3000)
+        channel.port1.onmessage = (event: MessageEvent<{ ok?: boolean }>) => {
+          clearTimeout(timer)
+          resolve(event.data?.ok ? 'sent' : 'failed')
+        }
+        worker.postMessage(
+          { type: 'TEST_NOTIFICATION', payload: { title: t('testTitle'), body: t('testBody'), url: '/settings/reminders' } },
+          [channel.port2],
+        )
+      })
+      setTestStatus(result)
+    } catch {
+      setTestStatus('outdated')
+    }
   }
 
   const handleSave = async () => {
@@ -197,6 +230,20 @@ export default function SettingsRemindersPage() {
               >
                 {saving ? t('saving') : t('saveButton')}
               </button>
+
+              <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 space-y-2">
+                <button
+                  type="button"
+                  onClick={handleTest}
+                  disabled={testStatus === 'sending'}
+                  className="px-4 py-2 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-700 disabled:opacity-50"
+                >
+                  {t('testButton')}
+                </button>
+                {testStatus !== 'idle' && testStatus !== 'sending' && (
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400">{t(`testStatus_${testStatus}`)}</p>
+                )}
+              </div>
             </>
           )}
         </div>

@@ -955,7 +955,14 @@
     "saveSuccess": "Rappel enregistré",
     "saveErrorGeneric": "Erreur lors de l'enregistrement du rappel",
     "workdayLabel": "Journée de travail (heures)",
-    "workdayHint": "Utilisé uniquement pour le rappel : si tu as déjà saisi au moins autant d'heures aujourd'hui, aucun rappel n'est envoyé."
+    "workdayHint": "Utilisé uniquement pour le rappel : si tu as déjà saisi au moins autant d'heures aujourd'hui, aucun rappel n'est envoyé.",
+    "testButton": "Envoyer une notification de test",
+    "testTitle": "Saisir les heures",
+    "testBody": "Voici à quoi ressemble ton rappel de saisie.",
+    "testStatus_sent": "Envoyée - la notification devrait apparaître sous peu.",
+    "testStatus_outdated": "Cet appareil utilise encore une ancienne version de l'app. Ferme complètement Bürolist (aussi dans les apps récentes), rouvre-la et réessaie.",
+    "testStatus_noPermission": "Les notifications ne sont pas autorisées sur cet appareil. Active d'abord le rappel et enregistre.",
+    "testStatus_failed": "La notification n'a pas pu être affichée. Vérifie que les notifications pour Bürolist sont autorisées dans les réglages du système."
   },
   "notificationPrompt": {
     "title": "Activer le rappel ?",

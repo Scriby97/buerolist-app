@@ -955,7 +955,14 @@
     "saveSuccess": "Promemoria salvato",
     "saveErrorGeneric": "Errore nel salvataggio del promemoria",
     "workdayLabel": "Giornata lavorativa (ore)",
-    "workdayHint": "Usato solo per il promemoria: se oggi hai già registrato almeno queste ore, non viene inviato alcun promemoria."
+    "workdayHint": "Usato solo per il promemoria: se oggi hai già registrato almeno queste ore, non viene inviato alcun promemoria.",
+    "testButton": "Invia notifica di prova",
+    "testTitle": "Registra le ore",
+    "testBody": "Ecco come appare il tuo promemoria di registrazione.",
+    "testStatus_sent": "Inviata - la notifica dovrebbe apparire a breve.",
+    "testStatus_outdated": "Su questo dispositivo è ancora in uso una vecchia versione dell'app. Chiudi completamente Bürolist (anche dalle app recenti), riaprila e riprova.",
+    "testStatus_noPermission": "Le notifiche non sono consentite su questo dispositivo. Attiva prima il promemoria e salva.",
+    "testStatus_failed": "Non è stato possibile mostrare la notifica. Verifica che le notifiche per Bürolist siano consentite nelle impostazioni di sistema."
   },
   "notificationPrompt": {
     "title": "Attivare il promemoria?",

@@ -955,7 +955,14 @@
     "saveSuccess": "Erinnerung gespeichert",
     "saveErrorGeneric": "Fehler beim Speichern der Erinnerung",
     "workdayLabel": "Arbeitstag (Stunden)",
-    "workdayHint": "Wird nur für die Erinnerung verwendet: Hast du heute schon mindestens so viele Stunden erfasst, kommt keine Erinnerung."
+    "workdayHint": "Wird nur für die Erinnerung verwendet: Hast du heute schon mindestens so viele Stunden erfasst, kommt keine Erinnerung.",
+    "testButton": "Test-Benachrichtigung senden",
+    "testTitle": "Zeiten erfassen",
+    "testBody": "So sieht deine Erfassungserinnerung aus.",
+    "testStatus_sent": "Gesendet - die Benachrichtigung sollte gleich erscheinen.",
+    "testStatus_outdated": "Auf diesem Gerät läuft noch eine alte App-Version. Schliesse Bürolist ganz (auch aus den zuletzt verwendeten Apps), öffne es neu und versuche es nochmals.",
+    "testStatus_noPermission": "Benachrichtigungen sind auf diesem Gerät nicht erlaubt. Aktiviere zuerst die Erinnerung und speichere.",
+    "testStatus_failed": "Die Benachrichtigung konnte nicht angezeigt werden. Prüfe, ob Benachrichtigungen für Bürolist in den Systemeinstellungen erlaubt sind."
   },
   "notificationPrompt": {
     "title": "Erinnerung aktivieren?",
