@@ -101,8 +101,15 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Erinnerung anzeigen - gemeinsam fuer echte Pushes und die Test-Benachrichtigung
-function showReminder(data) {
+// Push-Nachricht (Erfassungserinnerung) anzeigen
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { body: event.data ? event.data.text() : '' };
+  }
+
   const title = data.title || 'Bürolist';
   const options = {
     body: data.body || '',
@@ -113,31 +120,8 @@ function showReminder(data) {
     badge: '/notification-badge.png',
     data: { url: data.url || '/' },
   };
-  return self.registration.showNotification(title, options);
-}
 
-// Push-Nachricht (Erfassungserinnerung) anzeigen
-self.addEventListener('push', (event) => {
-  let data = {};
-  try {
-    data = event.data ? event.data.json() : {};
-  } catch {
-    data = { body: event.data ? event.data.text() : '' };
-  }
-  event.waitUntil(showReminder(data));
-});
-
-// Test-Benachrichtigung aus den Einstellungen (Einstellungen -> Erinnerung).
-// Antwortet nur ein aktueller Service Worker - bleibt die Antwort aus, laeuft
-// auf dem Geraet noch eine alte Version.
-self.addEventListener('message', (event) => {
-  if (event.data?.type !== 'TEST_NOTIFICATION') return;
-  event.waitUntil(
-    showReminder(event.data.payload || {}).then(
-      () => event.ports[0]?.postMessage({ ok: true }),
-      (error) => event.ports[0]?.postMessage({ ok: false, error: String(error) })
-    )
-  );
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
 // Notification-Klick - vorhandenes Fenster fokussieren statt ein neues zu oeffnen
