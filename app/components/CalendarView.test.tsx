@@ -105,9 +105,9 @@ describe('CalendarView', () => {
       )
       render(<CalendarView events={events} />)
 
-      expect(dayButton(/16\. September: 7 Einträge, 7:00 h/)).toBeInTheDocument()
+      expect(dayButton(/16\. September: 7 Einträge, 7.00 h/)).toBeInTheDocument()
       expect(dayButton(/15\. September: keine Einträge/)).toBeInTheDocument()
-      expect(screen.getByText('7:00')).toBeInTheDocument()
+      expect(screen.getByText('7.00')).toBeInTheDocument()
     })
 
     it('meldet den angetippten Tag und hebt den gewaehlten Tag hervor', async () => {

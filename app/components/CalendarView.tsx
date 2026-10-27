@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { colorVars, ENTITY_BG, type EntityColor } from '@/lib/colors/entityColors';
+import { formatDecimalHours } from '@/lib/format/hours';
 
 // Kalenderansicht (Monat/Woche) - urspruenglich aus FleetTrack portiert. Die
 // Tage zeigen nur eine Uebersicht (Tagestotal + Anzahl Eintraege) und sind
@@ -126,7 +127,6 @@ export default function CalendarView({ events, selectedDate, onSelectDate, onVis
     onSelectDate?.(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
   };
 
-  const formatTotal = (minutes: number) => `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`;
 
   const renderDay = (d: Date, label: string, dimmed: boolean, tall: boolean) => {
     const key = d.toDateString();
@@ -135,7 +135,7 @@ export default function CalendarView({ events, selectedDate, onSelectDate, onVis
     const isToday = isSameDay(d, today);
     const ariaLabel = [
       d.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' }),
-      summary ? t('dayEntries', { count: summary.count, total: formatTotal(summary.minutes) }) : t('dayNoEntries'),
+      summary ? t('dayEntries', { count: summary.count, total: formatDecimalHours(summary.minutes) }) : t('dayNoEntries'),
     ].join(': ');
     return (
       <button
@@ -154,7 +154,7 @@ export default function CalendarView({ events, selectedDate, onSelectDate, onVis
         {summary && (
           <span className="mt-auto flex flex-col items-start gap-0.5 sm:gap-1">
             <span className="text-[11px] sm:text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-50">
-              {formatTotal(summary.minutes)}
+              {formatDecimalHours(summary.minutes)}
             </span>
             <span className="flex items-center gap-0.5" aria-hidden="true">
               {/* Ein Punkt pro Eintrag in der Farbe seines Projekts - so sieht man

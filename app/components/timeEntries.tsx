@@ -25,6 +25,7 @@ import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrai
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
+import { formatDecimalHours } from '@/lib/format/hours';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
@@ -793,7 +794,7 @@ const MyEntries: FC = () => {
                 </h2>
                 {selectedDayGroup.entries.length > 0 && (
                   <span className="shrink-0 text-sm text-zinc-600 dark:text-zinc-400">
-                    {t('dayTotal', { duration: formatMinutes(selectedDayGroup.totalMinutes) })}
+                    {t('dayTotal', { duration: `${formatDecimalHours(selectedDayGroup.totalMinutes)} h` })}
                   </span>
                 )}
               </div>
@@ -835,7 +836,7 @@ const MyEntries: FC = () => {
                     {group.date.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                   </h2>
                   <span className="shrink-0 text-sm text-zinc-600 dark:text-zinc-400">
-                    {t('dayTotal', { duration: formatMinutes(group.totalMinutes) })}
+                    {t('dayTotal', { duration: `${formatDecimalHours(group.totalMinutes)} h` })}
                   </span>
                 </div>
                 <DayCostLine entries={group.entries} />
