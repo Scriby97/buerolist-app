@@ -73,7 +73,9 @@
     "employeeLabel": "Collaboratore",
     "employeeSelf": "Io ({name})",
     "withoutLogin": "senza login",
-    "employeeHint": "La registrazione viene salvata per questa persona. La vede ma non può modificarla."
+    "employeeHint": "La registrazione viene salvata per questa persona. La vede ma non può modificarla.",
+    "travelLabel": "Tempo di viaggio (ore, es. 1.25)",
+    "travelInvalid": "Indica il tempo di viaggio in ore, es. 1.25 (max. 24)."
   },
   "entryItems": {
     "materialTitle": "Materiale",
@@ -125,7 +127,10 @@
     "noEntriesOnDay": "Nessuna registrazione in questo giorno.",
     "selectDayHint": "Tocca un giorno per vedere le sue registrazioni.",
     "reportButton": "Rapporto",
-    "lockedByManagerHint": "Bloccato – questa registrazione è stata fatta da un admin e può essere modificata solo dagli admin."
+    "lockedByManagerHint": "Bloccato – questa registrazione è stata fatta da un admin e può essere modificata solo dagli admin.",
+    "travelLabel": "Tempo di viaggio:",
+    "travelInputLabel": "Tempo di viaggio (ore)",
+    "travelInvalid": "Indica il tempo di viaggio in ore, es. 1.25 (max. 24)."
   },
   "calendar": {
     "today": "Oggi",
@@ -206,7 +211,8 @@
     "deleteError": "Errore durante l'eliminazione del progetto",
     "deleteProjectButton": "Elimina progetto",
     "deleteProjectHint": "Elimina definitivamente il progetto con tutte le registrazioni e note.",
-    "reportButton": "Rapporto"
+    "reportButton": "Rapporto",
+    "travelRowLabel": "Tempo di viaggio"
   },
   "createCustomer": {
     "title": "Aggiungi cliente",

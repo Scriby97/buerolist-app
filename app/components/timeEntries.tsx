@@ -25,7 +25,7 @@ import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrai
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
-import { formatDecimalHours } from '@/lib/format/hours';
+import { formatDecimalHours, minutesToDecimalInput, parseDecimalHours } from '@/lib/format/hours';
 import { personName } from '@/lib/format/personName';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
@@ -89,11 +89,14 @@ function toTimeInputValue(iso: string): string {
 /** "Material CHF 10.40 · Spesen CHF 5.00" fuer einen Tag (nur wenn vorhanden). */
 const DayCostLine: FC<{ entries: TimeEntry[] }> = ({ entries }) => {
   const tItems = useTranslations('entryItems');
+  const t = useTranslations('myEntries');
   const totals = entriesCostTotals(entries);
-  if (totals.material === 0 && totals.expense === 0) return null;
+  const travel = entries.reduce((sum, entry) => sum + (entry.travelMinutes ?? 0), 0);
+  if (totals.material === 0 && totals.expense === 0 && travel === 0) return null;
   return (
     <p className="-mt-1 text-right text-xs text-zinc-600 dark:text-zinc-400 tabular-nums">
       {[
+        travel > 0 && `${t('travelLabel')} ${formatDecimalHours(travel)} h`,
         totals.material > 0 && `${tItems('materialTitle')} CHF ${formatChf(totals.material)}`,
         totals.expense > 0 && `${tItems('expensesTitle')} CHF ${formatChf(totals.expense)}`,
       ]
@@ -154,6 +157,11 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
               <span className="font-medium">{t('categoryLabel')}</span> {entry.category.name}
             </p>
           )}
+          {entry.travelMinutes ? (
+            <p>
+              <span className="font-medium">{t('travelLabel')}</span> {formatDecimalHours(entry.travelMinutes)} h
+            </p>
+          ) : null}
           {entry.comment && (
             <p className="whitespace-pre-wrap break-words">
               <span className="font-medium">{t('commentLabel')}</span> {entry.comment}
@@ -355,6 +363,7 @@ const MyEntries: FC = () => {
     startTime: '',
     endTime: '',
     comment: '',
+    travel: '',
     materials: withTrailingEmptyRow([]) as ItemRow[],
     expenses: withTrailingEmptyRow([]) as ItemRow[],
   });
@@ -370,6 +379,7 @@ const MyEntries: FC = () => {
       startTime: toTimeInputValue(entry.startAt),
       endTime: toTimeInputValue(entry.endAt),
       comment: entry.comment ?? '',
+      travel: minutesToDecimalInput(entry.travelMinutes),
       materials: itemsToRows(entry.items, 'material'),
       expenses: itemsToRows(entry.items, 'expense'),
     });
@@ -396,8 +406,9 @@ const MyEntries: FC = () => {
       const endAt = new Date(`${editForm.date}T${editForm.endTime}:00`).toISOString();
       const materials = rowsToItems(editForm.materials, 'material');
       const expenses = rowsToItems(editForm.expenses, 'expense');
-      if (!materials || !expenses) {
-        setError(tItems('invalid'));
+      const travelMinutes = parseDecimalHours(editForm.travel);
+      if (!materials || !expenses || travelMinutes === undefined) {
+        setError(travelMinutes === undefined ? t('travelInvalid') : tItems('invalid'));
         setIsSubmitting(false);
         return;
       }
@@ -406,6 +417,7 @@ const MyEntries: FC = () => {
         startAt,
         endAt,
         comment: editForm.comment.trim() || null,
+        travelMinutes,
         items: [...materials, ...expenses],
       });
       const applyUpdate = (prev: TimeEntry[]) =>
@@ -725,6 +737,25 @@ const MyEntries: FC = () => {
                       required
                       disabled={!canEditEditingEntry}
                     />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="edit-travel" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {t('travelInputLabel')}
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      id="edit-travel"
+                      type="text"
+                      inputMode="decimal"
+                      value={editForm.travel}
+                      onChange={(e) => setEditForm((prev) => ({ ...prev, travel: e.target.value }))}
+                      placeholder="0.00"
+                      disabled={!canEditEditingEntry}
+                      className="w-28 px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 tabular-nums disabled:opacity-60"
+                    />
+                    <span className="text-sm text-zinc-600 dark:text-zinc-400">h</span>
                   </div>
                 </div>
 

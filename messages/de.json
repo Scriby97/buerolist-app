@@ -73,7 +73,9 @@
     "employeeLabel": "Mitarbeiter",
     "employeeSelf": "Ich ({name})",
     "withoutLogin": "ohne Login",
-    "employeeHint": "Der Eintrag wird für diese Person gespeichert. Sie sieht ihn, kann ihn aber nicht ändern."
+    "employeeHint": "Der Eintrag wird für diese Person gespeichert. Sie sieht ihn, kann ihn aber nicht ändern.",
+    "travelLabel": "Fahrzeit (Stunden, z.B. 1.25)",
+    "travelInvalid": "Fahrzeit bitte als Stunden angeben, z.B. 1.25 (max. 24)."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -125,7 +127,10 @@
     "noEntriesOnDay": "Keine Einträge an diesem Tag.",
     "selectDayHint": "Tippe auf einen Tag, um seine Einträge zu sehen.",
     "reportButton": "Rapport",
-    "lockedByManagerHint": "Gesperrt – dieser Eintrag wurde von einem Admin erfasst und kann nur von Admins geändert werden."
+    "lockedByManagerHint": "Gesperrt – dieser Eintrag wurde von einem Admin erfasst und kann nur von Admins geändert werden.",
+    "travelLabel": "Fahrzeit:",
+    "travelInputLabel": "Fahrzeit (Stunden)",
+    "travelInvalid": "Fahrzeit bitte als Stunden angeben, z.B. 1.25 (max. 24)."
   },
   "calendar": {
     "today": "Heute",
@@ -206,7 +211,8 @@
     "deleteError": "Fehler beim Löschen des Projekts",
     "deleteProjectButton": "Projekt löschen",
     "deleteProjectHint": "Projekt inkl. aller Zeiteinträge und Notizen endgültig löschen.",
-    "reportButton": "Rapport"
+    "reportButton": "Rapport",
+    "travelRowLabel": "Fahrzeit"
   },
   "createCustomer": {
     "title": "Kunde hinzufügen",

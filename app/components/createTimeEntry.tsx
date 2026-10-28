@@ -22,6 +22,7 @@ import { NotificationPermissionPrompt } from './NotificationPermissionPrompt';
 import { getOrganizationMembers } from '@/lib/api/organizationMembers';
 import type { OrganizationMemberDetail } from '@/lib/types/user';
 import { personName } from '@/lib/format/personName';
+import { nextStartTime, parseDecimalHours } from '@/lib/format/hours';
 
 interface FormState {
   projectId: string;
@@ -30,6 +31,8 @@ interface FormState {
   startTime: string;
   endTime: string;
   comment: string;
+  /** Fahrzeit als Dezimalstunden-Text, z.B. "1.25" */
+  travel: string;
   materials: ItemRow[];
   expenses: ItemRow[];
 }
@@ -95,6 +98,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     startTime: '',
     endTime: '',
     comment: '',
+    travel: '',
     materials: withTrailingEmptyRow([]),
     expenses: withTrailingEmptyRow([]),
   });
@@ -132,15 +136,13 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     setFormData({
       projectId: draft?.projectId ?? '',
       categoryId: draft?.categoryId ?? '',
-      // Mitarbeiter duerfen nur in der laufenden Woche erfassen - ein alter
-      // Entwurf (z.B. von letzter Woche) startet daher wieder bei heute.
-      date:
-        draft?.date && (canManageSelectedOrganization || draft.date >= currentWeekStartKey())
-          ? draft.date
-          : getTodayDate(),
+      // Beim Oeffnen immer der heutige Tag - ein Entwurf behaelt nur Projekt,
+      // Zeiten und Inhalte, nicht das Datum.
+      date: getTodayDate(),
       startTime: draft?.startTime ?? '',
       endTime: draft?.endTime ?? '',
       comment: draft?.comment ?? '',
+      travel: draft?.travel ?? '',
       materials: withTrailingEmptyRow(draft?.materials ?? []),
       expenses: withTrailingEmptyRow(draft?.expenses ?? []),
     });
@@ -178,7 +180,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           .map((entry) => entry.endAt)
           .sort();
         const latestEndAt = ownEndTimes[ownEndTimes.length - 1];
-        const suggestion = latestEndAt ? toLocalTime(latestEndAt) : '';
+        const suggestion = latestEndAt ? nextStartTime(toLocalTime(latestEndAt)) : '';
         setFormData((prev) => {
           if (prev.date !== date) return prev;
           if (prev.startTime !== '' && prev.startTime !== autoStartTimeRef.current) return prev;
@@ -233,7 +235,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     // gespeicherten Eintrags (falls fuer heute erfasst; sonst laedt der
     // Effekt oben den Vorschlag fuer heute).
     const today = getTodayDate();
-    const startTime = savedDate === today ? savedEndTime : '';
+    const startTime = savedDate === today ? nextStartTime(savedEndTime) : '';
     autoStartTimeRef.current = startTime;
     setFormData({
       projectId,
@@ -242,6 +244,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       startTime,
       endTime: '',
       comment: '',
+      travel: '',
       materials: withTrailingEmptyRow([]),
       expenses: withTrailingEmptyRow([]),
     });
@@ -278,6 +281,8 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       const materials = rowsToItems(formData.materials, 'material');
       const expenses = rowsToItems(formData.expenses, 'expense');
       if (!materials || !expenses) throw new Error(tItems('invalid'));
+      const travelMinutes = parseDecimalHours(formData.travel);
+      if (travelMinutes === undefined) throw new Error(t('travelInvalid'));
 
       await createTimeEntry({
         projectId: formData.projectId,
@@ -286,6 +291,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         startAt,
         endAt,
         comment: formData.comment.trim() || undefined,
+        travelMinutes: travelMinutes ?? undefined,
         items: [...materials, ...expenses],
       });
       handleSaveSuccess(formData.projectId, formData.categoryId, formData.date, formData.endTime);
@@ -514,6 +520,29 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         {timeError && (
           <p className="text-sm text-red-700 dark:text-red-200">{timeError}</p>
         )}
+
+        {/* Fahrzeit (Dezimalstunden, separat von der Arbeitszeit) */}
+        <div className="space-y-2">
+          <label htmlFor="entryTravel" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            {t('travelLabel')}
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              id="entryTravel"
+              type="text"
+              inputMode="decimal"
+              value={formData.travel}
+              onChange={(e) => setFormData((prev) => ({ ...prev, travel: e.target.value }))}
+              placeholder="0.00"
+              aria-invalid={parseDecimalHours(formData.travel) === undefined}
+              className="w-28 px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 tabular-nums focus:ring-2 focus:ring-blue-500"
+            />
+            <span className="text-sm text-zinc-600 dark:text-zinc-400">h</span>
+          </div>
+          {parseDecimalHours(formData.travel) === undefined && (
+            <p className="text-sm text-red-700 dark:text-red-200">{t('travelInvalid')}</p>
+          )}
+        </div>
 
         {/* Material und Spesen (beliebig viele Positionen) */}
         <EntryItemsEditor

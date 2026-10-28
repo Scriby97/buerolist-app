@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDecimalHours } from './hours'
+import { formatDecimalHours, minutesToDecimalInput, nextStartTime, parseDecimalHours } from './hours'
 
 describe('formatDecimalHours', () => {
   it('rechnet Minuten in Dezimalstunden um', () => {
@@ -7,5 +7,35 @@ describe('formatDecimalHours', () => {
     expect(formatDecimalHours(270)).toBe('4.50')
     expect(formatDecimalHours(480)).toBe('8.00')
     expect(formatDecimalHours(20)).toBe('0.33')
+  })
+})
+
+describe('parseDecimalHours', () => {
+  it('liest Dezimalstunden mit Punkt oder Komma', () => {
+    expect(parseDecimalHours('1.25')).toBe(75)
+    expect(parseDecimalHours('1,5')).toBe(90)
+    expect(parseDecimalHours('2')).toBe(120)
+    expect(parseDecimalHours('  ')).toBeNull()
+  })
+
+  it('erkennt ungueltige Eingaben', () => {
+    expect(parseDecimalHours('abc')).toBeUndefined()
+    expect(parseDecimalHours('-1')).toBeUndefined()
+    expect(parseDecimalHours('25')).toBeUndefined()
+    expect(parseDecimalHours('1.255')).toBeUndefined()
+  })
+
+  it('zeigt Minuten wieder als Eingabe', () => {
+    expect(minutesToDecimalInput(75)).toBe('1.25')
+    expect(minutesToDecimalInput(90)).toBe('1.5')
+    expect(minutesToDecimalInput(null)).toBe('')
+  })
+})
+
+describe('nextStartTime', () => {
+  it('springt nach 12:00 auf 13:00 (Mittagspause), sonst direkt anschliessend', () => {
+    expect(nextStartTime('12:00')).toBe('13:00')
+    expect(nextStartTime('10:30')).toBe('10:30')
+    expect(nextStartTime('')).toBe('')
   })
 })

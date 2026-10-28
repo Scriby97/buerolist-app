@@ -50,6 +50,8 @@ export interface ProjectDetail {
   timeSummary: ProjectTimeSummaryRow[]
   /** Material/Spesen pro Mitarbeiter (fehlt bei aelteren Backends) */
   costSummary?: ProjectCostSummaryRow[]
+  /** Fahrzeit pro Mitarbeiter in Minuten (fehlt bei aelteren Backends) */
+  travelSummary?: { creatorId: string; totalMinutes: number }[]
 }
 
 export async function getProjects(

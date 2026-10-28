@@ -73,7 +73,9 @@
     "employeeLabel": "Collaborateur",
     "employeeSelf": "Moi ({name})",
     "withoutLogin": "sans login",
-    "employeeHint": "La saisie est enregistrée pour cette personne. Elle la voit mais ne peut pas la modifier."
+    "employeeHint": "La saisie est enregistrée pour cette personne. Elle la voit mais ne peut pas la modifier.",
+    "travelLabel": "Temps de trajet (heures, p. ex. 1.25)",
+    "travelInvalid": "Indique le temps de trajet en heures, p. ex. 1.25 (max. 24)."
   },
   "entryItems": {
     "materialTitle": "Matériel",
@@ -125,7 +127,10 @@
     "noEntriesOnDay": "Aucune saisie ce jour-là.",
     "selectDayHint": "Touche un jour pour voir ses saisies.",
     "reportButton": "Rapport",
-    "lockedByManagerHint": "Verrouillé – cette saisie a été faite par un admin et ne peut être modifiée que par les admins."
+    "lockedByManagerHint": "Verrouillé – cette saisie a été faite par un admin et ne peut être modifiée que par les admins.",
+    "travelLabel": "Temps de trajet :",
+    "travelInputLabel": "Temps de trajet (heures)",
+    "travelInvalid": "Indique le temps de trajet en heures, p. ex. 1.25 (max. 24)."
   },
   "calendar": {
     "today": "Aujourd'hui",
@@ -206,7 +211,8 @@
     "deleteError": "Erreur lors de la suppression du projet",
     "deleteProjectButton": "Supprimer le projet",
     "deleteProjectHint": "Supprimer définitivement le projet avec toutes ses saisies et notes.",
-    "reportButton": "Rapport"
+    "reportButton": "Rapport",
+    "travelRowLabel": "Temps de trajet"
   },
   "createCustomer": {
     "title": "Ajouter un client",

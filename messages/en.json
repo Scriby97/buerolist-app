@@ -73,7 +73,9 @@
     "employeeLabel": "Employee",
     "employeeSelf": "Me ({name})",
     "withoutLogin": "no login",
-    "employeeHint": "The entry is saved for this person. They can see it but not change it."
+    "employeeHint": "The entry is saved for this person. They can see it but not change it.",
+    "travelLabel": "Travel time (hours, e.g. 1.25)",
+    "travelInvalid": "Please enter travel time in hours, e.g. 1.25 (max. 24)."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -125,7 +127,10 @@
     "noEntriesOnDay": "No entries on this day.",
     "selectDayHint": "Tap a day to see its entries.",
     "reportButton": "Report",
-    "lockedByManagerHint": "Locked – this entry was recorded by an admin and can only be changed by admins."
+    "lockedByManagerHint": "Locked – this entry was recorded by an admin and can only be changed by admins.",
+    "travelLabel": "Travel time:",
+    "travelInputLabel": "Travel time (hours)",
+    "travelInvalid": "Please enter travel time in hours, e.g. 1.25 (max. 24)."
   },
   "calendar": {
     "today": "Today",
@@ -206,7 +211,8 @@
     "deleteError": "Error deleting the project",
     "deleteProjectButton": "Delete project",
     "deleteProjectHint": "Permanently delete the project incl. all time entries and notes.",
-    "reportButton": "Report"
+    "reportButton": "Report",
+    "travelRowLabel": "Travel time"
   },
   "createCustomer": {
     "title": "Add customer",

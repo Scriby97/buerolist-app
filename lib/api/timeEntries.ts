@@ -43,6 +43,8 @@ export interface TimeEntry {
   startAt: string
   endAt: string
   comment: string | null
+  /** Fahrzeit in Minuten (null = keine; fehlt bei aelteren Backends) */
+  travelMinutes?: number | null
   /** Fehlt bei aelteren Backends */
   items?: TimeEntryItem[]
   project: TimeEntryProject
@@ -126,6 +128,7 @@ export async function createTimeEntry(data: {
   startAt: string
   endAt: string
   comment?: string
+  travelMinutes?: number
   items?: Omit<TimeEntryItem, 'id'>[]
 }): Promise<TimeEntry> {
   const res = await authenticatedFetch(buildApiUrl('/time-entries'), {
@@ -145,6 +148,7 @@ export async function updateTimeEntry(
     startAt?: string
     endAt?: string
     comment?: string | null
+    travelMinutes?: number | null
     items?: Omit<TimeEntryItem, 'id'>[]
   },
 ): Promise<TimeEntry> {

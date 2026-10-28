@@ -28,6 +28,7 @@ import { NotesSection } from './NotesSection';
 import { ConfirmDialog } from './ConfirmDialog';
 import { useToast } from '@/lib/hooks/useToast';
 import { ToastContainer } from './Toast';
+import { formatDecimalHours } from '@/lib/format/hours';
 
 interface ProjectDetailProps {
   projectId: string;
@@ -142,7 +143,12 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
     );
   }
 
-  const { project, categories, notes, timeSummary, costSummary = [] } = detail;
+  const { project, categories, notes, timeSummary, costSummary = [], travelSummary = [] } = detail;
+  const travelOf = (creatorId?: string) =>
+    travelSummary
+      .filter((row) => creatorId === undefined || row.creatorId === creatorId)
+      .reduce((sum, row) => sum + row.totalMinutes, 0);
+  const decimalHours = (minutes: number) => (minutes ? `${formatDecimalHours(minutes)} h` : '');
 
   // Zeit-Zusammenfassung als Matrix Kategorie x Mitarbeiter (die API liefert
   // bereits pro Mitarbeiter+Kategorie gruppierte Zeilen), mit Total pro
@@ -297,6 +303,17 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                   ))}
                   {showTotalColumn && <td className={numCell}>{formatHoursMinutes(summaryMatrix.totalMinutes)}</td>}
                 </tr>
+                {travelOf() > 0 && (
+                  <tr className="border-t border-zinc-100 dark:border-zinc-700/60 text-zinc-700 dark:text-zinc-300">
+                    <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left font-normal`}>{t('travelRowLabel')}</th>
+                    {summaryMatrix.employees.map((employee) => (
+                      <td key={employee.id} className={numCell}>{decimalHours(travelOf(employee.id))}</td>
+                    ))}
+                    {showTotalColumn && (
+                      <td className={`${numCell} font-medium text-zinc-900 dark:text-zinc-100`}>{decimalHours(travelOf())}</td>
+                    )}
+                  </tr>
+                )}
               </tfoot>
             </table>
           </div>
