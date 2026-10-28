@@ -135,15 +135,19 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
     const draft = loadDraft(selectedOrgId);
     currentProjectIdRef.current = draft?.projectId ?? '';
+    // Zeiten nur aus einem Entwurf von heute uebernehmen - sonst stuende z.B.
+    // die Endzeit von gestern als Startzeit drin, statt des Arbeitsbeginns.
+    const today = getTodayDate();
+    const draftIsToday = draft?.date === today;
 
     setFormData({
       projectId: draft?.projectId ?? '',
       categoryId: draft?.categoryId ?? '',
-      // Beim Oeffnen immer der heutige Tag - ein Entwurf behaelt nur Projekt,
-      // Zeiten und Inhalte, nicht das Datum.
-      date: getTodayDate(),
-      startTime: draft?.startTime ?? '',
-      endTime: draft?.endTime ?? '',
+      // Beim Oeffnen immer der heutige Tag - ein Entwurf behaelt nur Projekt
+      // und Inhalte, nicht das Datum.
+      date: today,
+      startTime: draftIsToday ? (draft?.startTime ?? '') : '',
+      endTime: draftIsToday ? (draft?.endTime ?? '') : '',
       comment: draft?.comment ?? '',
       travel: draft?.travel ?? '',
       materials: withTrailingEmptyRow(draft?.materials ?? []),

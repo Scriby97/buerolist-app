@@ -5,6 +5,7 @@ import { renderWithIntl } from '@/test/renderWithIntl'
 import CreateTimeEntry from './createTimeEntry'
 
 const createTimeEntryMock = vi.fn()
+const DRAFT_KEY = 'buerolist:createTimeEntryDraft:org-1'
 let canManage = true
 
 vi.mock('@/lib/api/url', () => ({ getApiBaseUrlOrNull: () => 'http://api' }))
@@ -77,6 +78,16 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
 
   it('neuer Tag startet mit dem Arbeitsbeginn aus den Arbeitszeiten (07:15)', async () => {
     canManage = false
+    renderWithIntl(<CreateTimeEntry />)
+    await waitFor(() => expect((screen.getByLabelText('Von') as HTMLInputElement).value).toBe('07:15'))
+  })
+
+  it('ignoriert die Startzeit aus einem Entwurf von gestern', async () => {
+    canManage = false
+    window.localStorage.setItem(
+      DRAFT_KEY,
+      JSON.stringify({ projectId: 'p1', date: '2000-01-01', startTime: '17:15', endTime: '' }),
+    )
     renderWithIntl(<CreateTimeEntry />)
     await waitFor(() => expect((screen.getByLabelText('Von') as HTMLInputElement).value).toBe('07:15'))
   })
