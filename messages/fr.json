@@ -85,7 +85,8 @@
     "unitPrice": "CHF/pce",
     "remove": "Supprimer",
     "total": "Total",
-    "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides."
+    "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides.",
+    "presetPick": "Ajouter un prédéfini…"
   },
   "myEntries": {
     "title": "Entrées",
@@ -447,7 +448,9 @@
     "remindersTitle": "Rappel",
     "remindersDescription": "Rappel quotidien pour saisir tes heures.",
     "workScheduleTitle": "Horaires de travail",
-    "workScheduleDescription": "Ta journée de travail normale, p. ex. 07:15–12:00 et 13:00–17:00."
+    "workScheduleDescription": "Ta journée de travail normale, p. ex. 07:15–12:00 et 13:00–17:00.",
+    "itemPresetsTitle": "Matériel & frais",
+    "itemPresetsDescription": "Positions prédéfinies, p. ex. repas de midi CHF 22.–, à choisir rapidement lors de la saisie."
   },
   "impressum": {
     "title": "Mentions légales",
@@ -935,7 +938,8 @@
     "PLACEHOLDER_NOT_FOUND": "Collaborateur sans login introuvable.",
     "PLACEHOLDER_MERGE_OVERLAP": "Les heures saisies pour toi se chevauchent avec des saisies existantes de ton compte. Contacte ton admin.",
     "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login.",
-    "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants."
+    "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants.",
+    "ITEM_PRESET_NOT_FOUND": "La position n'a pas été trouvée."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -1011,5 +1015,24 @@
     "saving": "Enregistrement...",
     "saveSuccess": "Horaires enregistrés",
     "saveError": "Erreur lors de l'enregistrement des horaires"
+  },
+  "itemPresets": {
+    "title": "Matériel & frais",
+    "subtitle": "Positions prédéfinies à choisir lors de la saisie. La saisie libre reste possible.",
+    "materialTitle": "Matériel",
+    "expensesTitle": "Frais",
+    "empty": "Aucune position pour le moment.",
+    "descriptionLabel": "Désignation",
+    "priceLabel": "Prix (CHF)",
+    "pricePlaceholder": "Prix",
+    "noPrice": "sans prix",
+    "newMaterialPlaceholder": "Nouveau matériel, p. ex. cartouche de mastic",
+    "newExpensePlaceholder": "Nouveau frais, p. ex. parking",
+    "addButton": "Ajouter",
+    "loadError": "Erreur lors du chargement des positions",
+    "saveError": "Erreur lors de l'enregistrement de la position",
+    "deleteError": "Erreur lors de la suppression de la position",
+    "confirmDeleteTitle": "Supprimer la position",
+    "confirmDeleteMessage": "Vraiment supprimer « {name} » ? Les saisies existantes restent inchangées."
   }
 }

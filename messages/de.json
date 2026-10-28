@@ -85,7 +85,8 @@
     "unitPrice": "CHF/Stk.",
     "remove": "Entfernen",
     "total": "Total",
-    "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben."
+    "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben.",
+    "presetPick": "Vordefiniert hinzufügen…"
   },
   "myEntries": {
     "title": "Einträge",
@@ -447,7 +448,9 @@
     "remindersTitle": "Erinnerung",
     "remindersDescription": "Tägliche Erinnerung, deine Zeiten zu erfassen.",
     "workScheduleTitle": "Arbeitszeiten",
-    "workScheduleDescription": "Dein normaler Arbeitstag, z.B. 07:15–12:00 und 13:00–17:00."
+    "workScheduleDescription": "Dein normaler Arbeitstag, z.B. 07:15–12:00 und 13:00–17:00.",
+    "itemPresetsTitle": "Material & Spesen",
+    "itemPresetsDescription": "Vordefinierte Positionen, z.B. Mittagessen CHF 22.–, zur schnellen Auswahl beim Erfassen."
   },
   "impressum": {
     "title": "Impressum",
@@ -935,7 +938,8 @@
     "PLACEHOLDER_NOT_FOUND": "Mitarbeiter ohne Login nicht gefunden.",
     "PLACEHOLDER_MERGE_OVERLAP": "Die für dich erfassten Zeiten überschneiden sich mit bestehenden Einträgen deines Kontos. Bitte melde dich bei deinem Admin.",
     "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich.",
-    "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein."
+    "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein.",
+    "ITEM_PRESET_NOT_FOUND": "Die Position wurde nicht gefunden."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -1011,5 +1015,24 @@
     "saving": "Wird gespeichert...",
     "saveSuccess": "Arbeitszeiten gespeichert",
     "saveError": "Fehler beim Speichern der Arbeitszeiten"
+  },
+  "itemPresets": {
+    "title": "Material & Spesen",
+    "subtitle": "Vordefinierte Positionen, die beim Erfassen ausgewählt werden können. Freie Eingabe bleibt weiterhin möglich.",
+    "materialTitle": "Material",
+    "expensesTitle": "Spesen",
+    "empty": "Noch keine Positionen.",
+    "descriptionLabel": "Bezeichnung",
+    "priceLabel": "Preis (CHF)",
+    "pricePlaceholder": "Preis",
+    "noPrice": "ohne Preis",
+    "newMaterialPlaceholder": "Neues Material, z.B. Patrone Kitt",
+    "newExpensePlaceholder": "Neue Spese, z.B. Parkieren",
+    "addButton": "Hinzufügen",
+    "loadError": "Fehler beim Laden der Positionen",
+    "saveError": "Fehler beim Speichern der Position",
+    "deleteError": "Fehler beim Löschen der Position",
+    "confirmDeleteTitle": "Position löschen",
+    "confirmDeleteMessage": "„{name}“ wirklich löschen? Bereits erfasste Einträge bleiben unverändert."
   }
 }

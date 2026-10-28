@@ -85,7 +85,8 @@
     "unitPrice": "CHF/pz.",
     "remove": "Rimuovi",
     "total": "Totale",
-    "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi."
+    "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi.",
+    "presetPick": "Aggiungi predefinito…"
   },
   "myEntries": {
     "title": "Voci",
@@ -447,7 +448,9 @@
     "remindersTitle": "Promemoria",
     "remindersDescription": "Promemoria giornaliero per registrare le tue ore.",
     "workScheduleTitle": "Orari di lavoro",
-    "workScheduleDescription": "La tua giornata lavorativa normale, es. 07:15–12:00 e 13:00–17:00."
+    "workScheduleDescription": "La tua giornata lavorativa normale, es. 07:15–12:00 e 13:00–17:00.",
+    "itemPresetsTitle": "Materiale & spese",
+    "itemPresetsDescription": "Posizioni predefinite, es. pranzo CHF 22.–, da scegliere rapidamente durante la registrazione."
   },
   "impressum": {
     "title": "Note legali",
@@ -935,7 +938,8 @@
     "PLACEHOLDER_NOT_FOUND": "Collaboratore senza login non trovato.",
     "PLACEHOLDER_MERGE_OVERLAP": "Le ore registrate per te si sovrappongono a registrazioni esistenti del tuo account. Contatta il tuo admin.",
     "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login.",
-    "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti."
+    "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti.",
+    "ITEM_PRESET_NOT_FOUND": "La posizione non è stata trovata."
   },
   "settingsOrganization": {
     "title": "Organizzazione",
@@ -1011,5 +1015,24 @@
     "saving": "Salvataggio...",
     "saveSuccess": "Orari salvati",
     "saveError": "Errore nel salvataggio degli orari"
+  },
+  "itemPresets": {
+    "title": "Materiale & spese",
+    "subtitle": "Posizioni predefinite selezionabili durante la registrazione. Resta possibile l’inserimento libero.",
+    "materialTitle": "Materiale",
+    "expensesTitle": "Spese",
+    "empty": "Ancora nessuna posizione.",
+    "descriptionLabel": "Descrizione",
+    "priceLabel": "Prezzo (CHF)",
+    "pricePlaceholder": "Prezzo",
+    "noPrice": "senza prezzo",
+    "newMaterialPlaceholder": "Nuovo materiale, es. cartuccia di stucco",
+    "newExpensePlaceholder": "Nuova spesa, es. parcheggio",
+    "addButton": "Aggiungi",
+    "loadError": "Errore nel caricamento delle posizioni",
+    "saveError": "Errore nel salvataggio della posizione",
+    "deleteError": "Errore nell'eliminazione della posizione",
+    "confirmDeleteTitle": "Elimina posizione",
+    "confirmDeleteMessage": "Eliminare davvero «{name}»? Le registrazioni esistenti restano invariate."
   }
 }

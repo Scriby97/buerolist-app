@@ -4,6 +4,11 @@
 
 const pad = (n: number, width: number) => String(n).padStart(width, '0')
 
+/** Nummer einer Material-/Spesen-Vorlage: Material M-001, Spesen S-001. */
+export function formatPresetNumber(type: 'material' | 'expense', number: number): string {
+  return `${type === 'material' ? 'M' : 'S'}-${pad(number, 3)}`
+}
+
 export function formatCustomerNumber(customerNumber?: number | null): string {
   return customerNumber ? pad(customerNumber, 3) : ''
 }

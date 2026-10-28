@@ -4,6 +4,8 @@ import type { FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatChf, parseChfToRappen, parseQuantity, sanitizeDecimalInput } from '@/lib/format/money';
 import { isRowEmpty, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
+import { formatPresetNumber } from '@/lib/format/numbers';
+import type { ItemPreset } from '@/lib/api/itemPresets';
 
 interface EntryItemsEditorProps {
   /** Eindeutiges Praefix fuer die Feld-IDs, z.B. "material" */
@@ -12,6 +14,8 @@ interface EntryItemsEditorProps {
   rows: ItemRow[];
   onChange: (rows: ItemRow[]) => void;
   disabled?: boolean;
+  /** Vordefinierte Positionen dieses Typs (Einstellungen -> Material & Spesen) */
+  presets?: ItemPreset[];
 }
 
 const invalidClass = 'border-red-500 dark:border-red-500';
@@ -25,7 +29,7 @@ const inputClass =
  * erscheint darunter die naechste. So lassen sich beliebig viele Positionen
  * erfassen.
  */
-export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, rows, onChange, disabled }) => {
+export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, rows, onChange, disabled, presets = [] }) => {
   const t = useTranslations('entryItems');
   const visibleRows = rows.length > 0 && isRowEmpty(rows[rows.length - 1]) ? rows : withTrailingEmptyRow(rows);
 
@@ -35,6 +39,23 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
     // Mitte bleiben stehen, bis man sie entfernt (sonst springt der Fokus).
     if (!isRowEmpty(next[next.length - 1])) next.push({ quantity: '', description: '', price: '' });
     onChange(next);
+  };
+
+  // Vorlage als neue, ausgefuellte Zeile uebernehmen (danach frei anpassbar)
+  const addPreset = (presetId: string) => {
+    const preset = presets.find((p) => p.id === presetId);
+    if (!preset) return;
+    const filled = visibleRows.filter((row) => !isRowEmpty(row));
+    onChange(
+      withTrailingEmptyRow([
+        ...filled,
+        {
+          quantity: '1',
+          description: preset.description,
+          price: preset.unitPriceRappen ? formatChf(preset.unitPriceRappen) : '',
+        },
+      ]),
+    );
   };
 
   const removeRow = (index: number) => onChange(withTrailingEmptyRow(visibleRows.filter((_, i) => i !== index)));
@@ -50,6 +71,23 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
   return (
     <fieldset className="space-y-2" disabled={disabled}>
       <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">{title}</legend>
+      {presets.length > 0 && (
+        <select
+          id={`${idPrefix}-preset`}
+          aria-label={`${title}: ${t('presetPick')}`}
+          value=""
+          onChange={(e) => addPreset(e.target.value)}
+          className={`${inputClass} sm:max-w-sm`}
+        >
+          <option value="">{t('presetPick')}</option>
+          {presets.map((preset) => (
+            <option key={preset.id} value={preset.id}>
+              {formatPresetNumber(preset.type, preset.number)} {preset.description}
+              {preset.unitPriceRappen ? ` · CHF ${formatChf(preset.unitPriceRappen)}` : ''}
+            </option>
+          ))}
+        </select>
+      )}
       <div className="grid grid-cols-[3.5rem_minmax(0,1fr)_5.5rem_2rem] gap-x-1.5 gap-y-1.5 items-center">
         <span className="text-xs text-zinc-500 dark:text-zinc-400">{t('quantity')}</span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">{t('description')}</span>

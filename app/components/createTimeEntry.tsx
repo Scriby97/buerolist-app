@@ -24,6 +24,7 @@ import type { OrganizationMemberDetail } from '@/lib/types/user';
 import { personName } from '@/lib/format/personName';
 import { parseDecimalHours } from '@/lib/format/hours';
 import { scheduleOf, suggestStartTime } from '@/lib/workSchedule';
+import { getItemPresets, type ItemPreset } from '@/lib/api/itemPresets';
 
 interface FormState {
   projectId: string;
@@ -106,6 +107,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   // Admin/Owner: fuer wen erfasst wird ('' = fuer sich selbst)
   const [members, setMembers] = useState<OrganizationMemberDetail[]>([]);
+  const [presets, setPresets] = useState<ItemPreset[]>([]);
   const [creatorId, setCreatorId] = useState('');
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
@@ -306,6 +308,22 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       setIsSubmitting(false);
     }
   };
+
+  // Vordefinierte Material-/Spesen-Positionen der Organisation
+  useEffect(() => {
+    if (!selectedOrgId) return;
+    let cancelled = false;
+    getItemPresets(selectedOrgId)
+      .then((list) => {
+        if (!cancelled) setPresets(list);
+      })
+      .catch(() => {
+        if (!cancelled) setPresets([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedOrgId]);
 
   // Admin/Owner: Mitglieder fuer die Mitarbeiterauswahl laden (inkl. ohne Login)
   useEffect(() => {
@@ -555,12 +573,14 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           title={tItems('materialTitle')}
           rows={formData.materials}
           onChange={(materials) => setFormData((prev) => ({ ...prev, materials }))}
+          presets={presets.filter((p) => p.type === 'material')}
         />
         <EntryItemsEditor
           idPrefix="expense"
           title={tItems('expensesTitle')}
           rows={formData.expenses}
           onChange={(expenses) => setFormData((prev) => ({ ...prev, expenses }))}
+          presets={presets.filter((p) => p.type === 'expense')}
         />
 
         {/* Bemerkung (optional) */}

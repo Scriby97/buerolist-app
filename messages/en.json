@@ -85,7 +85,8 @@
     "unitPrice": "CHF/unit",
     "remove": "Remove",
     "total": "Total",
-    "invalid": "Please enter a description, a valid quantity and a price for each material and expense line."
+    "invalid": "Please enter a description, a valid quantity and a price for each material and expense line.",
+    "presetPick": "Add predefined…"
   },
   "myEntries": {
     "title": "Entries",
@@ -447,7 +448,9 @@
     "remindersTitle": "Reminder",
     "remindersDescription": "Daily reminder to record your time.",
     "workScheduleTitle": "Working hours",
-    "workScheduleDescription": "Your normal workday, e.g. 07:15–12:00 and 13:00–17:00."
+    "workScheduleDescription": "Your normal workday, e.g. 07:15–12:00 and 13:00–17:00.",
+    "itemPresetsTitle": "Material & expenses",
+    "itemPresetsDescription": "Predefined items, e.g. lunch CHF 22.–, for quick selection when recording."
   },
   "impressum": {
     "title": "Legal Notice",
@@ -935,7 +938,8 @@
     "PLACEHOLDER_NOT_FOUND": "Employee without login not found.",
     "PLACEHOLDER_MERGE_OVERLAP": "The time recorded for you overlaps with existing entries of your account. Please contact your admin.",
     "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login.",
-    "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order."
+    "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order.",
+    "ITEM_PRESET_NOT_FOUND": "The item was not found."
   },
   "settingsOrganization": {
     "title": "Organization",
@@ -1011,5 +1015,24 @@
     "saving": "Saving...",
     "saveSuccess": "Working hours saved",
     "saveError": "Failed to save working hours"
+  },
+  "itemPresets": {
+    "title": "Material & expenses",
+    "subtitle": "Predefined items that can be selected when recording. Free input remains possible.",
+    "materialTitle": "Material",
+    "expensesTitle": "Expenses",
+    "empty": "No items yet.",
+    "descriptionLabel": "Description",
+    "priceLabel": "Price (CHF)",
+    "pricePlaceholder": "Price",
+    "noPrice": "no price",
+    "newMaterialPlaceholder": "New material, e.g. putty cartridge",
+    "newExpensePlaceholder": "New expense, e.g. parking",
+    "addButton": "Add",
+    "loadError": "Failed to load items",
+    "saveError": "Failed to save item",
+    "deleteError": "Failed to delete item",
+    "confirmDeleteTitle": "Delete item",
+    "confirmDeleteMessage": "Really delete \"{name}\"? Existing entries stay unchanged."
   }
 }

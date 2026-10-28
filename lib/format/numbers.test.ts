@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatCustomerNumber, formatProjectNumber, projectDisplayName } from './numbers'
+import { formatCustomerNumber, formatPresetNumber, formatProjectNumber, projectDisplayName } from './numbers'
 
 describe('numbers', () => {
   it('formatiert Kunden- und Projektnummern', () => {
@@ -16,5 +16,12 @@ describe('numbers', () => {
     expect(projectDisplayName({ title: 'Fassade', number: 3 }, { name: 'Chalet', number: 7 })).toBe(
       '007-03 Chalet – Fassade',
     )
+  })
+})
+
+describe('formatPresetNumber', () => {
+  it('nummeriert Material mit M, Spesen mit S', () => {
+    expect(formatPresetNumber('material', 1)).toBe('M-001')
+    expect(formatPresetNumber('expense', 12)).toBe('S-012')
   })
 })

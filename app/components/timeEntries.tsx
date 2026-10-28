@@ -27,6 +27,7 @@ import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 import { formatDecimalHours, minutesToDecimalInput, parseDecimalHours } from '@/lib/format/hours';
 import { personName } from '@/lib/format/personName';
+import { getItemPresets, type ItemPreset } from '@/lib/api/itemPresets';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
@@ -368,6 +369,21 @@ const MyEntries: FC = () => {
     expenses: withTrailingEmptyRow([]) as ItemRow[],
   });
   const [editForm, setEditForm] = useState(emptyEditForm);
+  const [presets, setPresets] = useState<ItemPreset[]>([]);
+  useEffect(() => {
+    if (!selectedOrgId) return;
+    let cancelled = false;
+    getItemPresets(selectedOrgId)
+      .then((list) => {
+        if (!cancelled) setPresets(list);
+      })
+      .catch(() => {
+        if (!cancelled) setPresets([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedOrgId]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -764,6 +780,7 @@ const MyEntries: FC = () => {
                   title={tItems('materialTitle')}
                   rows={editForm.materials}
                   onChange={(materials) => setEditForm((prev) => ({ ...prev, materials }))}
+                  presets={presets.filter((p) => p.type === 'material')}
                   disabled={!canEditEditingEntry}
                 />
                 <EntryItemsEditor
@@ -771,6 +788,7 @@ const MyEntries: FC = () => {
                   title={tItems('expensesTitle')}
                   rows={editForm.expenses}
                   onChange={(expenses) => setEditForm((prev) => ({ ...prev, expenses }))}
+                  presets={presets.filter((p) => p.type === 'expense')}
                   disabled={!canEditEditingEntry}
                 />
 
