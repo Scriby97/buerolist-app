@@ -70,12 +70,15 @@
     "noProjectsDialogAdminMessage": "Crée d'abord un client et un projet, avant que toi et ton équipe puissiez saisir du temps.",
     "noProjectsDialogAddProjectButton": "Créer un client/projet maintenant",
     "commentLabel": "Remarque (facultatif)",
-    "employeeLabel": "Collaborateur",
     "employeeSelf": "Moi ({name})",
     "withoutLogin": "sans login",
     "employeeHint": "La saisie est enregistrée pour cette personne. Elle la voit mais ne peut pas la modifier.",
     "travelLabel": "Temps de trajet (heures, p. ex. 1.25)",
-    "travelInvalid": "Indique le temps de trajet en heures, p. ex. 1.25 (max. 24)."
+    "travelInvalid": "Indique le temps de trajet en heures, p. ex. 1.25 (max. 24).",
+    "employeesLabel": "Saisir pour",
+    "employeesHint": "La même saisie est enregistrée pour les {count} personnes choisies. Les autres la voient mais ne peuvent pas la modifier.",
+    "saveSuccessMultiple": "Enregistré pour {count} personnes",
+    "selectEmployeeError": "Choisis au moins une personne pour la saisie."
   },
   "entryItems": {
     "materialTitle": "Matériel",
@@ -938,7 +941,8 @@
     "PLACEHOLDER_MERGE_OVERLAP": "Les heures saisies pour toi se chevauchent avec des saisies existantes de ton compte. Contacte ton admin.",
     "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login.",
     "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants.",
-    "ITEM_PRESET_NOT_FOUND": "La position n'a pas été trouvée."
+    "ITEM_PRESET_NOT_FOUND": "La position n'a pas été trouvée.",
+    "TIME_ENTRY_OVERLAP_FOR": "Une saisie existe déjà pour {name} sur cette période – rien n’a été enregistré."
   },
   "settingsOrganization": {
     "title": "Organisation",

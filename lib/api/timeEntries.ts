@@ -124,13 +124,15 @@ export async function createTimeEntry(data: {
   projectId: string
   /** Fuer wen erfasst wird (nur Admin/Owner; fehlt = fuer sich selbst) */
   creatorId?: string
+  /** Gleicher Eintrag fuer mehrere Mitarbeiter (nur Admin/Owner, ersetzt creatorId) */
+  creatorIds?: string[]
   categoryId?: string
   startAt: string
   endAt: string
   comment?: string
   travelMinutes?: number
   items?: Omit<TimeEntryItem, 'id'>[]
-}): Promise<TimeEntry> {
+}): Promise<TimeEntry | TimeEntry[]> {
   const res = await authenticatedFetch(buildApiUrl('/time-entries'), {
     method: 'POST',
     body: JSON.stringify(data),

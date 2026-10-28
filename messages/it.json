@@ -70,12 +70,15 @@
     "noProjectsDialogAdminMessage": "Crea prima un cliente e un progetto, prima che tu e il tuo team possiate registrare il tempo.",
     "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora",
     "commentLabel": "Osservazione (facoltativa)",
-    "employeeLabel": "Collaboratore",
     "employeeSelf": "Io ({name})",
     "withoutLogin": "senza login",
     "employeeHint": "La registrazione viene salvata per questa persona. La vede ma non può modificarla.",
     "travelLabel": "Tempo di viaggio (ore, es. 1.25)",
-    "travelInvalid": "Indica il tempo di viaggio in ore, es. 1.25 (max. 24)."
+    "travelInvalid": "Indica il tempo di viaggio in ore, es. 1.25 (max. 24).",
+    "employeesLabel": "Registra per",
+    "employeesHint": "La stessa registrazione viene salvata per tutte le {count} persone scelte. Gli altri la vedono ma non possono modificarla.",
+    "saveSuccessMultiple": "Salvato per {count} persone",
+    "selectEmployeeError": "Scegli almeno una persona per cui registrare."
   },
   "entryItems": {
     "materialTitle": "Materiale",
@@ -938,7 +941,8 @@
     "PLACEHOLDER_MERGE_OVERLAP": "Le ore registrate per te si sovrappongono a registrazioni esistenti del tuo account. Contatta il tuo admin.",
     "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login.",
     "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti.",
-    "ITEM_PRESET_NOT_FOUND": "La posizione non è stata trovata."
+    "ITEM_PRESET_NOT_FOUND": "La posizione non è stata trovata.",
+    "TIME_ENTRY_OVERLAP_FOR": "Per {name} esiste già una registrazione in questo periodo – non è stato salvato nulla."
   },
   "settingsOrganization": {
     "title": "Organizzazione",

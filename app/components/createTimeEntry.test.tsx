@@ -54,10 +54,9 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
   it('Admin/Owner wählt einen Mitarbeiter ohne Login und speichert für ihn', async () => {
     canManage = true
     renderWithIntl(<CreateTimeEntry />)
-    const select = await screen.findByLabelText('Mitarbeiter')
-    expect(screen.getByRole('option', { name: 'Max Muster (ohne Login)' })).toBeTruthy()
-
-    fireEvent.change(select, { target: { value: 'ph' } })
+    const other = await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' })
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Ich (Nicolas Balmer)' }))
+    fireEvent.click(other)
     fillTimes()
     fireEvent.click(screen.getByRole('button', { name: /speichern/i }))
 
@@ -68,12 +67,24 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
   it('ohne Auswahl wird für sich selbst gespeichert', async () => {
     canManage = true
     renderWithIntl(<CreateTimeEntry />)
-    await screen.findByLabelText('Mitarbeiter')
+    await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' })
     fillTimes()
     fireEvent.click(screen.getByRole('button', { name: /speichern/i }))
 
     await waitFor(() => expect(createTimeEntryMock).toHaveBeenCalled())
     expect(createTimeEntryMock.mock.calls[0][0].creatorId).toBeUndefined()
+    expect(createTimeEntryMock.mock.calls[0][0].creatorIds).toBeUndefined()
+  })
+
+  it('mehrere Personen gewählt: ein Eintrag für alle (creatorIds)', async () => {
+    canManage = true
+    renderWithIntl(<CreateTimeEntry />)
+    fireEvent.click(await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' }))
+    fillTimes()
+    fireEvent.click(screen.getByRole('button', { name: /speichern/i }))
+
+    await waitFor(() => expect(createTimeEntryMock).toHaveBeenCalled())
+    expect(createTimeEntryMock.mock.calls[0][0]).toMatchObject({ creatorIds: ['me', 'ph'] })
   })
 
   it('neuer Tag startet mit dem Arbeitsbeginn aus den Arbeitszeiten (07:15)', async () => {
@@ -97,6 +108,6 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
     canManage = false
     renderWithIntl(<CreateTimeEntry />)
     await screen.findByLabelText('Von')
-    expect(screen.queryByLabelText('Mitarbeiter')).toBeNull()
+    expect(screen.queryByRole('checkbox', { name: /Ich/ })).toBeNull()
   })
 })

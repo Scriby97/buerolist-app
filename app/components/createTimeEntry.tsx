@@ -108,7 +108,13 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   // Admin/Owner: fuer wen erfasst wird ('' = fuer sich selbst)
   const [members, setMembers] = useState<OrganizationMemberDetail[]>([]);
   const [presets, setPresets] = useState<ItemPreset[]>([]);
-  const [creatorId, setCreatorId] = useState('');
+  // Fuer wen erfasst wird (Admin/Owner koennen mehrere waehlen); null = nur ich
+  const [selection, setSelection] = useState<string[] | null>(null);
+  const myId = userProfile?.id ?? '';
+  const selectedIds = selection ?? (myId ? [myId] : []);
+  // Massgebend fuer Startzeit-Vorschlag und Arbeitszeiten: ich, falls gewaehlt,
+  // sonst die erste gewaehlte Person ('' = ich)
+  const creatorId = selectedIds.includes(myId) ? '' : (selectedIds[0] ?? '');
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [projectsError, setProjectsError] = useState<string | null>(null);
@@ -257,7 +263,10 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       materials: withTrailingEmptyRow([]),
       expenses: withTrailingEmptyRow([]),
     });
-    showToast(t('saveSuccess'), 'success');
+    showToast(
+      selectedIds.length > 1 ? t('saveSuccessMultiple', { count: selectedIds.length }) : t('saveSuccess'),
+      'success',
+    );
     // Erst nach dem ersten gespeicherten Eintrag nach der Erlaubnis fuer die
     // Erfassungserinnerung fragen (die Komponente fragt pro User nur einmal).
     setShowNotificationPrompt(true);
@@ -282,6 +291,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
     try {
       if (!formData.projectId) throw new Error(t('selectProjectError'));
+      if (selectedIds.length === 0) throw new Error(t('selectEmployeeError'));
       if (!formData.startTime || !formData.endTime) throw new Error(t('timesRequiredError'));
       if (formData.endTime <= formData.startTime) throw new Error(t('endTimeMustBeAfterError'));
 
@@ -295,7 +305,12 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
       await createTimeEntry({
         projectId: formData.projectId,
-        creatorId: creatorId && creatorId !== userProfile?.id ? creatorId : undefined,
+        // ein Mitarbeiter: creatorId (nur wenn nicht ich), mehrere: creatorIds
+        ...(selectedIds.length > 1
+          ? { creatorIds: selectedIds }
+          : selectedIds[0] !== myId
+            ? { creatorId: selectedIds[0] }
+            : {}),
         categoryId: formData.categoryId || undefined,
         startAt,
         endAt,
@@ -329,7 +344,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
   // Admin/Owner: Mitglieder fuer die Mitarbeiterauswahl laden (inkl. ohne Login)
   useEffect(() => {
-    setCreatorId('');
+    setSelection(null);
     if (!selectedOrgId || !canManageSelectedOrganization) {
       setMembers([]);
       return;
@@ -421,32 +436,48 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           </div>
         )}
 
-        {/* Mitarbeiter (nur Admin/Owner, wenn es weitere Mitglieder gibt) */}
+        {/* Erfassen fuer (nur Admin/Owner, wenn es weitere Mitglieder gibt) -
+            mehrere Personen: derselbe Eintrag wird fuer alle angelegt */}
         {canManageSelectedOrganization && otherMembers.length > 0 && (
-          <div className="space-y-2">
-            <label htmlFor="entryEmployee" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              {t('employeeLabel')}
-            </label>
-            <select
-              id="entryEmployee"
-              value={creatorId}
-              onChange={(e) => {
-                autoStartTimeRef.current = '';
-                setCreatorId(e.target.value);
-                setFormData((prev) => ({ ...prev, startTime: '' }));
-              }}
-              className="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">{t('employeeSelf', { name: personName(userProfile, '') })}</option>
-              {otherMembers.map((m) => (
-                <option key={m.userId} value={m.userId}>
-                  {personName(m.user, '?')}
-                  {m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}
-                </option>
-              ))}
-            </select>
-            {creatorId && <p className="text-xs text-zinc-500 dark:text-zinc-400">{t('employeeHint')}</p>}
-          </div>
+          <fieldset className="space-y-2">
+            <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('employeesLabel')}</legend>
+            <div className="flex flex-wrap gap-2">
+              {[{ userId: myId, label: t('employeeSelf', { name: personName(userProfile, '') }) }, ...otherMembers.map((m) => ({
+                userId: m.userId,
+                label: `${personName(m.user, '?')}${m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}`,
+              }))].map(({ userId: id, label }) => {
+                const checked = selectedIds.includes(id);
+                return (
+                  <label
+                    key={id}
+                    className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
+                      checked
+                        ? 'border-brown-600 bg-brown-50 text-zinc-900 dark:bg-brown-900/30 dark:text-zinc-50'
+                        : 'border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => {
+                        setSelection(checked ? selectedIds.filter((x) => x !== id) : [...selectedIds, id]);
+                        // Vorgeschlagene Startzeit fuer die (neue) Hauptperson neu bestimmen
+                        setFormData((prev) => (prev.startTime === autoStartTimeRef.current ? { ...prev, startTime: '' } : prev));
+                        autoStartTimeRef.current = '';
+                      }}
+                      className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
+                    />
+                    {label}
+                  </label>
+                );
+              })}
+            </div>
+            {selectedIds.some((id) => id !== myId) && (
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                {selectedIds.length > 1 ? t('employeesHint', { count: selectedIds.length }) : t('employeeHint')}
+              </p>
+            )}
+          </fieldset>
         )}
 
         {/* Projekt */}

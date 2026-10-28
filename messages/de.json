@@ -70,12 +70,15 @@
     "noProjectsDialogAdminMessage": "Lege zuerst einen Kunden und ein Projekt an, bevor du und deine Mitarbeiter Zeit erfassen könnt.",
     "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen",
     "commentLabel": "Bemerkung (optional)",
-    "employeeLabel": "Mitarbeiter",
     "employeeSelf": "Ich ({name})",
     "withoutLogin": "ohne Login",
     "employeeHint": "Der Eintrag wird für diese Person gespeichert. Sie sieht ihn, kann ihn aber nicht ändern.",
     "travelLabel": "Fahrzeit (Stunden, z.B. 1.25)",
-    "travelInvalid": "Fahrzeit bitte als Stunden angeben, z.B. 1.25 (max. 24)."
+    "travelInvalid": "Fahrzeit bitte als Stunden angeben, z.B. 1.25 (max. 24).",
+    "employeesLabel": "Erfassen für",
+    "employeesHint": "Derselbe Eintrag wird für alle {count} gewählten Personen gespeichert. Die anderen sehen ihn, können ihn aber nicht ändern.",
+    "saveSuccessMultiple": "Für {count} Personen gespeichert",
+    "selectEmployeeError": "Bitte mindestens eine Person wählen, für die erfasst wird."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -938,7 +941,8 @@
     "PLACEHOLDER_MERGE_OVERLAP": "Die für dich erfassten Zeiten überschneiden sich mit bestehenden Einträgen deines Kontos. Bitte melde dich bei deinem Admin.",
     "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich.",
     "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein.",
-    "ITEM_PRESET_NOT_FOUND": "Die Position wurde nicht gefunden."
+    "ITEM_PRESET_NOT_FOUND": "Die Position wurde nicht gefunden.",
+    "TIME_ENTRY_OVERLAP_FOR": "Für {name} ist in diesem Zeitraum bereits ein Eintrag erfasst – es wurde für niemanden gespeichert."
   },
   "settingsOrganization": {
     "title": "Organisation",

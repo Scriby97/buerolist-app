@@ -70,12 +70,15 @@
     "noProjectsDialogAdminMessage": "Add a customer and a project first, before you and your team can log time.",
     "noProjectsDialogAddProjectButton": "Add customer/project now",
     "commentLabel": "Comment (optional)",
-    "employeeLabel": "Employee",
     "employeeSelf": "Me ({name})",
     "withoutLogin": "no login",
     "employeeHint": "The entry is saved for this person. They can see it but not change it.",
     "travelLabel": "Travel time (hours, e.g. 1.25)",
-    "travelInvalid": "Please enter travel time in hours, e.g. 1.25 (max. 24)."
+    "travelInvalid": "Please enter travel time in hours, e.g. 1.25 (max. 24).",
+    "employeesLabel": "Record for",
+    "employeesHint": "The same entry is saved for all {count} selected people. The others can see it but not change it.",
+    "saveSuccessMultiple": "Saved for {count} people",
+    "selectEmployeeError": "Please select at least one person to record for."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -938,7 +941,8 @@
     "PLACEHOLDER_MERGE_OVERLAP": "The time recorded for you overlaps with existing entries of your account. Please contact your admin.",
     "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login.",
     "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order.",
-    "ITEM_PRESET_NOT_FOUND": "The item was not found."
+    "ITEM_PRESET_NOT_FOUND": "The item was not found.",
+    "TIME_ENTRY_OVERLAP_FOR": "There is already an entry for {name} in this period – nothing was saved for anyone."
   },
   "settingsOrganization": {
     "title": "Organization",
