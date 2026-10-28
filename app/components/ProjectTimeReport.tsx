@@ -198,7 +198,9 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                                             <span className="min-w-0 break-words">
                                               {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}: {formatQuantity(item.quantity)}× {item.description}
                                             </span>
-                                            <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                                            {item.unitPriceRappen > 0 && (
+                                              <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                                            )}
                                           </span>
                                         ))}
                                       </li>

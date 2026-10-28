@@ -102,8 +102,8 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
                             <td className={td} />
                             <td className={td} colSpan={columnCount - 1}>
                               {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}:{' '}
-                              {formatQuantity(item.quantity)}× {item.description} · CHF{' '}
-                              {formatChf(Math.round(item.quantity * item.unitPriceRappen))}
+                              {formatQuantity(item.quantity)}× {item.description}
+                              {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}
                             </td>
                           </tr>
                         ))}

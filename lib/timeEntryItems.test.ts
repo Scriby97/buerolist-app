@@ -71,7 +71,11 @@ describe('timeEntryItems', () => {
 
   it('meldet unvollstaendige Zeilen als ungueltig', () => {
     expect(rowsToItems([{ quantity: '1', description: '', price: '5' }], 'expense')).toBeNull()
-    expect(rowsToItems([{ quantity: '1', description: 'Parkieren', price: '' }], 'expense')).toBeNull()
+    // Preis darf fehlen (ohne Preis = 0), ein unlesbarer Preis nicht
+    expect(rowsToItems([{ quantity: '1', description: 'Parkieren', price: '' }], 'expense')).toEqual([
+      { type: 'expense', quantity: 1, description: 'Parkieren', unitPriceRappen: 0 },
+    ])
+    expect(rowsToItems([{ quantity: '1', description: 'Parkieren', price: 'abc' }], 'expense')).toBeNull()
   })
 
   it('rechnet Menge x Stueckpreis', () => {

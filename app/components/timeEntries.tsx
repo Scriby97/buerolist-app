@@ -171,7 +171,9 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
                       <span className="min-w-0 break-words">
                         {formatQuantity(item.quantity)}× {item.description}
                       </span>
-                      <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                      {item.unitPriceRappen > 0 && (
+                        <span className="shrink-0 tabular-nums">CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</span>
+                      )}
                     </li>
                   ))}
                   {items.length > 1 && (

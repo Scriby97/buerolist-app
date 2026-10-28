@@ -248,7 +248,8 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                           <td className={td} />
                           <td className={td} colSpan={options.comments ? 5 : 4}>
                             {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}: {formatQuantity(item.quantity)}×{' '}
-                            {item.description} · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}
+                            {item.description}
+                            {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}
                           </td>
                         </tr>
                       ))}

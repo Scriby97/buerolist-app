@@ -25,7 +25,8 @@ export function itemsToRows(items: TimeEntryItem[] | undefined, type: TimeEntryI
       .map((item) => ({
         quantity: formatQuantity(item.quantity),
         description: item.description,
-        price: formatChf(item.unitPriceRappen),
+        // Ohne Preis erfasst (0) -> Feld leer lassen
+        price: item.unitPriceRappen ? formatChf(item.unitPriceRappen) : '',
       })),
   )
 }
@@ -35,14 +36,15 @@ export type ItemInput = Omit<TimeEntryItem, 'id'>
 /**
  * Ausgefuellte Zeilen -> Positionen fuer die API. Leere Zeilen werden
  * ignoriert. Gibt null zurueck, wenn eine Zeile unvollstaendig/ungueltig ist
- * (Bezeichnung fehlt, Menge oder Preis nicht lesbar). Menge leer = 1.
+ * (Bezeichnung fehlt, Menge oder Preis nicht lesbar). Menge leer = 1, Preis
+ * leer = ohne Preis (0).
  */
 export function rowsToItems(rows: ItemRow[], type: TimeEntryItemType): ItemInput[] | null {
   const items: ItemInput[] = []
   for (const row of rows) {
     if (isRowEmpty(row)) continue
     const quantity = parseQuantity(row.quantity)
-    const unitPriceRappen = parseChfToRappen(row.price)
+    const unitPriceRappen = row.price.trim() ? parseChfToRappen(row.price) : 0
     const description = row.description.trim()
     if (!description || quantity === null || unitPriceRappen === null) return null
     items.push({ type, quantity, description, unitPriceRappen })
