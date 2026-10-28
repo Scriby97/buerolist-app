@@ -11,6 +11,7 @@ import { projectDisplayName } from '@/lib/format/numbers';
 import { buildCategoryMatrix, formatHoursMinutes, type SummaryRowInput } from '@/lib/timeReport/buildTimeMatrix';
 import { buildReportData, entryMinutes, formatHm, formatTime } from '@/lib/reports/reportData';
 import { itemsTotalRappen } from '@/lib/timeEntryItems';
+import { personName } from '@/lib/format/personName';
 
 export interface ProjectReportOptions {
   summary: boolean;
@@ -37,8 +38,7 @@ const th = 'border-b border-zinc-400 px-2 py-1.5 text-left text-xs font-semibold
 const td = 'px-2 py-1 align-top';
 const sectionTitle = 'mb-2 mt-6 text-sm font-bold uppercase tracking-wide text-zinc-700';
 
-const creatorName = (entry: TimeEntry) =>
-  `${entry.creator.firstName ?? ''} ${entry.creator.lastName ?? ''}`.trim() || entry.creator.email;
+const creatorName = (entry: TimeEntry) => personName(entry.creator, '?');
 
 /** Summen pro Mitarbeiter+Kategorie aus den (ggf. zeitlich gefilterten) Eintraegen. */
 export function entriesToSummaryRows(entries: TimeEntry[]): SummaryRowInput[] {

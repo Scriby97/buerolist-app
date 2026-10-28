@@ -4,6 +4,7 @@ import { useEffect, useId, useState, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries';
+import { personName } from '@/lib/format/personName';
 
 interface ProjectEntryCommentsProps {
   projectId: string;
@@ -76,8 +77,7 @@ export const ProjectEntryComments: FC<ProjectEntryCommentsProps> = ({ projectId,
       {open && (
         <ul id={panelId} className="mt-4 space-y-3">
           {entries.map((entry) => {
-            const name =
-              `${entry.creator.firstName ?? ''} ${entry.creator.lastName ?? ''}`.trim() || entry.creator.email;
+            const name = personName(entry.creator, '?');
             return (
               <li key={entry.id} className="border-t border-zinc-100 dark:border-zinc-700/60 pt-3 first:border-t-0 first:pt-0">
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">

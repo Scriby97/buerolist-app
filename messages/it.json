@@ -69,7 +69,11 @@
     "noProjectsDialogEmployeeMessage": "Il tuo amministratore dell'organizzazione deve prima creare un cliente e un progetto prima che tu possa registrare il tempo.",
     "noProjectsDialogAdminMessage": "Crea prima un cliente e un progetto, prima che tu e il tuo team possiate registrare il tempo.",
     "noProjectsDialogAddProjectButton": "Crea cliente/progetto ora",
-    "commentLabel": "Osservazione (facoltativa)"
+    "commentLabel": "Osservazione (facoltativa)",
+    "employeeLabel": "Collaboratore",
+    "employeeSelf": "Io ({name})",
+    "withoutLogin": "senza login",
+    "employeeHint": "La registrazione viene salvata per questa persona. La vede ma non può modificarla."
   },
   "entryItems": {
     "materialTitle": "Materiale",
@@ -120,7 +124,8 @@
     "lockedHint": "Bloccato – solo gli amministratori possono modificare le registrazioni delle settimane precedenti.",
     "noEntriesOnDay": "Nessuna registrazione in questo giorno.",
     "selectDayHint": "Tocca un giorno per vedere le sue registrazioni.",
-    "reportButton": "Rapporto"
+    "reportButton": "Rapporto",
+    "lockedByManagerHint": "Bloccato – questa registrazione è stata fatta da un admin e può essere modificata solo dagli admin."
   },
   "calendar": {
     "today": "Oggi",
@@ -753,7 +758,8 @@
     "createSuccess": "Invito creato",
     "createErrorGeneric": "Errore durante la creazione dell'invito",
     "deleteErrorGeneric": "Errore durante l'eliminazione dell'invito",
-    "copyErrorGeneric": "Errore durante la copia"
+    "copyErrorGeneric": "Errore durante la copia",
+    "takesOverLabel": "riprende le ore di {name}"
   },
   "memberManagement": {
     "tabLabel": "Membri",
@@ -782,7 +788,19 @@
     "removeErrorGeneric": "Errore durante la rimozione del membro",
     "removeConfirmTitle": "Rimuovi membro",
     "removeConfirmMessage": "{name} verrà rimosso dall'organizzazione e perderà immediatamente l'accesso. Continuare?",
-    "removeConfirmButton": "Rimuovi"
+    "removeConfirmButton": "Rimuovi",
+    "placeholderCreateButton": "Collaboratore senza login",
+    "placeholderModalTitle": "Aggiungi collaboratore senza login",
+    "placeholderModalHint": "Puoi registrare ore per questa persona prima che usi l'app. Più tardi la inviti via e-mail – le ore già registrate vengono riprese automaticamente.",
+    "firstNameLabel": "Nome",
+    "lastNameLabel": "Cognome",
+    "placeholderCreateSubmit": "Aggiungi",
+    "placeholderCreateError": "Non è stato possibile aggiungere il collaboratore.",
+    "withoutLoginBadge": "senza login",
+    "invitedAs": "Invitato: {email}",
+    "invitePlaceholderButton": "Invita",
+    "invitePlaceholderTitle": "Invita {name}",
+    "invitePlaceholderHint": "Non appena l'invito viene accettato, tutte le ore registrate finora appartengono al nuovo account."
   },
   "userManagement": {
     "title": "Gestione utenti",
@@ -902,7 +920,13 @@
     "NOTE_NOT_FOUND": "Nota non trovata.",
     "NOTE_TARGET_REQUIRED": "Una nota deve essere collegata a un cliente o a un progetto.",
     "NOTE_DELETE_FORBIDDEN": "Solo l'autore o gli amministratori/il proprietario dell'organizzazione possono eliminare questa nota.",
-    "NOTE_PHOTO_INVALID": "L'immagine non è valida. Formati consentiti: PNG, JPEG o WebP (max 10 MB)."
+    "NOTE_PHOTO_INVALID": "L'immagine non è valida. Formati consentiti: PNG, JPEG o WebP (max 10 MB).",
+    "TIME_ENTRY_CREATED_BY_MANAGER": "Questa registrazione è stata fatta da un admin e può essere modificata solo dagli admin.",
+    "TIME_ENTRY_TARGET_NOT_MEMBER": "Questa persona non è membro dell'organizzazione.",
+    "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Solo admin o owner possono registrare ore per altri.",
+    "PLACEHOLDER_NOT_FOUND": "Collaboratore senza login non trovato.",
+    "PLACEHOLDER_MERGE_OVERLAP": "Le ore registrate per te si sovrappongono a registrazioni esistenti del tuo account. Contatta il tuo admin.",
+    "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login."
   },
   "settingsOrganization": {
     "title": "Organizzazione",

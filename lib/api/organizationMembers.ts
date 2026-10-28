@@ -21,6 +21,26 @@ export async function getOrganizationMembers(
 }
 
 /**
+ * Mitarbeiter ohne Login anlegen (nur Admin/Owner) - fuer ihn koennen Zeiten
+ * erfasst werden; spaeter per Einladung an ein echtes Konto uebergeben.
+ */
+export async function createPlaceholderMember(
+  organizationId: string,
+  data: { firstName: string; lastName: string }
+): Promise<OrganizationMemberDetail> {
+  const response = await authenticatedFetch(
+    buildApiUrl(`/organizations/${organizationId}/placeholder-members`),
+    { method: 'POST', body: JSON.stringify(data) }
+  )
+
+  if (!response.ok) {
+    await throwApiError(response, 'Fehler beim Anlegen des Mitarbeiters')
+  }
+
+  return response.json()
+}
+
+/**
  * Rolle eines Mitglieds ändern (Employee <-> Admin). Die Owner-Rolle kann
  * hierüber nicht gesetzt werden - dafür gibt es transferOwnership().
  */

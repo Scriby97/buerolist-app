@@ -4,6 +4,7 @@ import {
   canDemoteToEmployee,
   canTransferOwnership,
   canRemoveMember,
+  canInvitePlaceholder,
 } from './organizationMembers'
 import type { OrganizationMemberDetail, OrganizationRole } from '@/lib/types/user'
 
@@ -102,5 +103,21 @@ describe('canRemoveMember', () => {
     expect(
       canRemoveMember(member('admin'), { currentUserRole: 'owner', isSelf: true }),
     ).toBe(false)
+  })
+})
+
+describe('Mitarbeiter ohne Login', () => {
+  const placeholder = { role: 'employee', user: { id: 'p', email: null, isPlaceholder: true } } as OrganizationMemberDetail
+  const owner = { currentUserRole: 'owner' as const, isSelf: false }
+
+  it('kann weder Admin noch Owner werden, aber eingeladen und entfernt werden', () => {
+    expect(canPromoteToAdmin(placeholder)).toBe(false)
+    expect(canTransferOwnership(placeholder, owner)).toBe(false)
+    expect(canInvitePlaceholder(placeholder)).toBe(true)
+    expect(canRemoveMember(placeholder, owner)).toBe(true)
+  })
+
+  it('normale Mitglieder werden nicht über den Platzhalter-Weg eingeladen', () => {
+    expect(canInvitePlaceholder(member('employee'))).toBe(false)
   })
 })

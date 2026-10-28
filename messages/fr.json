@@ -69,7 +69,11 @@
     "noProjectsDialogEmployeeMessage": "Ton administrateur d'organisation doit d'abord créer un client et un projet avant que tu puisses saisir du temps.",
     "noProjectsDialogAdminMessage": "Crée d'abord un client et un projet, avant que toi et ton équipe puissiez saisir du temps.",
     "noProjectsDialogAddProjectButton": "Créer un client/projet maintenant",
-    "commentLabel": "Remarque (facultatif)"
+    "commentLabel": "Remarque (facultatif)",
+    "employeeLabel": "Collaborateur",
+    "employeeSelf": "Moi ({name})",
+    "withoutLogin": "sans login",
+    "employeeHint": "La saisie est enregistrée pour cette personne. Elle la voit mais ne peut pas la modifier."
   },
   "entryItems": {
     "materialTitle": "Matériel",
@@ -120,7 +124,8 @@
     "lockedHint": "Verrouillé – seuls les administrateurs peuvent modifier les saisies des semaines précédentes.",
     "noEntriesOnDay": "Aucune saisie ce jour-là.",
     "selectDayHint": "Touche un jour pour voir ses saisies.",
-    "reportButton": "Rapport"
+    "reportButton": "Rapport",
+    "lockedByManagerHint": "Verrouillé – cette saisie a été faite par un admin et ne peut être modifiée que par les admins."
   },
   "calendar": {
     "today": "Aujourd'hui",
@@ -753,7 +758,8 @@
     "createSuccess": "Invitation créée",
     "createErrorGeneric": "Erreur lors de la création de l'invitation",
     "deleteErrorGeneric": "Erreur lors de la suppression de l'invitation",
-    "copyErrorGeneric": "Erreur lors de la copie"
+    "copyErrorGeneric": "Erreur lors de la copie",
+    "takesOverLabel": "reprend les heures de {name}"
   },
   "memberManagement": {
     "tabLabel": "Membres",
@@ -782,7 +788,19 @@
     "removeErrorGeneric": "Erreur lors du retrait du membre",
     "removeConfirmTitle": "Retirer le membre",
     "removeConfirmMessage": "{name} sera retiré·e de l'organisation et perdra immédiatement l'accès. Continuer ?",
-    "removeConfirmButton": "Retirer"
+    "removeConfirmButton": "Retirer",
+    "placeholderCreateButton": "Collaborateur sans login",
+    "placeholderModalTitle": "Ajouter un collaborateur sans login",
+    "placeholderModalHint": "Tu peux saisir des heures pour cette personne avant qu'elle utilise l'app. Plus tard, tu l'invites par e-mail – les heures déjà saisies sont alors reprises automatiquement.",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom",
+    "placeholderCreateSubmit": "Ajouter",
+    "placeholderCreateError": "Le collaborateur n'a pas pu être ajouté.",
+    "withoutLoginBadge": "sans login",
+    "invitedAs": "Invité : {email}",
+    "invitePlaceholderButton": "Inviter",
+    "invitePlaceholderTitle": "Inviter {name}",
+    "invitePlaceholderHint": "Dès que l'invitation est acceptée, toutes les heures déjà saisies appartiennent au nouveau compte."
   },
   "userManagement": {
     "title": "Gestion des utilisateurs",
@@ -902,7 +920,13 @@
     "NOTE_NOT_FOUND": "Note introuvable.",
     "NOTE_TARGET_REQUIRED": "Une note doit être rattachée soit à un client, soit à un projet.",
     "NOTE_DELETE_FORBIDDEN": "Seuls l'auteur ou les administrateurs/le propriétaire de l'organisation peuvent supprimer cette note.",
-    "NOTE_PHOTO_INVALID": "L'image n'est pas valide. Formats autorisés : PNG, JPEG ou WebP (max. 10 Mo)."
+    "NOTE_PHOTO_INVALID": "L'image n'est pas valide. Formats autorisés : PNG, JPEG ou WebP (max. 10 Mo).",
+    "TIME_ENTRY_CREATED_BY_MANAGER": "Cette saisie a été faite par un admin et ne peut être modifiée que par les admins.",
+    "TIME_ENTRY_TARGET_NOT_MEMBER": "Cette personne n'est pas membre de l'organisation.",
+    "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Seuls les admins ou owners peuvent saisir des heures pour d'autres.",
+    "PLACEHOLDER_NOT_FOUND": "Collaborateur sans login introuvable.",
+    "PLACEHOLDER_MERGE_OVERLAP": "Les heures saisies pour toi se chevauchent avec des saisies existantes de ton compte. Contacte ton admin.",
+    "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login."
   },
   "settingsOrganization": {
     "title": "Organisation",

@@ -45,9 +45,12 @@ export interface OrganizationMemberDetail {
   joinedAt: string
   user: {
     id: string
-    email: string
+    /** null bei Mitarbeitern ohne Login */
+    email: string | null
     firstName?: string
     lastName?: string
+    /** Mitarbeiter ohne Login, von Admin/Owner angelegt */
+    isPlaceholder?: boolean
   }
 }
 
@@ -124,6 +127,8 @@ export interface InviteEntity {
   invitedBy: string
   createdAt: string
   organizationId: string
+  /** Mitarbeiter ohne Login, der mit dieser Einladung uebergeben wird */
+  placeholderUserId?: string | null
 }
 
 export interface SelfServiceOrganizationRequest {

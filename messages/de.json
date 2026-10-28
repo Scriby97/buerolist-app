@@ -69,7 +69,11 @@
     "noProjectsDialogEmployeeMessage": "Dein Organisationsadministrator muss zuerst einen Kunden und ein Projekt anlegen, bevor du Zeit erfassen kannst.",
     "noProjectsDialogAdminMessage": "Lege zuerst einen Kunden und ein Projekt an, bevor du und deine Mitarbeiter Zeit erfassen könnt.",
     "noProjectsDialogAddProjectButton": "Jetzt Kunden/Projekt anlegen",
-    "commentLabel": "Bemerkung (optional)"
+    "commentLabel": "Bemerkung (optional)",
+    "employeeLabel": "Mitarbeiter",
+    "employeeSelf": "Ich ({name})",
+    "withoutLogin": "ohne Login",
+    "employeeHint": "Der Eintrag wird für diese Person gespeichert. Sie sieht ihn, kann ihn aber nicht ändern."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -120,7 +124,8 @@
     "lockedHint": "Gesperrt – Einträge aus früheren Wochen können nur Admins ändern.",
     "noEntriesOnDay": "Keine Einträge an diesem Tag.",
     "selectDayHint": "Tippe auf einen Tag, um seine Einträge zu sehen.",
-    "reportButton": "Rapport"
+    "reportButton": "Rapport",
+    "lockedByManagerHint": "Gesperrt – dieser Eintrag wurde von einem Admin erfasst und kann nur von Admins geändert werden."
   },
   "calendar": {
     "today": "Heute",
@@ -753,7 +758,8 @@
     "createSuccess": "Einladung erstellt",
     "createErrorGeneric": "Fehler beim Erstellen der Einladung",
     "deleteErrorGeneric": "Fehler beim Löschen der Einladung",
-    "copyErrorGeneric": "Fehler beim Kopieren"
+    "copyErrorGeneric": "Fehler beim Kopieren",
+    "takesOverLabel": "übernimmt die Zeiten von {name}"
   },
   "memberManagement": {
     "tabLabel": "Mitglieder",
@@ -782,7 +788,19 @@
     "removeErrorGeneric": "Fehler beim Entfernen des Mitglieds",
     "removeConfirmTitle": "Mitglied entfernen",
     "removeConfirmMessage": "{name} wird aus der Organisation entfernt und verliert damit sofort den Zugriff. Fortfahren?",
-    "removeConfirmButton": "Entfernen"
+    "removeConfirmButton": "Entfernen",
+    "placeholderCreateButton": "Mitarbeiter ohne Login",
+    "placeholderModalTitle": "Mitarbeiter ohne Login anlegen",
+    "placeholderModalHint": "Du kannst für diese Person Zeiten erfassen, bevor sie die App nutzt. Später lädst du sie per E-Mail ein – die bisher erfassten Zeiten übernimmt sie dann automatisch.",
+    "firstNameLabel": "Vorname",
+    "lastNameLabel": "Nachname",
+    "placeholderCreateSubmit": "Anlegen",
+    "placeholderCreateError": "Der Mitarbeiter konnte nicht angelegt werden.",
+    "withoutLoginBadge": "ohne Login",
+    "invitedAs": "Eingeladen: {email}",
+    "invitePlaceholderButton": "Einladen",
+    "invitePlaceholderTitle": "{name} einladen",
+    "invitePlaceholderHint": "Sobald die Einladung angenommen wird, gehören alle bisher erfassten Zeiten zum neuen Konto."
   },
   "userManagement": {
     "title": "Benutzerverwaltung",
@@ -902,7 +920,13 @@
     "NOTE_NOT_FOUND": "Notiz wurde nicht gefunden.",
     "NOTE_TARGET_REQUIRED": "Eine Notiz muss entweder einem Kunden oder einem Projekt zugeordnet sein.",
     "NOTE_DELETE_FORBIDDEN": "Nur der Autor oder Organisations-Admins/-Owner dürfen diese Notiz löschen.",
-    "NOTE_PHOTO_INVALID": "Das Bild ist ungültig. Erlaubt sind PNG, JPEG oder WebP (max. 10 MB)."
+    "NOTE_PHOTO_INVALID": "Das Bild ist ungültig. Erlaubt sind PNG, JPEG oder WebP (max. 10 MB).",
+    "TIME_ENTRY_CREATED_BY_MANAGER": "Dieser Eintrag wurde von einem Admin erfasst und kann nur von Admins geändert werden.",
+    "TIME_ENTRY_TARGET_NOT_MEMBER": "Diese Person ist kein Mitglied der Organisation.",
+    "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Nur Admins oder Owner dürfen Zeiten für andere erfassen.",
+    "PLACEHOLDER_NOT_FOUND": "Mitarbeiter ohne Login nicht gefunden.",
+    "PLACEHOLDER_MERGE_OVERLAP": "Die für dich erfassten Zeiten überschneiden sich mit bestehenden Einträgen deines Kontos. Bitte melde dich bei deinem Admin.",
+    "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich."
   },
   "settingsOrganization": {
     "title": "Organisation",

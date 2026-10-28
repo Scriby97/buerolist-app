@@ -6,7 +6,8 @@ export interface TimeEntryCreator {
   id: string
   firstName?: string
   lastName?: string
-  email: string
+  /** null bei Mitarbeitern ohne Login */
+  email: string | null
 }
 
 export interface TimeEntryProject {
@@ -47,6 +48,8 @@ export interface TimeEntry {
   project: TimeEntryProject
   category: TimeEntryCategory | null
   creator: TimeEntryCreator
+  /** Gesetzt, wenn ein Admin/Owner den Eintrag fuer den Mitarbeiter erfasst hat */
+  createdBy?: { id: string; firstName?: string; lastName?: string } | null
 }
 
 export interface GetTimeEntriesResponse {
@@ -117,6 +120,8 @@ export async function getTimeEntries(
 
 export async function createTimeEntry(data: {
   projectId: string
+  /** Fuer wen erfasst wird (nur Admin/Owner; fehlt = fuer sich selbst) */
+  creatorId?: string
   categoryId?: string
   startAt: string
   endAt: string

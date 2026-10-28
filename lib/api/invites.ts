@@ -8,7 +8,7 @@ import type { InviteEntity, PendingInvite } from '@/lib/types/user'
  * organizationId is automatically taken from the authenticated user
  */
 export async function createInvite(
-  data: { email: string; role: 'admin' | 'employee' },
+  data: { email: string; role: 'admin' | 'employee'; placeholderUserId?: string },
   organizationId?: string
 ): Promise<InviteEntity> {
   // organizationId in the body disambiguates which org to invite to - only

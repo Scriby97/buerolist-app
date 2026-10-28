@@ -19,6 +19,9 @@ import { EntryItemsEditor } from './EntryItemsEditor';
 import { rowsToItems, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
 import { NotificationPermissionPrompt } from './NotificationPermissionPrompt';
+import { getOrganizationMembers } from '@/lib/api/organizationMembers';
+import type { OrganizationMemberDetail } from '@/lib/types/user';
+import { personName } from '@/lib/format/personName';
 
 interface FormState {
   projectId: string;
@@ -96,6 +99,9 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     expenses: withTrailingEmptyRow([]),
   });
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
+  // Admin/Owner: fuer wen erfasst wird ('' = fuer sich selbst)
+  const [members, setMembers] = useState<OrganizationMemberDetail[]>([]);
+  const [creatorId, setCreatorId] = useState('');
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [projectsError, setProjectsError] = useState<string | null>(null);
@@ -155,7 +161,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   // als Startzeit vorschlagen, damit Eintraege lueckenlos aneinander
   // anschliessen. Admin/Owner bekommen alle Eintraege der Organisation -
   // daher clientseitig auf die eigenen filtern.
-  const userId = userProfile?.id;
+  const userId = creatorId || userProfile?.id;
   useEffect(() => {
     if (!selectedOrgId || !userId || activeDraftOrgId !== selectedOrgId || !formData.date) return;
     const date = formData.date;
@@ -275,6 +281,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
 
       await createTimeEntry({
         projectId: formData.projectId,
+        creatorId: creatorId && creatorId !== userProfile?.id ? creatorId : undefined,
         categoryId: formData.categoryId || undefined,
         startAt,
         endAt,
@@ -288,6 +295,30 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       setIsSubmitting(false);
     }
   };
+
+  // Admin/Owner: Mitglieder fuer die Mitarbeiterauswahl laden (inkl. ohne Login)
+  useEffect(() => {
+    setCreatorId('');
+    if (!selectedOrgId || !canManageSelectedOrganization) {
+      setMembers([]);
+      return;
+    }
+    let cancelled = false;
+    getOrganizationMembers(selectedOrgId)
+      .then((list) => {
+        if (!cancelled) setMembers(list);
+      })
+      .catch(() => {
+        if (!cancelled) setMembers([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedOrgId, canManageSelectedOrganization]);
+
+  const otherMembers = members
+    .filter((m) => m.userId !== userProfile?.id)
+    .sort((a, b) => personName(a.user, '?').localeCompare(personName(b.user, '?')));
 
   // Projekte laden, sobald eine Organisation ausgewaehlt ist.
   useEffect(() => {
@@ -356,6 +387,34 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         {error && (
           <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
             <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
+          </div>
+        )}
+
+        {/* Mitarbeiter (nur Admin/Owner, wenn es weitere Mitglieder gibt) */}
+        {canManageSelectedOrganization && otherMembers.length > 0 && (
+          <div className="space-y-2">
+            <label htmlFor="entryEmployee" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              {t('employeeLabel')}
+            </label>
+            <select
+              id="entryEmployee"
+              value={creatorId}
+              onChange={(e) => {
+                autoStartTimeRef.current = '';
+                setCreatorId(e.target.value);
+                setFormData((prev) => ({ ...prev, startTime: '' }));
+              }}
+              className="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">{t('employeeSelf', { name: personName(userProfile, '') })}</option>
+              {otherMembers.map((m) => (
+                <option key={m.userId} value={m.userId}>
+                  {personName(m.user, '?')}
+                  {m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}
+                </option>
+              ))}
+            </select>
+            {creatorId && <p className="text-xs text-zinc-500 dark:text-zinc-400">{t('employeeHint')}</p>}
           </div>
         )}
 

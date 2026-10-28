@@ -26,6 +26,7 @@ import { formatChf, formatQuantity } from '@/lib/format/money';
 import { TimeInput } from './TimeInput';
 import CalendarView from './CalendarView';
 import { formatDecimalHours } from '@/lib/format/hours';
+import { personName } from '@/lib/format/personName';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
@@ -109,17 +110,16 @@ interface EntryItemProps {
   canManage: boolean;
   canEdit: boolean;
   canDelete: boolean;
-  /** Eigener Eintrag aus einer frueheren Woche - fuer Mitarbeiter gesperrt. */
-  isLocked: boolean;
+  /** Fuer Mitarbeiter gesperrt (fruehere Woche oder vom Admin erfasst) - Grund als Hinweis. */
+  lockedHint: string | null;
 }
 
-const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit, canDelete, isLocked }) => {
+const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, canEdit, canDelete, lockedHint }) => {
   const t = useTranslations('myEntries');
   const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
-  const creatorName = entry.creator.firstName || entry.creator.lastName
-    ? `${entry.creator.firstName || ''} ${entry.creator.lastName || ''}`.trim()
-    : entry.creator.email;
+  const creatorName = personName(entry.creator);
+  const recordedByName = entry.createdBy ? personName(entry.createdBy, '?') : null;
 
   return (
     <div
@@ -186,17 +186,22 @@ const EntryItem: FC<EntryItemProps> = ({ entry, onEdit, onDelete, canManage, can
           })}
           {canManage && creatorName && (
             <p>
-              <span className="font-medium">{t('createdByLabel')}</span> {creatorName}
+              <span className="font-medium">{t('employeeLabel')}:</span> {creatorName}
+            </p>
+          )}
+          {recordedByName && (
+            <p>
+              <span className="font-medium">{t('createdByLabel')}</span> {recordedByName}
             </p>
           )}
         </div>
       </div>
 
-      {isLocked && (
+      {lockedHint && (
         <span
           className="ml-4 flex-shrink-0 p-2 text-zinc-400 dark:text-zinc-500"
-          title={t('lockedHint')}
-          aria-label={t('lockedHint')}
+          title={lockedHint}
+          aria-label={lockedHint}
           role="img"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -244,10 +249,16 @@ const MyEntries: FC = () => {
   const getApiErrorMessage = useApiErrorMessage();
   // Admin/Owner: alles. Mitarbeiter: eigene Eintraege nur in der laufenden
   // Woche (aeltere sind gesperrt - siehe Backend assertCanModifyTimeEntry).
-  const isOwnLockedEntry = (entry: TimeEntry) =>
-    !canManageSelectedOrganization && entry.creatorId === userProfile?.id && !isInCurrentWeek(entry.startAt);
+  // Vom Admin/Owner fuer den Mitarbeiter erfasste Eintraege sind fuer ihn
+  // ebenfalls gesperrt.
+  const lockedHint = (entry: TimeEntry): string | null => {
+    if (canManageSelectedOrganization || entry.creatorId !== userProfile?.id) return null;
+    if (entry.createdBy) return t('lockedByManagerHint');
+    return isInCurrentWeek(entry.startAt) ? null : t('lockedHint');
+  };
   const canEditEntry = (entry: TimeEntry) =>
-    canManageSelectedOrganization || (entry.creatorId === userProfile?.id && isInCurrentWeek(entry.startAt));
+    canManageSelectedOrganization ||
+    (entry.creatorId === userProfile?.id && !entry.createdBy && isInCurrentWeek(entry.startAt));
   const { toasts, showToast, removeToast } = useToast();
 
   const [entries, setEntries] = useState<TimeEntry[]>([]);
@@ -298,7 +309,7 @@ const MyEntries: FC = () => {
       members
         .map((m) => ({
           id: m.userId,
-          name: `${m.user.firstName || ''} ${m.user.lastName || ''}`.trim() || m.user.email,
+          name: personName(m.user, '?'),
         }))
         .sort((a, b) => a.name.localeCompare(b.name, dateLocale)),
     [members, dateLocale],
@@ -812,7 +823,7 @@ const MyEntries: FC = () => {
                       canManage={canManageSelectedOrganization}
                       canEdit={canEditEntry(entry)}
                       canDelete={canEditEntry(entry)}
-                      isLocked={isOwnLockedEntry(entry)}
+                      lockedHint={lockedHint(entry)}
                     />
                   ))}
                 </div>
@@ -850,7 +861,7 @@ const MyEntries: FC = () => {
                       canManage={canManageSelectedOrganization}
                       canEdit={canEditEntry(entry)}
                       canDelete={canEditEntry(entry)}
-                      isLocked={isOwnLockedEntry(entry)}
+                      lockedHint={lockedHint(entry)}
                     />
                   ))}
                 </div>

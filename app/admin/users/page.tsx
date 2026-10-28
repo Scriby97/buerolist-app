@@ -7,11 +7,19 @@ import Breadcrumbs from '@/app/components/Breadcrumbs'
 import { useAuth } from '@/lib/auth/AuthProvider'
 import { useOrganization } from '@/lib/contexts/OrganizationContext'
 import { createInvite, deleteInvite, getOrganizationInvites } from '@/lib/api/invites'
-import { getOrganizationMembers, updateMemberRole, transferOwnership, removeMember } from '@/lib/api/organizationMembers'
-import { canPromoteToAdmin, canDemoteToEmployee, canTransferOwnership, canRemoveMember } from '@/lib/permissions/organizationMembers'
+import { getOrganizationMembers, updateMemberRole, transferOwnership, removeMember, createPlaceholderMember } from '@/lib/api/organizationMembers'
+import { canPromoteToAdmin, canDemoteToEmployee, canTransferOwnership, canRemoveMember, canInvitePlaceholder } from '@/lib/permissions/organizationMembers'
+import { personName } from '@/lib/format/personName'
 import type { InviteEntity, InviteStatus, OrganizationMemberDetail } from '@/lib/types/user'
 import { useDateLocale } from '@/lib/i18n/formatDate'
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
+
+function getInviteStatus(invite: InviteEntity): InviteStatus {
+  if (invite.usedAt) return 'used'
+  const expiresAt = new Date(invite.expiresAt).getTime()
+  if (Number.isNaN(expiresAt) || expiresAt < Date.now()) return 'expired'
+  return 'pending'
+}
 
 export default function UsersPage() {
   const router = useRouter()
@@ -64,6 +72,12 @@ export default function UsersPage() {
   const [confirmDemoteMember, setConfirmDemoteMember] = useState<OrganizationMemberDetail | null>(null)
   const [confirmTransferMember, setConfirmTransferMember] = useState<OrganizationMemberDetail | null>(null)
   const [confirmRemoveMember, setConfirmRemoveMember] = useState<OrganizationMemberDetail | null>(null)
+  // Mitarbeiter ohne Login anlegen bzw. per Einladung uebergeben
+  const [showPlaceholderModal, setShowPlaceholderModal] = useState(false)
+  const [placeholderFirstName, setPlaceholderFirstName] = useState('')
+  const [placeholderLastName, setPlaceholderLastName] = useState('')
+  const [placeholderError, setPlaceholderError] = useState<string | null>(null)
+  const [invitePlaceholder, setInvitePlaceholder] = useState<OrganizationMemberDetail | null>(null)
 
   useEffect(() => {
     // Erst entscheiden, wenn sowohl Auth ALS AUCH die Organisationsdaten
@@ -122,9 +136,37 @@ export default function UsersPage() {
     }
   }
 
-  const getMemberDisplayName = (member: OrganizationMemberDetail) => {
-    const name = `${member.user.firstName ?? ''} ${member.user.lastName ?? ''}`.trim()
-    return name || member.user.email
+  const getMemberDisplayName = (member: OrganizationMemberDetail) => personName(member.user, '?')
+
+  // Offene Einladung, mit der ein Mitarbeiter ohne Login uebergeben wird
+  const pendingInviteFor = (member: OrganizationMemberDetail) =>
+    invites.find((invite) => invite.placeholderUserId === member.userId && getInviteStatus(invite) === 'pending')
+
+  const handleCreatePlaceholder = async (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!selectedOrgId) return
+    setPlaceholderError(null)
+    setSubmitting(true)
+    try {
+      await createPlaceholderMember(selectedOrgId, {
+        firstName: placeholderFirstName.trim(),
+        lastName: placeholderLastName.trim(),
+      })
+      setShowPlaceholderModal(false)
+      setPlaceholderFirstName('')
+      setPlaceholderLastName('')
+      await refetchMembers()
+    } catch (err) {
+      setPlaceholderError(getApiErrorMessage(err, tMember('placeholderCreateError')))
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const openPlaceholderInvite = (member: OrganizationMemberDetail) => {
+    setInvitePlaceholder(member)
+    setInviteRole('employee')
+    setShowInviteModal(true)
   }
 
   const handlePromoteToAdmin = async (member: OrganizationMemberDetail) => {
@@ -196,12 +238,6 @@ export default function UsersPage() {
     }
   }
 
-  const getInviteStatus = (invite: InviteEntity): InviteStatus => {
-    if (invite.usedAt) return 'used'
-    const expiresAt = new Date(invite.expiresAt).getTime()
-    if (Number.isNaN(expiresAt) || expiresAt < Date.now()) return 'expired'
-    return 'pending'
-  }
 
   const handleCreateInvite = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -215,7 +251,10 @@ export default function UsersPage() {
 
     setSubmitting(true)
     try {
-      const invite = await createInvite({ email, role: inviteRole }, selectedOrgId ?? undefined)
+      const invite = await createInvite(
+        { email, role: inviteRole, placeholderUserId: invitePlaceholder?.userId },
+        selectedOrgId ?? undefined,
+      )
       setInvites((prev) => [invite, ...prev])
       // Der eingeladene User wird die Einladung nach dem naechsten Login
       // automatisch per Popup angezeigt bekommen - kein Link-Handout im
@@ -263,6 +302,7 @@ export default function UsersPage() {
 
   const handleCloseModal = () => {
     setShowInviteModal(false)
+    setInvitePlaceholder(null)
     setInviteEmail('')
     setInviteRole('employee')
     setError(null)
@@ -304,6 +344,16 @@ export default function UsersPage() {
               {t('organizationLabel', { name: selectedOrganization?.name ?? '' })}
             </p>
           </div>
+          {activeTab === 'members' && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowPlaceholderModal(true)}
+                className="px-4 py-2 text-sm font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 transition-colors"
+              >
+                {tMember('placeholderCreateButton')}
+              </button>
+            </div>
+          )}
           {activeTab === 'invites' && (
             <div className="flex items-center gap-3">
               <button
@@ -397,6 +447,13 @@ export default function UsersPage() {
                           <tr key={invite.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
                             <td className="px-4 py-3 text-zinc-900 dark:text-zinc-100 font-medium">
                               {invite.email}
+                              {invite.placeholderUserId && (
+                              <span className="block text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                                {tInv('takesOverLabel', {
+                                  name: personName(members.find((m) => m.userId === invite.placeholderUserId)?.user, '?'),
+                                })}
+                              </span>
+                            )}
                             </td>
                             <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                               {ORG_ROLE_LABELS[invite.role]}
@@ -449,6 +506,13 @@ export default function UsersPage() {
                             <p className="font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                               {invite.email}
                             </p>
+                            {invite.placeholderUserId && (
+                              <span className="block text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                                {tInv('takesOverLabel', {
+                                  name: personName(members.find((m) => m.userId === invite.placeholderUserId)?.user, '?'),
+                                })}
+                              </span>
+                            )}
                             <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
                               {tInv('roleColumnLabel')} {ORG_ROLE_LABELS[invite.role]}
                             </p>
@@ -522,13 +586,35 @@ export default function UsersPage() {
                               {getMemberDisplayName(member)}{isSelf && <span className="text-zinc-500 dark:text-zinc-400 font-normal">{tMember('youSuffix')}</span>}
                             </td>
                             <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                              {member.user.email}
+                              {member.user.isPlaceholder ? (
+                                <span>
+                                  <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
+                                    {tMember('withoutLoginBadge')}
+                                  </span>
+                                  {pendingInviteFor(member) && (
+                                    <span className="block mt-1 text-xs">
+                                      {tMember('invitedAs', { email: pendingInviteFor(member)!.email })}
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                member.user.email
+                              )}
                             </td>
                             <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                               {ORG_ROLE_LABELS[member.role]}
                             </td>
                             <td className="px-4 py-3">
                               <div className="flex flex-wrap gap-2">
+                                {canInvitePlaceholder(member) && !pendingInviteFor(member) && (
+                                  <button
+                                    onClick={() => openPlaceholderInvite(member)}
+                                    disabled={isBusy}
+                                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 disabled:opacity-50"
+                                  >
+                                    {tMember('invitePlaceholderButton')}
+                                  </button>
+                                )}
                                 {canPromoteToAdmin(member) && (
                                   <button
                                     onClick={() => handlePromoteToAdmin(member)}
@@ -595,15 +681,37 @@ export default function UsersPage() {
                           <p className="font-semibold text-zinc-900 dark:text-zinc-100">
                             {getMemberDisplayName(member)}{isSelf && <span className="text-zinc-500 dark:text-zinc-400 font-normal">{tMember('youSuffix')}</span>}
                           </p>
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 break-all">
-                            {member.user.email}
-                          </p>
+                          <div className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 break-all">
+                            {member.user.isPlaceholder ? (
+                                <span>
+                                  <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
+                                    {tMember('withoutLoginBadge')}
+                                  </span>
+                                  {pendingInviteFor(member) && (
+                                    <span className="block mt-1 text-xs">
+                                      {tMember('invitedAs', { email: pendingInviteFor(member)!.email })}
+                                    </span>
+                                  )}
+                                </span>
+                              ) : (
+                                member.user.email
+                              )}
+                          </div>
                         </div>
                         <div className="text-sm text-zinc-600 dark:text-zinc-400">
                           <span className="font-medium">{tMember('roleHeader')}:</span> {ORG_ROLE_LABELS[member.role]}
                         </div>
                         <div className="flex flex-wrap gap-2 pt-1">
-                          {canPromoteToAdmin(member) && (
+                          {canInvitePlaceholder(member) && !pendingInviteFor(member) && (
+                                  <button
+                                    onClick={() => openPlaceholderInvite(member)}
+                                    disabled={isBusy}
+                                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 disabled:opacity-50"
+                                  >
+                                    {tMember('invitePlaceholderButton')}
+                                  </button>
+                                )}
+                                {canPromoteToAdmin(member) && (
                             <button
                               onClick={() => handlePromoteToAdmin(member)}
                               disabled={isBusy}
@@ -656,7 +764,9 @@ export default function UsersPage() {
           <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl w-full max-w-sm sm:max-w-lg">
             <div className="p-6 border-b border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {tInv('modalTitle')}
+                {invitePlaceholder
+                  ? tMember('invitePlaceholderTitle', { name: getMemberDisplayName(invitePlaceholder) })
+                  : tInv('modalTitle')}
               </h2>
               <button
                 onClick={handleCloseModal}
@@ -668,6 +778,12 @@ export default function UsersPage() {
 
             <div className="p-6">
               <form onSubmit={handleCreateInvite} className="space-y-4">
+                {invitePlaceholder && (
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">{tMember('invitePlaceholderHint')}</p>
+                )}
+                {error && (
+                  <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
                     {tInv('emailLabel')}
@@ -681,6 +797,7 @@ export default function UsersPage() {
                   />
                 </div>
 
+                {!invitePlaceholder && (
                 <div>
                   <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
                     {tInv('roleLabel')}
@@ -694,6 +811,7 @@ export default function UsersPage() {
                     <option value="admin">{tInv('adminOption')}</option>
                   </select>
                 </div>
+                )}
 
                 <div className="flex gap-3">
                   <button
@@ -714,6 +832,65 @@ export default function UsersPage() {
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showPlaceholderModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl w-full max-w-sm sm:max-w-lg">
+            <form onSubmit={handleCreatePlaceholder} className="p-6 space-y-4">
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{tMember('placeholderModalTitle')}</h2>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">{tMember('placeholderModalHint')}</p>
+              {placeholderError && <p className="text-sm text-red-700 dark:text-red-300">{placeholderError}</p>}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="placeholderFirstName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                    {tMember('firstNameLabel')}
+                  </label>
+                  <input
+                    id="placeholderFirstName"
+                    value={placeholderFirstName}
+                    onChange={(e) => setPlaceholderFirstName(e.target.value)}
+                    required
+                    autoFocus
+                    className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg dark:bg-zinc-700 dark:text-zinc-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="placeholderLastName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                    {tMember('lastNameLabel')}
+                  </label>
+                  <input
+                    id="placeholderLastName"
+                    value={placeholderLastName}
+                    onChange={(e) => setPlaceholderLastName(e.target.value)}
+                    required
+                    className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg dark:bg-zinc-700 dark:text-zinc-100"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowPlaceholderModal(false)
+                    setPlaceholderError(null)
+                  }}
+                  disabled={submitting}
+                  className="flex-1 px-4 py-2 text-sm rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors disabled:opacity-60"
+                >
+                  {tCommon('cancel')}
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting || !placeholderFirstName.trim() || !placeholderLastName.trim()}
+                  className="flex-1 px-4 py-2 bg-brown-600 text-white rounded-lg hover:bg-brown-700 transition-colors disabled:opacity-60"
+                >
+                  {submitting ? tMember('waitingLabel') : tMember('placeholderCreateSubmit')}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

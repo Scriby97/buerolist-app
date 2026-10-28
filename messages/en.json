@@ -69,7 +69,11 @@
     "noProjectsDialogEmployeeMessage": "Your organization admin needs to add a customer and a project first before you can log time.",
     "noProjectsDialogAdminMessage": "Add a customer and a project first, before you and your team can log time.",
     "noProjectsDialogAddProjectButton": "Add customer/project now",
-    "commentLabel": "Comment (optional)"
+    "commentLabel": "Comment (optional)",
+    "employeeLabel": "Employee",
+    "employeeSelf": "Me ({name})",
+    "withoutLogin": "no login",
+    "employeeHint": "The entry is saved for this person. They can see it but not change it."
   },
   "entryItems": {
     "materialTitle": "Material",
@@ -120,7 +124,8 @@
     "lockedHint": "Locked – only admins can change entries from previous weeks.",
     "noEntriesOnDay": "No entries on this day.",
     "selectDayHint": "Tap a day to see its entries.",
-    "reportButton": "Report"
+    "reportButton": "Report",
+    "lockedByManagerHint": "Locked – this entry was recorded by an admin and can only be changed by admins."
   },
   "calendar": {
     "today": "Today",
@@ -753,7 +758,8 @@
     "createSuccess": "Invitation created",
     "createErrorGeneric": "Error creating the invitation",
     "deleteErrorGeneric": "Error deleting the invitation",
-    "copyErrorGeneric": "Error copying to clipboard"
+    "copyErrorGeneric": "Error copying to clipboard",
+    "takesOverLabel": "takes over the time of {name}"
   },
   "memberManagement": {
     "tabLabel": "Members",
@@ -782,7 +788,19 @@
     "removeErrorGeneric": "Error removing member",
     "removeConfirmTitle": "Remove member",
     "removeConfirmMessage": "{name} will be removed from the organization and will lose access immediately. Continue?",
-    "removeConfirmButton": "Remove"
+    "removeConfirmButton": "Remove",
+    "placeholderCreateButton": "Employee without login",
+    "placeholderModalTitle": "Add employee without login",
+    "placeholderModalHint": "You can record time for this person before they use the app. Later you invite them by e-mail – the time recorded so far is then taken over automatically.",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name",
+    "placeholderCreateSubmit": "Add",
+    "placeholderCreateError": "The employee could not be added.",
+    "withoutLoginBadge": "no login",
+    "invitedAs": "Invited: {email}",
+    "invitePlaceholderButton": "Invite",
+    "invitePlaceholderTitle": "Invite {name}",
+    "invitePlaceholderHint": "As soon as the invitation is accepted, all time recorded so far belongs to the new account."
   },
   "userManagement": {
     "title": "User Management",
@@ -902,7 +920,13 @@
     "NOTE_NOT_FOUND": "Note was not found.",
     "NOTE_TARGET_REQUIRED": "A note must be attached to either a customer or a project.",
     "NOTE_DELETE_FORBIDDEN": "Only the author or organization admins/owners may delete this note.",
-    "NOTE_PHOTO_INVALID": "The image is invalid. Allowed formats are PNG, JPEG or WebP (max. 10 MB)."
+    "NOTE_PHOTO_INVALID": "The image is invalid. Allowed formats are PNG, JPEG or WebP (max. 10 MB).",
+    "TIME_ENTRY_CREATED_BY_MANAGER": "This entry was recorded by an admin and can only be changed by admins.",
+    "TIME_ENTRY_TARGET_NOT_MEMBER": "This person is not a member of the organization.",
+    "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Only admins or owners can record time for others.",
+    "PLACEHOLDER_NOT_FOUND": "Employee without login not found.",
+    "PLACEHOLDER_MERGE_OVERLAP": "The time recorded for you overlaps with existing entries of your account. Please contact your admin.",
+    "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login."
   },
   "settingsOrganization": {
     "title": "Organization",

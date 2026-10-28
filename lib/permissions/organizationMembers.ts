@@ -17,7 +17,8 @@ export interface MemberActionActor {
  * Ansichten zwangsläufig dieselben Regeln zeigen.
  */
 export function canPromoteToAdmin(member: OrganizationMemberDetail): boolean {
-  return member.role === 'employee'
+  // Mitarbeiter ohne Login koennen nichts verwalten
+  return member.role === 'employee' && !member.user?.isPlaceholder
 }
 
 export function canDemoteToEmployee(
@@ -31,7 +32,12 @@ export function canTransferOwnership(
   member: OrganizationMemberDetail,
   { currentUserRole, isSelf }: MemberActionActor,
 ): boolean {
-  return member.role !== 'owner' && currentUserRole === 'owner' && !isSelf
+  return member.role !== 'owner' && currentUserRole === 'owner' && !isSelf && !member.user?.isPlaceholder
+}
+
+/** Mitarbeiter ohne Login per Einladung an ein echtes Konto uebergeben */
+export function canInvitePlaceholder(member: OrganizationMemberDetail): boolean {
+  return Boolean(member.user?.isPlaceholder)
 }
 
 /**
