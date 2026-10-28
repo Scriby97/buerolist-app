@@ -445,7 +445,9 @@
     "impressumTitle": "Mentions légales",
     "impressumDescription": "Informations légales sur l'éditeur de cette app.",
     "remindersTitle": "Rappel",
-    "remindersDescription": "Rappel quotidien pour saisir tes heures."
+    "remindersDescription": "Rappel quotidien pour saisir tes heures.",
+    "workScheduleTitle": "Horaires de travail",
+    "workScheduleDescription": "Ta journée de travail normale, p. ex. 07:15–12:00 et 13:00–17:00."
   },
   "impressum": {
     "title": "Mentions légales",
@@ -932,7 +934,8 @@
     "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Seuls les admins ou owners peuvent saisir des heures pour d'autres.",
     "PLACEHOLDER_NOT_FOUND": "Collaborateur sans login introuvable.",
     "PLACEHOLDER_MERGE_OVERLAP": "Les heures saisies pour toi se chevauchent avec des saisies existantes de ton compte. Contacte ton admin.",
-    "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login."
+    "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login.",
+    "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -984,8 +987,7 @@
     "loadError": "Erreur lors du chargement du rappel",
     "saveSuccess": "Rappel enregistré",
     "saveErrorGeneric": "Erreur lors de l'enregistrement du rappel",
-    "workdayLabel": "Journée de travail (heures)",
-    "workdayHint": "Utilisé uniquement pour le rappel : si tu as déjà saisi au moins autant d'heures aujourd'hui, aucun rappel n'est envoyé."
+    "workdayFromScheduleHint": "La durée d'une journée normale provient de tes"
   },
   "notificationPrompt": {
     "title": "Activer le rappel ?",
@@ -994,5 +996,20 @@
     "enableButton": "Activer",
     "dismissButton": "Pas maintenant",
     "genericError": "Une erreur s'est produite. Tu peux réessayer à tout moment dans les réglages."
+  },
+  "settingsWorkSchedule": {
+    "title": "Horaires de travail",
+    "subtitle": "Ta journée de travail normale avec pause de midi.",
+    "morningLabel": "Matin",
+    "afternoonLabel": "Après-midi",
+    "fromLabel": "De",
+    "toLabel": "À",
+    "totalLabel": "Journée normale :",
+    "invalidOrder": "Les heures doivent être croissantes : matin de – à, puis après-midi de – à.",
+    "usageHint": "Proposé comme heure de début lors de la saisie (début du travail ou après la pause de midi) et utilisé pour le rappel de saisie.",
+    "saveButton": "Enregistrer",
+    "saving": "Enregistrement...",
+    "saveSuccess": "Horaires enregistrés",
+    "saveError": "Erreur lors de l'enregistrement des horaires"
   }
 }

@@ -8,8 +8,6 @@ export interface EntryReminder {
   enabled: boolean
   reminderTime: string
   timezone: string
-  /** Dauer eines Arbeitstags in Minuten (fehlt bei aelteren Backends) */
-  workdayMinutes?: number
 }
 
 export async function getReminderSettings(): Promise<EntryReminder> {
@@ -22,14 +20,10 @@ export async function getReminderSettings(): Promise<EntryReminder> {
   return response.json()
 }
 
-export async function updateReminderSettings(
-  enabled: boolean,
-  time: string,
-  workdayMinutes?: number,
-): Promise<EntryReminder> {
+export async function updateReminderSettings(enabled: boolean, time: string): Promise<EntryReminder> {
   const response = await authenticatedFetch(buildApiUrl('/notifications/reminder'), {
     method: 'PUT',
-    body: JSON.stringify({ enabled, time, workdayMinutes }),
+    body: JSON.stringify({ enabled, time }),
   })
 
   if (!response.ok) {

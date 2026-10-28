@@ -22,7 +22,8 @@ import { NotificationPermissionPrompt } from './NotificationPermissionPrompt';
 import { getOrganizationMembers } from '@/lib/api/organizationMembers';
 import type { OrganizationMemberDetail } from '@/lib/types/user';
 import { personName } from '@/lib/format/personName';
-import { nextStartTime, parseDecimalHours } from '@/lib/format/hours';
+import { parseDecimalHours } from '@/lib/format/hours';
+import { scheduleOf, suggestStartTime } from '@/lib/workSchedule';
 
 interface FormState {
   projectId: string;
@@ -164,6 +165,9 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   // anschliessen. Admin/Owner bekommen alle Eintraege der Organisation -
   // daher clientseitig auf die eigenen filtern.
   const userId = creatorId || userProfile?.id;
+  // Arbeitszeiten der Person, fuer die erfasst wird (Admin: gewaehlter Mitarbeiter)
+  const schedule = scheduleOf(creatorId ? members.find((m) => m.userId === creatorId)?.user : userProfile);
+  const { workMorningStart, workMorningEnd, workAfternoonStart } = schedule;
   useEffect(() => {
     if (!selectedOrgId || !userId || activeDraftOrgId !== selectedOrgId || !formData.date) return;
     const date = formData.date;
@@ -180,7 +184,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
           .map((entry) => entry.endAt)
           .sort();
         const latestEndAt = ownEndTimes[ownEndTimes.length - 1];
-        const suggestion = latestEndAt ? nextStartTime(toLocalTime(latestEndAt)) : '';
+        const suggestion = suggestStartTime(latestEndAt ? toLocalTime(latestEndAt) : '', schedule);
         setFormData((prev) => {
           if (prev.date !== date) return prev;
           if (prev.startTime !== '' && prev.startTime !== autoStartTimeRef.current) return prev;
@@ -193,7 +197,8 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       });
 
     return () => controller.abort();
-  }, [formData.date, selectedOrgId, userId, activeDraftOrgId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- schedule ist ueber die drei Zeiten abgedeckt
+  }, [formData.date, selectedOrgId, userId, activeDraftOrgId, workMorningStart, workMorningEnd, workAfternoonStart]);
 
   const fetchProjectCategories = useCallback(async (projectId: string) => {
     if (!projectId) {
@@ -235,7 +240,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     // gespeicherten Eintrags (falls fuer heute erfasst; sonst laedt der
     // Effekt oben den Vorschlag fuer heute).
     const today = getTodayDate();
-    const startTime = savedDate === today ? nextStartTime(savedEndTime) : '';
+    const startTime = savedDate === today ? suggestStartTime(savedEndTime, schedule) : '';
     autoStartTimeRef.current = startTime;
     setFormData({
       projectId,

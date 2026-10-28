@@ -103,6 +103,20 @@ export default function SettingsPage() {
             </Link>
 
             <Link
+              href="/settings/work-schedule"
+              className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
+            >
+              <SettingsIcon>
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </SettingsIcon>
+              <div className="mt-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('workScheduleTitle')}</div>
+              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                {t('workScheduleDescription')}
+              </p>
+            </Link>
+
+            <Link
               href="/settings/reminders"
               className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
             >

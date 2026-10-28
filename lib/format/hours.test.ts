@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDecimalHours, minutesToDecimalInput, nextStartTime, parseDecimalHours } from './hours'
+import { formatDecimalHours, minutesToDecimalInput, parseDecimalHours } from './hours'
 
 describe('formatDecimalHours', () => {
   it('rechnet Minuten in Dezimalstunden um', () => {
@@ -32,10 +32,3 @@ describe('parseDecimalHours', () => {
   })
 })
 
-describe('nextStartTime', () => {
-  it('springt nach 12:00 auf 13:00 (Mittagspause), sonst direkt anschliessend', () => {
-    expect(nextStartTime('12:00')).toBe('13:00')
-    expect(nextStartTime('10:30')).toBe('10:30')
-    expect(nextStartTime('')).toBe('')
-  })
-})

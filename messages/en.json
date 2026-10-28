@@ -445,7 +445,9 @@
     "impressumTitle": "Legal Notice",
     "impressumDescription": "Legal information about the provider of this app.",
     "remindersTitle": "Reminder",
-    "remindersDescription": "Daily reminder to record your time."
+    "remindersDescription": "Daily reminder to record your time.",
+    "workScheduleTitle": "Working hours",
+    "workScheduleDescription": "Your normal workday, e.g. 07:15–12:00 and 13:00–17:00."
   },
   "impressum": {
     "title": "Legal Notice",
@@ -932,7 +934,8 @@
     "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Only admins or owners can record time for others.",
     "PLACEHOLDER_NOT_FOUND": "Employee without login not found.",
     "PLACEHOLDER_MERGE_OVERLAP": "The time recorded for you overlaps with existing entries of your account. Please contact your admin.",
-    "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login."
+    "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login.",
+    "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order."
   },
   "settingsOrganization": {
     "title": "Organization",
@@ -984,8 +987,7 @@
     "loadError": "Failed to load the reminder",
     "saveSuccess": "Reminder saved",
     "saveErrorGeneric": "Failed to save the reminder",
-    "workdayLabel": "Workday (hours)",
-    "workdayHint": "Only used for the reminder: if you've already recorded at least this many hours today, no reminder is sent."
+    "workdayFromScheduleHint": "The length of a normal workday comes from your"
   },
   "notificationPrompt": {
     "title": "Enable reminder?",
@@ -994,5 +996,20 @@
     "enableButton": "Enable",
     "dismissButton": "Not now",
     "genericError": "Something went wrong. You can try again anytime in the settings."
+  },
+  "settingsWorkSchedule": {
+    "title": "Working hours",
+    "subtitle": "Your normal workday with lunch break.",
+    "morningLabel": "Morning",
+    "afternoonLabel": "Afternoon",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "totalLabel": "Normal workday:",
+    "invalidOrder": "The times must be in order: morning from – to, then afternoon from – to.",
+    "usageHint": "Suggested as start time when recording (start of work or after the lunch break) and used for the entry reminder.",
+    "saveButton": "Save",
+    "saving": "Saving...",
+    "saveSuccess": "Working hours saved",
+    "saveError": "Failed to save working hours"
   }
 }

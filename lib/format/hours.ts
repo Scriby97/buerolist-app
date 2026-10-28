@@ -15,11 +15,6 @@ export function minutesToDecimalInput(minutes: number | null | undefined): strin
   return minutes ? String(Number((minutes / 60).toFixed(2))) : ''
 }
 
-/** Mittagspause: wer bis 12:00 erfasst hat, startet den naechsten Eintrag um 13:00. */
-export function nextStartTime(lastEndTime: string): string {
-  return lastEndTime === '12:00' ? '13:00' : lastEndTime
-}
-
 /** Minuten als Dezimalstunden mit zwei Stellen: 585 -> "9.75", 270 -> "4.50". */
 export function formatDecimalHours(minutes: number): string {
   return (minutes / 60).toFixed(2)

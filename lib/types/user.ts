@@ -51,6 +51,10 @@ export interface OrganizationMemberDetail {
     lastName?: string
     /** Mitarbeiter ohne Login, von Admin/Owner angelegt */
     isPlaceholder?: boolean
+    workMorningStart?: string
+    workMorningEnd?: string
+    workAfternoonStart?: string
+    workAfternoonEnd?: string
   }
 }
 
@@ -114,6 +118,11 @@ export interface User {
   firstName?: string
   lastName?: string
   name?: string
+  // Normaler Arbeitstag (Einstellungen -> Arbeitszeiten)
+  workMorningStart?: string
+  workMorningEnd?: string
+  workAfternoonStart?: string
+  workAfternoonEnd?: string
 }
 
 export interface InviteEntity {

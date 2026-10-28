@@ -445,7 +445,9 @@
     "impressumTitle": "Note legali",
     "impressumDescription": "Informazioni legali sul fornitore di questa app.",
     "remindersTitle": "Promemoria",
-    "remindersDescription": "Promemoria giornaliero per registrare le tue ore."
+    "remindersDescription": "Promemoria giornaliero per registrare le tue ore.",
+    "workScheduleTitle": "Orari di lavoro",
+    "workScheduleDescription": "La tua giornata lavorativa normale, es. 07:15–12:00 e 13:00–17:00."
   },
   "impressum": {
     "title": "Note legali",
@@ -932,7 +934,8 @@
     "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Solo admin o owner possono registrare ore per altri.",
     "PLACEHOLDER_NOT_FOUND": "Collaboratore senza login non trovato.",
     "PLACEHOLDER_MERGE_OVERLAP": "Le ore registrate per te si sovrappongono a registrazioni esistenti del tuo account. Contatta il tuo admin.",
-    "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login."
+    "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login.",
+    "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti."
   },
   "settingsOrganization": {
     "title": "Organizzazione",
@@ -984,8 +987,7 @@
     "loadError": "Errore nel caricamento del promemoria",
     "saveSuccess": "Promemoria salvato",
     "saveErrorGeneric": "Errore nel salvataggio del promemoria",
-    "workdayLabel": "Giornata lavorativa (ore)",
-    "workdayHint": "Usato solo per il promemoria: se oggi hai già registrato almeno queste ore, non viene inviato alcun promemoria."
+    "workdayFromScheduleHint": "La durata di una giornata normale deriva dai tuoi"
   },
   "notificationPrompt": {
     "title": "Attivare il promemoria?",
@@ -994,5 +996,20 @@
     "enableButton": "Attiva",
     "dismissButton": "Non ora",
     "genericError": "Qualcosa è andato storto. Puoi riprovare in qualsiasi momento nelle impostazioni."
+  },
+  "settingsWorkSchedule": {
+    "title": "Orari di lavoro",
+    "subtitle": "La tua giornata lavorativa normale con pausa pranzo.",
+    "morningLabel": "Mattina",
+    "afternoonLabel": "Pomeriggio",
+    "fromLabel": "Dalle",
+    "toLabel": "Alle",
+    "totalLabel": "Giornata normale:",
+    "invalidOrder": "Gli orari devono essere crescenti: mattina dalle – alle, poi pomeriggio dalle – alle.",
+    "usageHint": "Proposto come ora d'inizio durante la registrazione (inizio lavoro o dopo la pausa pranzo) e usato per il promemoria.",
+    "saveButton": "Salva",
+    "saving": "Salvataggio...",
+    "saveSuccess": "Orari salvati",
+    "saveError": "Errore nel salvataggio degli orari"
   }
 }

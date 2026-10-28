@@ -445,7 +445,9 @@
     "impressumTitle": "Impressum",
     "impressumDescription": "Rechtliche Angaben zum Anbieter dieser App.",
     "remindersTitle": "Erinnerung",
-    "remindersDescription": "Tägliche Erinnerung, deine Zeiten zu erfassen."
+    "remindersDescription": "Tägliche Erinnerung, deine Zeiten zu erfassen.",
+    "workScheduleTitle": "Arbeitszeiten",
+    "workScheduleDescription": "Dein normaler Arbeitstag, z.B. 07:15–12:00 und 13:00–17:00."
   },
   "impressum": {
     "title": "Impressum",
@@ -932,7 +934,8 @@
     "TIME_ENTRY_FOR_OTHERS_FORBIDDEN": "Nur Admins oder Owner dürfen Zeiten für andere erfassen.",
     "PLACEHOLDER_NOT_FOUND": "Mitarbeiter ohne Login nicht gefunden.",
     "PLACEHOLDER_MERGE_OVERLAP": "Die für dich erfassten Zeiten überschneiden sich mit bestehenden Einträgen deines Kontos. Bitte melde dich bei deinem Admin.",
-    "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich."
+    "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich.",
+    "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -984,8 +987,7 @@
     "loadError": "Fehler beim Laden der Erinnerung",
     "saveSuccess": "Erinnerung gespeichert",
     "saveErrorGeneric": "Fehler beim Speichern der Erinnerung",
-    "workdayLabel": "Arbeitstag (Stunden)",
-    "workdayHint": "Wird nur für die Erinnerung verwendet: Hast du heute schon mindestens so viele Stunden erfasst, kommt keine Erinnerung."
+    "workdayFromScheduleHint": "Die Dauer eines normalen Arbeitstags kommt aus deinen"
   },
   "notificationPrompt": {
     "title": "Erinnerung aktivieren?",
@@ -994,5 +996,20 @@
     "enableButton": "Aktivieren",
     "dismissButton": "Nicht jetzt",
     "genericError": "Etwas ist schiefgelaufen. Du kannst es jederzeit in den Einstellungen erneut versuchen."
+  },
+  "settingsWorkSchedule": {
+    "title": "Arbeitszeiten",
+    "subtitle": "Dein normaler Arbeitstag mit Mittagspause.",
+    "morningLabel": "Vormittag",
+    "afternoonLabel": "Nachmittag",
+    "fromLabel": "Von",
+    "toLabel": "Bis",
+    "totalLabel": "Normaler Arbeitstag:",
+    "invalidOrder": "Die Zeiten müssen aufsteigend sein: Vormittag von – bis, dann Nachmittag von – bis.",
+    "usageHint": "Wird beim Erfassen als Startzeit vorgeschlagen (Arbeitsbeginn bzw. nach der Mittagspause) und für die Erfassungserinnerung verwendet.",
+    "saveButton": "Speichern",
+    "saving": "Wird gespeichert...",
+    "saveSuccess": "Arbeitszeiten gespeichert",
+    "saveError": "Fehler beim Speichern der Arbeitszeiten"
   }
 }

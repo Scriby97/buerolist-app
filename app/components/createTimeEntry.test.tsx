@@ -75,6 +75,12 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
     expect(createTimeEntryMock.mock.calls[0][0].creatorId).toBeUndefined()
   })
 
+  it('neuer Tag startet mit dem Arbeitsbeginn aus den Arbeitszeiten (07:15)', async () => {
+    canManage = false
+    renderWithIntl(<CreateTimeEntry />)
+    await waitFor(() => expect((screen.getByLabelText('Von') as HTMLInputElement).value).toBe('07:15'))
+  })
+
   it('Mitarbeiter sehen keine Mitarbeiterauswahl', async () => {
     canManage = false
     renderWithIntl(<CreateTimeEntry />)
