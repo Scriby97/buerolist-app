@@ -805,7 +805,7 @@
     "removeConfirmTitle": "Rimuovi membro",
     "removeConfirmMessage": "{name} verrà rimosso dall'organizzazione e perderà immediatamente l'accesso. Continuare?",
     "removeConfirmButton": "Rimuovi",
-    "placeholderCreateButton": "Collaboratore senza login",
+    "placeholderCreateButton": "Aggiungi collaboratore senza login",
     "placeholderModalTitle": "Aggiungi collaboratore senza login",
     "placeholderModalHint": "Puoi registrare ore per questa persona prima che usi l'app. Più tardi la inviti via e-mail – le ore già registrate vengono riprese automaticamente.",
     "firstNameLabel": "Nome",

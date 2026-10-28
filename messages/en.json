@@ -805,7 +805,7 @@
     "removeConfirmTitle": "Remove member",
     "removeConfirmMessage": "{name} will be removed from the organization and will lose access immediately. Continue?",
     "removeConfirmButton": "Remove",
-    "placeholderCreateButton": "Employee without login",
+    "placeholderCreateButton": "Add employee without login",
     "placeholderModalTitle": "Add employee without login",
     "placeholderModalHint": "You can record time for this person before they use the app. Later you invite them by e-mail – the time recorded so far is then taken over automatically.",
     "firstNameLabel": "First name",
