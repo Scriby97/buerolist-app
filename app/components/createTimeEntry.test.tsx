@@ -82,12 +82,13 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
     await waitFor(() => expect((screen.getByLabelText('Von') as HTMLInputElement).value).toBe('07:15'))
   })
 
-  it('ignoriert die Startzeit aus einem Entwurf von gestern', async () => {
+  it.each([
+    ['von gestern', '2000-01-01'],
+    // Entwurf wird beim Oeffnen gleich mit dem heutigen Datum gespeichert
+    ['mit heutigem Datum', new Date().toLocaleDateString('en-CA')],
+  ])('ignoriert die Startzeit aus einem Entwurf %s', async (_label, date) => {
     canManage = false
-    window.localStorage.setItem(
-      DRAFT_KEY,
-      JSON.stringify({ projectId: 'p1', date: '2000-01-01', startTime: '17:15', endTime: '' }),
-    )
+    window.localStorage.setItem(DRAFT_KEY, JSON.stringify({ projectId: 'p1', date, startTime: '17:15', endTime: '' }))
     renderWithIntl(<CreateTimeEntry />)
     await waitFor(() => expect((screen.getByLabelText('Von') as HTMLInputElement).value).toBe('07:15'))
   })
