@@ -78,7 +78,10 @@
     "employeesLabel": "Record for",
     "employeesHint": "The same entry is saved for all {count} selected people. The others can see it but not change it.",
     "saveSuccessMultiple": "Saved for {count} people",
-    "selectEmployeeError": "Please select at least one person to record for."
+    "selectEmployeeError": "Please select at least one person to record for.",
+    "employeesNone": "Nobody selected",
+    "employeesSearch": "Search employees...",
+    "employeesNoMatches": "Nobody found."
   },
   "entryItems": {
     "materialTitle": "Material",

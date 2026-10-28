@@ -78,7 +78,10 @@
     "employeesLabel": "Registra per",
     "employeesHint": "La stessa registrazione viene salvata per tutte le {count} persone scelte. Gli altri la vedono ma non possono modificarla.",
     "saveSuccessMultiple": "Salvato per {count} persone",
-    "selectEmployeeError": "Scegli almeno una persona per cui registrare."
+    "selectEmployeeError": "Scegli almeno una persona per cui registrare.",
+    "employeesNone": "Nessuno selezionato",
+    "employeesSearch": "Cerca collaboratori...",
+    "employeesNoMatches": "Nessuno trovato."
   },
   "entryItems": {
     "materialTitle": "Materiale",

@@ -37,6 +37,8 @@ vi.mock('@/lib/api/organizationMembers', () => ({
 }))
 vi.mock('./NotificationPermissionPrompt', () => ({ NotificationPermissionPrompt: () => null }))
 
+const openEmployees = async () => fireEvent.click(await screen.findByRole('button', { name: 'Erfassen für' }))
+
 const fillTimes = () => {
   fireEvent.change(screen.getByLabelText('Von'), { target: { value: '07:00' } })
   fireEvent.blur(screen.getByLabelText('Von'))
@@ -54,6 +56,7 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
   it('Admin/Owner wählt einen Mitarbeiter ohne Login und speichert für ihn', async () => {
     canManage = true
     renderWithIntl(<CreateTimeEntry />)
+    await openEmployees()
     const other = await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' })
     fireEvent.click(screen.getByRole('checkbox', { name: 'Ich (Nicolas Balmer)' }))
     fireEvent.click(other)
@@ -67,7 +70,7 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
   it('ohne Auswahl wird für sich selbst gespeichert', async () => {
     canManage = true
     renderWithIntl(<CreateTimeEntry />)
-    await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' })
+    expect(await screen.findByRole('button', { name: 'Erfassen für' })).toBeTruthy()
     fillTimes()
     fireEvent.click(screen.getByRole('button', { name: /speichern/i }))
 
@@ -79,6 +82,7 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
   it('mehrere Personen gewählt: ein Eintrag für alle (creatorIds)', async () => {
     canManage = true
     renderWithIntl(<CreateTimeEntry />)
+    await openEmployees()
     fireEvent.click(await screen.findByRole('checkbox', { name: 'Max Muster (ohne Login)' }))
     fillTimes()
     fireEvent.click(screen.getByRole('button', { name: /speichern/i }))
@@ -108,6 +112,6 @@ describe('CreateTimeEntry - für Mitarbeiter erfassen', () => {
     canManage = false
     renderWithIntl(<CreateTimeEntry />)
     await screen.findByLabelText('Von')
-    expect(screen.queryByRole('checkbox', { name: /Ich/ })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Erfassen für' })).toBeNull()
   })
 })

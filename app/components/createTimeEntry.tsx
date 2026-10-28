@@ -25,6 +25,7 @@ import { personName } from '@/lib/format/personName';
 import { parseDecimalHours } from '@/lib/format/hours';
 import { scheduleOf, suggestStartTime } from '@/lib/workSchedule';
 import { getItemPresets, type ItemPreset } from '@/lib/api/itemPresets';
+import { MultiSelectDropdown } from './MultiSelectDropdown';
 
 interface FormState {
   projectId: string;
@@ -439,45 +440,36 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         {/* Erfassen fuer (nur Admin/Owner, wenn es weitere Mitglieder gibt) -
             mehrere Personen: derselbe Eintrag wird fuer alle angelegt */}
         {canManageSelectedOrganization && otherMembers.length > 0 && (
-          <fieldset className="space-y-2">
-            <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">{t('employeesLabel')}</legend>
-            <div className="flex flex-wrap gap-2">
-              {[{ userId: myId, label: t('employeeSelf', { name: personName(userProfile, '') }) }, ...otherMembers.map((m) => ({
-                userId: m.userId,
-                label: `${personName(m.user, '?')}${m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}`,
-              }))].map(({ userId: id, label }) => {
-                const checked = selectedIds.includes(id);
-                return (
-                  <label
-                    key={id}
-                    className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-                      checked
-                        ? 'border-brown-600 bg-brown-50 text-zinc-900 dark:bg-brown-900/30 dark:text-zinc-50'
-                        : 'border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => {
-                        setSelection(checked ? selectedIds.filter((x) => x !== id) : [...selectedIds, id]);
-                        // Vorgeschlagene Startzeit fuer die (neue) Hauptperson neu bestimmen
-                        setFormData((prev) => (prev.startTime === autoStartTimeRef.current ? { ...prev, startTime: '' } : prev));
-                        autoStartTimeRef.current = '';
-                      }}
-                      className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
-                    />
-                    {label}
-                  </label>
-                );
-              })}
-            </div>
+          <div className="space-y-2">
+            <label htmlFor="entryEmployees" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              {t('employeesLabel')}
+            </label>
+            <MultiSelectDropdown
+              id="entryEmployees"
+              options={[
+                { id: myId, label: t('employeeSelf', { name: personName(userProfile, '') }) },
+                ...otherMembers.map((m) => ({
+                  id: m.userId,
+                  label: `${personName(m.user, '?')}${m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}`,
+                })),
+              ]}
+              selected={selectedIds}
+              onChange={(next) => {
+                setSelection(next);
+                // Vorgeschlagene Startzeit fuer die (neue) Hauptperson neu bestimmen
+                setFormData((prev) => (prev.startTime === autoStartTimeRef.current ? { ...prev, startTime: '' } : prev));
+                autoStartTimeRef.current = '';
+              }}
+              emptyText={t('employeesNone')}
+              searchPlaceholder={t('employeesSearch')}
+              noMatchesText={t('employeesNoMatches')}
+            />
             {selectedIds.some((id) => id !== myId) && (
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {selectedIds.length > 1 ? t('employeesHint', { count: selectedIds.length }) : t('employeeHint')}
               </p>
             )}
-          </fieldset>
+          </div>
         )}
 
         {/* Projekt */}

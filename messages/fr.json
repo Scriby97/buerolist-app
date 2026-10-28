@@ -78,7 +78,10 @@
     "employeesLabel": "Saisir pour",
     "employeesHint": "La même saisie est enregistrée pour les {count} personnes choisies. Les autres la voient mais ne peuvent pas la modifier.",
     "saveSuccessMultiple": "Enregistré pour {count} personnes",
-    "selectEmployeeError": "Choisis au moins une personne pour la saisie."
+    "selectEmployeeError": "Choisis au moins une personne pour la saisie.",
+    "employeesNone": "Personne de choisi",
+    "employeesSearch": "Rechercher un collaborateur...",
+    "employeesNoMatches": "Personne trouvé."
   },
   "entryItems": {
     "materialTitle": "Matériel",

@@ -78,7 +78,10 @@
     "employeesLabel": "Erfassen für",
     "employeesHint": "Derselbe Eintrag wird für alle {count} gewählten Personen gespeichert. Die anderen sehen ihn, können ihn aber nicht ändern.",
     "saveSuccessMultiple": "Für {count} Personen gespeichert",
-    "selectEmployeeError": "Bitte mindestens eine Person wählen, für die erfasst wird."
+    "selectEmployeeError": "Bitte mindestens eine Person wählen, für die erfasst wird.",
+    "employeesNone": "Niemand gewählt",
+    "employeesSearch": "Mitarbeiter suchen...",
+    "employeesNoMatches": "Niemand gefunden."
   },
   "entryItems": {
     "materialTitle": "Material",
