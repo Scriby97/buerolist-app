@@ -85,8 +85,7 @@
     "unitPrice": "CHF/unit",
     "remove": "Remove",
     "total": "Total",
-    "invalid": "Please enter a description, a valid quantity and a price for each material and expense line.",
-    "presetPick": "Add predefined…"
+    "invalid": "Please enter a description, a valid quantity and a price for each material and expense line."
   },
   "myEntries": {
     "title": "Entries",

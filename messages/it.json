@@ -85,8 +85,7 @@
     "unitPrice": "CHF/pz.",
     "remove": "Rimuovi",
     "total": "Totale",
-    "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi.",
-    "presetPick": "Aggiungi predefinito…"
+    "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi."
   },
   "myEntries": {
     "title": "Voci",

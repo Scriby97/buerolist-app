@@ -85,8 +85,7 @@
     "unitPrice": "CHF/pce",
     "remove": "Supprimer",
     "total": "Total",
-    "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides.",
-    "presetPick": "Ajouter un prédéfini…"
+    "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides."
   },
   "myEntries": {
     "title": "Entrées",

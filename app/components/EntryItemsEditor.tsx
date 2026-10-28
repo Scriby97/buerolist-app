@@ -1,11 +1,12 @@
 'use client';
 
-import type { FC } from 'react';
+import { useId, useState, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatChf, parseChfToRappen, parseQuantity, sanitizeDecimalInput } from '@/lib/format/money';
 import { isRowEmpty, withTrailingEmptyRow, type ItemRow } from '@/lib/timeEntryItems';
 import { formatPresetNumber } from '@/lib/format/numbers';
 import type { ItemPreset } from '@/lib/api/itemPresets';
+import { normalizeSearchText, searchTokens } from '@/lib/search';
 
 interface EntryItemsEditorProps {
   /** Eindeutiges Praefix fuer die Feld-IDs, z.B. "material" */
@@ -41,22 +42,14 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
     onChange(next);
   };
 
-  // Vorlage als neue, ausgefuellte Zeile uebernehmen (danach frei anpassbar)
-  const addPreset = (presetId: string) => {
-    const preset = presets.find((p) => p.id === presetId);
-    if (!preset) return;
-    const filled = visibleRows.filter((row) => !isRowEmpty(row));
-    onChange(
-      withTrailingEmptyRow([
-        ...filled,
-        {
-          quantity: '1',
-          description: preset.description,
-          price: preset.unitPriceRappen ? formatChf(preset.unitPriceRappen) : '',
-        },
-      ]),
-    );
-  };
+  // Vorlage in die Zeile uebernehmen (danach frei anpassbar): Bezeichnung,
+  // Preis der Vorlage (falls vorhanden) und Menge 1, falls noch leer.
+  const applyPreset = (index: number, preset: ItemPreset) =>
+    updateRow(index, {
+      description: preset.description,
+      price: preset.unitPriceRappen ? formatChf(preset.unitPriceRappen) : visibleRows[index].price,
+      quantity: visibleRows[index].quantity || '1',
+    });
 
   const removeRow = (index: number) => onChange(withTrailingEmptyRow(visibleRows.filter((_, i) => i !== index)));
 
@@ -71,23 +64,7 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
   return (
     <fieldset className="space-y-2" disabled={disabled}>
       <legend className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">{title}</legend>
-      {presets.length > 0 && (
-        <select
-          id={`${idPrefix}-preset`}
-          aria-label={`${title}: ${t('presetPick')}`}
-          value=""
-          onChange={(e) => addPreset(e.target.value)}
-          className={`${inputClass} sm:max-w-sm`}
-        >
-          <option value="">{t('presetPick')}</option>
-          {presets.map((preset) => (
-            <option key={preset.id} value={preset.id}>
-              {formatPresetNumber(preset.type, preset.number)} {preset.description}
-              {preset.unitPriceRappen ? ` · CHF ${formatChf(preset.unitPriceRappen)}` : ''}
-            </option>
-          ))}
-        </select>
-      )}
+
       <div className="grid grid-cols-[3.5rem_minmax(0,1fr)_5.5rem_2rem] gap-x-1.5 gap-y-1.5 items-center">
         <span className="text-xs text-zinc-500 dark:text-zinc-400">{t('quantity')}</span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">{t('description')}</span>
@@ -108,15 +85,14 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
               aria-invalid={!empty && parseQuantity(row.quantity) === null}
               className={`${inputClass} text-right tabular-nums ${!empty && parseQuantity(row.quantity) === null ? invalidClass : ''}`}
             />,
-            <input
+            <DescriptionInput
               key={`${index}-d`}
               id={`${idPrefix}-description-${index}`}
-              aria-label={`${title} ${index + 1}: ${t('description')}`}
-              autoComplete="off"
-              maxLength={200}
+              label={`${title} ${index + 1}: ${t('description')}`}
               value={row.description}
-              onChange={(e) => updateRow(index, { description: e.target.value })}
-              className={inputClass}
+              presets={presets}
+              onChange={(description) => updateRow(index, { description })}
+              onPick={(preset) => applyPreset(index, preset)}
             />,
             <input
               key={`${index}-p`}
@@ -154,5 +130,123 @@ export const EntryItemsEditor: FC<EntryItemsEditorProps> = ({ idPrefix, title, r
         </p>
       )}
     </fieldset>
+  );
+};
+
+/** Vorlagen, die zur Eingabe passen (alle Woerter in Nummer oder Bezeichnung). */
+export function matchPresets(presets: ItemPreset[], query: string): ItemPreset[] {
+  const tokens = searchTokens(query);
+  if (tokens.length === 0) return presets;
+  return presets.filter((preset) => {
+    const haystack = normalizeSearchText(`${formatPresetNumber(preset.type, preset.number)} ${preset.number} ${preset.description}`);
+    return tokens.every((token) => haystack.includes(token));
+  });
+}
+
+interface DescriptionInputProps {
+  id: string;
+  label: string;
+  value: string;
+  presets: ItemPreset[];
+  onChange: (value: string) => void;
+  onPick: (preset: ItemPreset) => void;
+}
+
+/**
+ * Bezeichnung mit Vorschlaegen: freie Eingabe, oder beim Fokussieren/Tippen
+ * eine vordefinierte Position waehlen (Klick, Pfeiltasten + Enter).
+ */
+const DescriptionInput: FC<DescriptionInputProps> = ({ id, label, value, presets, onChange, onPick }) => {
+  const listId = useId();
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+  // Bereits exakt gewaehlte Vorlage nicht nochmals als einzigen Vorschlag zeigen
+  const matches = matchPresets(presets, value).filter((p) => p.description !== value);
+  const showList = open && matches.length > 0;
+
+  const pick = (preset: ItemPreset) => {
+    onPick(preset);
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <input
+        id={id}
+        aria-label={label}
+        // Ohne Vorlagen ein normales Textfeld, sonst Combobox mit Vorschlaegen
+        {...(presets.length > 0 && {
+          role: 'combobox',
+          'aria-autocomplete': 'list' as const,
+          'aria-expanded': showList,
+          'aria-controls': listId,
+          'aria-activedescendant': showList ? `${listId}-${active}` : undefined,
+        })}
+        autoComplete="off"
+        maxLength={200}
+        value={value}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setOpen(true);
+          setActive(0);
+        }}
+        onFocus={() => {
+          setOpen(true);
+          setActive(0);
+        }}
+        onBlur={() => setOpen(false)}
+        onKeyDown={(e) => {
+          if (!showList) return;
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setActive((i) => Math.min(i + 1, matches.length - 1));
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setActive((i) => Math.max(i - 1, 0));
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            pick(matches[Math.min(active, matches.length - 1)]);
+          } else if (e.key === 'Escape') {
+            setOpen(false);
+          }
+        }}
+        className={inputClass}
+      />
+      {showList && (
+        <ul
+          id={listId}
+          role="listbox"
+          className="absolute left-0 right-0 z-20 mt-1 max-h-60 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-1 shadow-lg"
+        >
+          {matches.map((preset, i) => (
+            <li
+              key={preset.id}
+              id={`${listId}-${i}`}
+              role="option"
+              aria-selected={i === active}
+              // mousedown statt click: sonst schliesst onBlur die Liste vorher
+              onMouseDown={(e) => {
+                e.preventDefault();
+                pick(preset);
+              }}
+              onMouseEnter={() => setActive(i)}
+              className={`flex cursor-pointer items-baseline gap-2 px-3 py-2 text-sm ${
+                i === active ? 'bg-zinc-100 dark:bg-zinc-700' : ''
+              }`}
+            >
+              <span className="shrink-0 font-mono text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                {formatPresetNumber(preset.type, preset.number)}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-zinc-900 dark:text-zinc-50">{preset.description}</span>
+              {preset.unitPriceRappen ? (
+                <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                  CHF {formatChf(preset.unitPriceRappen)}
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };

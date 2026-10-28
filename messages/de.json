@@ -85,8 +85,7 @@
     "unitPrice": "CHF/Stk.",
     "remove": "Entfernen",
     "total": "Total",
-    "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben.",
-    "presetPick": "Vordefiniert hinzufügen…"
+    "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben."
   },
   "myEntries": {
     "title": "Einträge",
