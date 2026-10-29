@@ -44,9 +44,9 @@ export default function CreateOrganizationOnboardingPage() {
       id: 'free',
       label: tTier('free'),
       price: t('freeLabel'),
-      maxProjects: '8',
-      maxMembers: '5',
-      maxCustomers: '8',
+      maxProjects: '100',
+      maxMembers: '20',
+      maxCustomers: '50',
       paid: false,
     },
     {

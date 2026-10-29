@@ -48,7 +48,7 @@ export default function SettingsBillingPage() {
   const [portalLoading, setPortalLoading] = useState(false)
 
   const plans: PlanDefinition[] = [
-    { id: 'free', label: tTier('free'), price: t('freeLabel'), maxProjects: '8', maxMembers: '5', maxCustomers: '8', paid: false },
+    { id: 'free', label: tTier('free'), price: t('freeLabel'), maxProjects: '100', maxMembers: '20', maxCustomers: '50', paid: false },
     { id: 'pro', label: tTier('pro'), price: `CHF 39.- ${t('perMonthSuffix')}`, maxProjects: t('unlimitedLabel'), maxMembers: t('unlimitedLabel'), maxCustomers: t('unlimitedLabel'), paid: true },
   ]
 
