@@ -7,6 +7,8 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries';
 import { buildTimeMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
 import { formatChf, formatQuantity } from '@/lib/format/money';
+import { colorVars, employeeColors, ENTITY_BORDER_TOP, ENTITY_TINT } from '@/lib/colors/entityColors';
+import { ColorDot } from './ColorDot';
 
 interface ProjectTimeReportProps {
   projectId: string;
@@ -83,6 +85,16 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
 
   const stickyCell = 'sticky left-0 z-10';
   const numCell = 'px-3 py-2 text-right tabular-nums whitespace-nowrap';
+  // Mitarbeiter-Spalten farblich unterscheidbar (nur bei mehreren Personen):
+  // Farbbalken ueber dem Namen, Spalte leicht eingefaerbt.
+  const colors = employeeColors(matrix?.employees ?? []);
+  const employeeCol = (employeeId: string, className: string, head = false) =>
+    showTotalColumn
+      ? {
+          style: colorVars(colors.get(employeeId)!),
+          className: `${className} ${head ? `border-t-4 ${ENTITY_BORDER_TOP}` : ''} ${ENTITY_TINT}`,
+        }
+      : { className };
 
   return (
     <div className="fixed inset-0 z-[60] flex items-stretch justify-center bg-black/50 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="time-report-title">
@@ -124,7 +136,7 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                     {t('dayColumn')}
                   </th>
                   {matrix.employees.map((employee) => (
-                    <th key={employee.id} scope="col" className="px-3 py-2 text-right font-medium whitespace-nowrap">
+                    <th key={employee.id} scope="col" {...employeeCol(employee.id, 'px-3 py-2 text-right font-medium whitespace-nowrap', true)}>
                       {employee.name}
                     </th>
                   ))}
@@ -141,7 +153,7 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                         {t('weekLabel', { week: week.isoWeek, year: week.isoYear })}
                       </th>
                       {matrix.employees.map((employee) => (
-                        <td key={employee.id} className={numCell}>
+                        <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                           {formatHoursMinutes(week.minutesByEmployee[employee.id] ?? 0)}
                         </td>
                       ))}
@@ -166,7 +178,7 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                               </button>
                             </th>
                             {matrix.employees.map((employee) => (
-                              <td key={employee.id} className={numCell}>
+                              <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                                 {formatHoursMinutes(day.minutesByEmployee[employee.id] ?? 0)}
                               </td>
                             ))}
@@ -185,7 +197,13 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                                         <span className="tabular-nums font-medium">
                                           {toTime(entry.startAt)}–{toTime(entry.endAt)}
                                         </span>
-                                        {employeeCount > 1 && employee && <> · {employee.name}</>}
+                                        {employeeCount > 1 && employee && (
+                                          <>
+                                            {' · '}
+                                            <ColorDot color={colors.get(employee.id)!} className="mr-1 align-middle" />
+                                            {employee.name}
+                                          </>
+                                        )}
                                         {' · '}
                                         {entry.category?.name ?? t('noCategory')}
                                         {entry.comment && (
@@ -222,7 +240,7 @@ export const ProjectTimeReport: FC<ProjectTimeReportProps> = ({
                     {t('totalRow')}
                   </th>
                   {matrix.employees.map((employee) => (
-                    <td key={employee.id} className={numCell}>
+                    <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                       {formatHoursMinutes(matrix.minutesByEmployee[employee.id] ?? 0)}
                     </td>
                   ))}

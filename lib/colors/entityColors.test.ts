@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CUSTOMER_HUES, customerColor, projectColor } from './entityColors'
+import { CUSTOMER_HUES, customerColor, employeeColors, projectColor } from './entityColors'
 
 const parse = (oklch: string) => {
   const [l, c, h] = oklch.replace(/oklch\(|\)/g, '').split(' ').map(Number)
@@ -45,5 +45,13 @@ describe('entityColors', () => {
   it('ist grau, solange keine Nummer bekannt ist', () => {
     expect(parse(customerColor(undefined).light).c).toBe(0)
     expect(projectColor(undefined, 3)).toEqual(customerColor(undefined))
+  })
+
+  it('vergibt Mitarbeiterfarben alphabetisch, unabhaengig von der Reihenfolge', () => {
+    const anna = { id: 'a', name: 'Anna' }
+    const beat = { id: 'b', name: 'Beat' }
+    const colors = employeeColors([beat, anna])
+    expect(colors.get('a')).toEqual(employeeColors([anna, beat]).get('a'))
+    expect(colors.get('a')).not.toEqual(colors.get('b'))
   })
 })

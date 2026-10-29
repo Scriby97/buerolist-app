@@ -8,7 +8,7 @@ import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
 import { ProjectEntryComments } from './ProjectEntryComments';
 import { formatProjectNumber } from '@/lib/format/numbers';
-import { projectColor } from '@/lib/colors/entityColors';
+import { colorVars, employeeColors, ENTITY_BORDER_TOP, ENTITY_TINT, projectColor } from '@/lib/colors/entityColors';
 import { ColorDot } from './ColorDot';
 import { formatChf } from '@/lib/format/money';
 import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
@@ -157,6 +157,16 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const hasTime = summaryMatrix.rows.length > 0;
   const showTotalColumn = summaryMatrix.employees.length > 1;
   const numCell = 'px-1.5 py-1.5 text-right tabular-nums whitespace-nowrap';
+  // Mitarbeiter-Spalten farblich unterscheidbar (nur bei mehreren Personen):
+  // Farbbalken ueber dem Namen, Spalte leicht eingefaerbt.
+  const colors = employeeColors(summaryMatrix.employees);
+  const employeeCol = (employeeId: string, className: string, head = false) =>
+    showTotalColumn
+      ? {
+          style: colorVars(colors.get(employeeId)!),
+          className: `${className} ${head ? `border-t-4 ${ENTITY_BORDER_TOP}` : ''} ${ENTITY_TINT}`,
+        }
+      : { className };
   // Material/Spesen pro Mitarbeiter und gesamt (Rappen).
   const costOf = (type: 'material' | 'expense', creatorId?: string) =>
     costSummary
@@ -261,7 +271,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                 <tr className="text-zinc-500 dark:text-zinc-400">
                   <th scope="col" className={`${stickyCell} px-1.5 py-1.5 text-left align-bottom font-medium`}>{t('categoryColumn')}</th>
                   {summaryMatrix.employees.map((employee) => (
-                    <th key={employee.id} scope="col" className="px-1.5 py-1.5 text-right align-bottom font-medium leading-tight">
+                    <th key={employee.id} scope="col" {...employeeCol(employee.id, 'px-1.5 py-1.5 text-right align-bottom font-medium leading-tight', true)}>
                       {splitName(employee.name).map((part, idx) => (
                         <span key={idx} className="block whitespace-nowrap">{part}</span>
                       ))}
@@ -281,7 +291,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                       {row.categoryName ?? t('noCategoryLabel')}
                     </th>
                     {summaryMatrix.employees.map((employee) => (
-                      <td key={employee.id} className={numCell}>
+                      <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                         {formatHoursMinutes(row.minutesByEmployee[employee.id] ?? 0)}
                       </td>
                     ))}
@@ -297,7 +307,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                 <tr className="border-t-2 border-zinc-200 dark:border-zinc-600 font-semibold text-zinc-900 dark:text-zinc-50">
                   <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left`}>{t('totalLabel')}</th>
                   {summaryMatrix.employees.map((employee) => (
-                    <td key={employee.id} className={numCell}>
+                    <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                       {formatHoursMinutes(summaryMatrix.minutesByEmployee[employee.id] ?? 0)}
                     </td>
                   ))}
@@ -307,7 +317,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                   <tr className="border-t border-zinc-100 dark:border-zinc-700/60 text-zinc-700 dark:text-zinc-300">
                     <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left font-normal`}>{t('travelRowLabel')}</th>
                     {summaryMatrix.employees.map((employee) => (
-                      <td key={employee.id} className={numCell}>{decimalHours(travelOf(employee.id))}</td>
+                      <td key={employee.id} {...employeeCol(employee.id, numCell)}>{decimalHours(travelOf(employee.id))}</td>
                     ))}
                     {showTotalColumn && (
                       <td className={`${numCell} font-medium text-zinc-900 dark:text-zinc-100`}>{decimalHours(travelOf())}</td>
@@ -327,7 +337,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                   <tr className="text-zinc-500 dark:text-zinc-400">
                     <th scope="col" className={`${stickyCell} px-1.5 py-1.5 text-left align-bottom font-medium`}>CHF</th>
                     {summaryMatrix.employees.map((employee) => (
-                      <th key={employee.id} scope="col" className="px-1.5 py-1.5 text-right align-bottom font-medium leading-tight">
+                      <th key={employee.id} scope="col" {...employeeCol(employee.id, 'px-1.5 py-1.5 text-right align-bottom font-medium leading-tight', true)}>
                         {splitName(employee.name).map((part, idx) => (
                           <span key={idx} className="block whitespace-nowrap">{part}</span>
                         ))}
@@ -347,7 +357,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                         {type === 'material' ? t('costsMaterial') : t('costsExpenses')}
                       </th>
                       {summaryMatrix.employees.map((employee) => (
-                        <td key={employee.id} className={numCell}>{chf(costOf(type, employee.id))}</td>
+                        <td key={employee.id} {...employeeCol(employee.id, numCell)}>{chf(costOf(type, employee.id))}</td>
                       ))}
                       {showTotalColumn && (
                         <td className={`${numCell} font-medium text-zinc-900 dark:text-zinc-100`}>{chf(costOf(type))}</td>
@@ -359,7 +369,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
                   <tr className="border-t-2 border-zinc-200 dark:border-zinc-600 font-semibold text-zinc-900 dark:text-zinc-50">
                     <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left`}>{t('totalLabel')}</th>
                     {summaryMatrix.employees.map((employee) => (
-                      <td key={employee.id} className={numCell}>
+                      <td key={employee.id} {...employeeCol(employee.id, numCell)}>
                         {chf(costOf('material', employee.id) + costOf('expense', employee.id))}
                       </td>
                     ))}

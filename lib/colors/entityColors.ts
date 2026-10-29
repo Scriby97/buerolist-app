@@ -94,3 +94,21 @@ export const ENTITY_BORDER_LEFT = 'border-l-[color:var(--entity-color-light)] da
 
 /** Rahmen rundum in Erkennungsfarbe (fuer Projekt-Karten). */
 export const ENTITY_BORDER = 'border-[color:var(--entity-color-light)] dark:border-[color:var(--entity-color-dark)]'
+
+/**
+ * Farben fuer die Mitarbeiter-Spalten einer Projekt-Auswertung. Vergeben in
+ * alphabetischer Reihenfolge (nicht nach Stunden), damit eine Person ihre
+ * Farbe behaelt, auch wenn sich die Rangfolge der Stunden aendert - und in
+ * Zeit-Zusammenfassung und Zeitaufstellung dieselbe hat.
+ */
+export function employeeColors(employees: readonly { id: string; name: string }[]): Map<string, EntityColor> {
+  const sorted = [...employees].sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id))
+  return new Map(sorted.map((employee, index) => [employee.id, color(index + 1, 0)]))
+}
+
+/** Dezent eingefaerbter Hintergrund (fuer Tabellenspalten). */
+export const ENTITY_TINT =
+  'bg-[color-mix(in_oklch,var(--entity-color-light)_14%,transparent)] dark:bg-[color-mix(in_oklch,var(--entity-color-dark)_22%,transparent)]'
+
+/** Oberer Rand in Erkennungsfarbe (fuer Spaltenkoepfe). */
+export const ENTITY_BORDER_TOP = 'border-t-[color:var(--entity-color-light)] dark:border-t-[color:var(--entity-color-dark)]'
