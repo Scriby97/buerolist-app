@@ -27,7 +27,8 @@ export interface Note {
 export async function createNote(data: {
   customerId?: string
   projectId?: string
-  text: string
+  /** Optional - eine Notiz kann auch nur aus Fotos bestehen */
+  text?: string
 }): Promise<Note> {
   const res = await authenticatedFetch(buildApiUrl('/notes'), {
     method: 'POST',

@@ -252,7 +252,7 @@
   },
   "notesSection": {
     "title": "Notizen",
-    "placeholder": "Notiz hinzufügen...",
+    "placeholder": "Notiz oder Fotos hinzufügen...",
     "submitting": "Wird gespeichert...",
     "submitButton": "Notiz hinzufügen",
     "createError": "Fehler beim Speichern der Notiz",
@@ -271,7 +271,10 @@
     "previousPhoto": "Vorheriges Foto",
     "nextPhoto": "Nächstes Foto",
     "photosFailed": "{failed} von {total} Fotos konnten nicht hochgeladen werden.",
-    "addPhotos": "Fotos hinzufügen"
+    "addPhotos": "Fotos hinzufügen",
+    "newNotePhotos": "Fotos",
+    "newNotePhotosLabel": "Fotos zur neuen Notiz hinzufügen",
+    "removePhoto": "Foto entfernen"
   },
   "categoryPicker": {
     "empty": "Noch keine Kategorien angelegt (Einstellungen → Kategorien).",

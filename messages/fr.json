@@ -252,7 +252,7 @@
   },
   "notesSection": {
     "title": "Notes",
-    "placeholder": "Ajouter une note...",
+    "placeholder": "Ajouter une note ou des photos...",
     "submitting": "Enregistrement...",
     "submitButton": "Ajouter la note",
     "createError": "Erreur lors de l'enregistrement de la note",
@@ -271,7 +271,10 @@
     "previousPhoto": "Photo précédente",
     "nextPhoto": "Photo suivante",
     "photosFailed": "{failed} photo(s) sur {total} n’ont pas pu être téléversées.",
-    "addPhotos": "Ajouter des photos"
+    "addPhotos": "Ajouter des photos",
+    "newNotePhotos": "Photos",
+    "newNotePhotosLabel": "Ajouter des photos à la nouvelle note",
+    "removePhoto": "Retirer la photo"
   },
   "categoryPicker": {
     "empty": "Aucune catégorie (Paramètres → Catégories).",

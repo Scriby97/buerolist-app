@@ -252,7 +252,7 @@
   },
   "notesSection": {
     "title": "Notes",
-    "placeholder": "Add a note...",
+    "placeholder": "Add a note or photos...",
     "submitting": "Saving...",
     "submitButton": "Add note",
     "createError": "Error saving the note",
@@ -271,7 +271,10 @@
     "previousPhoto": "Previous photo",
     "nextPhoto": "Next photo",
     "photosFailed": "{failed} of {total} photos could not be uploaded.",
-    "addPhotos": "Add photos"
+    "addPhotos": "Add photos",
+    "newNotePhotos": "Photos",
+    "newNotePhotosLabel": "Add photos to the new note",
+    "removePhoto": "Remove photo"
   },
   "categoryPicker": {
     "empty": "No categories yet (Settings → Categories).",

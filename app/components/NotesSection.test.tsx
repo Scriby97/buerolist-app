@@ -7,6 +7,7 @@ import { NotesSection } from './NotesSection'
 import type { Note } from '@/lib/api/notes'
 
 const addNotePhoto = vi.fn()
+const createNote = vi.fn()
 const resizePhoto = vi.fn()
 
 vi.mock('@/lib/auth/AuthProvider', () => ({ useAuth: () => ({ isAdmin: false, userProfile: { id: 'me' } }) }))
@@ -14,7 +15,7 @@ vi.mock('@/lib/contexts/OrganizationContext', () => ({
   useOrganization: () => ({ canManageSelectedOrganization: true }),
 }))
 vi.mock('@/lib/api/notes', () => ({
-  createNote: vi.fn(),
+  createNote: (...args: unknown[]) => createNote(...args),
   deleteNote: vi.fn(),
   deleteNotePhoto: vi.fn(),
   addNotePhoto: (...args: unknown[]) => addNotePhoto(...args),
@@ -72,5 +73,23 @@ describe('NotesSection - Fotos', () => {
     })
     expect(await screen.findByText(/1 von 3 Fotos konnten nicht hochgeladen werden/)).toBeTruthy()
     expect(screen.getByTestId('count').textContent).toBe('2')
+  })
+
+  it('legt eine neue Notiz nur mit Fotos an', async () => {
+    createNote.mockResolvedValue({ ...note, id: 'n2', text: '', photos: [] })
+    globalThis.URL.createObjectURL = vi.fn(() => 'blob:preview')
+    globalThis.URL.revokeObjectURL = vi.fn()
+    renderWithIntl(<Harness />)
+    const submit = screen.getByRole('button', { name: 'Notiz hinzufügen' }) as HTMLButtonElement
+    expect(submit.disabled).toBe(true)
+    fireEvent.change(screen.getByLabelText('Fotos zur neuen Notiz hinzufügen'), {
+      target: { files: [file('a.jpg'), file('b.jpg')] },
+    })
+    expect(submit.disabled).toBe(false)
+    fireEvent.click(submit)
+
+    await waitFor(() => expect(addNotePhoto).toHaveBeenCalledTimes(2))
+    expect(createNote).toHaveBeenCalledWith({ customerId: undefined, projectId: 'p1', text: '' })
+    expect(addNotePhoto.mock.calls.every((call) => call[0] === 'n2')).toBe(true)
   })
 })

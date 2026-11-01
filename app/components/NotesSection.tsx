@@ -33,6 +33,15 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
   const getApiErrorMessage = useApiErrorMessage();
 
   const [text, setText] = useState('');
+  // Fotos, die mit der neuen Notiz gespeichert werden (Vorschau per Object-URL)
+  const [pendingPhotos, setPendingPhotos] = useState<{ file: File; url: string }[]>([]);
+  useEffect(
+    () => () => pendingPhotos.forEach((p) => URL.revokeObjectURL(p.url)),
+    // Nur beim Entfernen der Komponente aufraeumen - einzelne Vorschauen werden
+    // beim Entfernen bzw. Speichern direkt freigegeben.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadingNoteId, setUploadingNoteId] = useState<string | null>(null);
@@ -52,19 +61,40 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
   const canDelete = (note: Note) =>
     isAdmin || canManageSelectedOrganization || note.authorId === userProfile?.id;
 
+  const removePendingPhoto = (url: string) => {
+    URL.revokeObjectURL(url);
+    setPendingPhotos((prev) => prev.filter((p) => p.url !== url));
+  };
+
+  // Neue Notiz mit Text und/oder Fotos: erst die Notiz anlegen, dann die
+  // Fotos daran hochladen.
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() && pendingPhotos.length === 0) return;
     setSubmitting(true);
     setError(null);
+    const photos = pendingPhotos;
+    let noteId: string;
     try {
       const note = await createNote({ customerId, projectId, text: text.trim() });
-      onChanged([{ ...note, photos: note.photos ?? [] }, ...notes]);
+      const updated = [{ ...note, photos: note.photos ?? [] }, ...notesRef.current];
+      notesRef.current = updated;
+      onChanged(updated);
+      noteId = note.id;
       setText('');
+      setPendingPhotos([]);
     } catch (err) {
       setError(getApiErrorMessage(err, t('createError')));
-    } finally {
       setSubmitting(false);
+      return;
+    }
+    setSubmitting(false);
+    if (photos.length > 0) {
+      await handlePhotosPicked(
+        noteId,
+        photos.map((p) => p.file),
+      );
+      photos.forEach((p) => URL.revokeObjectURL(p.url));
     }
   };
 
@@ -134,13 +164,56 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
           rows={2}
           className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-50 focus:border-blue-500 focus:ring-blue-500"
         />
-        <button
-          type="submit"
-          disabled={submitting || !text.trim()}
-          className="px-4 py-1.5 text-sm font-medium rounded-lg bg-brown-600 hover:bg-brown-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {submitting ? t('submitting') : t('submitButton')}
-        </button>
+        {pendingPhotos.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {pendingPhotos.map((photo) => (
+              <div key={photo.url} className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photo.url} alt="" className="h-16 w-16 rounded-lg object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removePendingPhoto(photo.url)}
+                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-white shadow"
+                  aria-label={t('removePhoto')}
+                  title={t('removePhoto')}
+                >
+                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="submit"
+            disabled={submitting || (!text.trim() && pendingPhotos.length === 0)}
+            className="px-4 py-1.5 text-sm font-medium rounded-lg bg-brown-600 hover:bg-brown-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {submitting ? t('submitting') : t('submitButton')}
+          </button>
+          <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-zinc-300 dark:border-zinc-600 px-3 py-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+            {t('newNotePhotos')}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              aria-label={t('newNotePhotosLabel')}
+              className="hidden"
+              disabled={submitting}
+              onChange={(e) => {
+                const files = Array.from(e.target.files ?? []);
+                e.target.value = '';
+                setPendingPhotos((prev) => [...prev, ...files.map((file) => ({ file, url: URL.createObjectURL(file) }))]);
+              }}
+            />
+          </label>
+        </div>
       </form>
 
       {error && (
@@ -156,7 +229,11 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
           {notes.map((note) => (
             <div key={note.id} className="rounded-lg border border-zinc-200 dark:border-zinc-700 p-4">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-sm text-zinc-900 dark:text-zinc-50 whitespace-pre-wrap">{note.text}</p>
+                {note.text ? (
+                  <p className="text-sm text-zinc-900 dark:text-zinc-50 whitespace-pre-wrap">{note.text}</p>
+                ) : (
+                  <span />
+                )}
                 {canDelete(note) && (
                   <button
                     onClick={() => setConfirmDeleteNoteId(note.id)}
