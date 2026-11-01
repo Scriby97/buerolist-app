@@ -4,6 +4,7 @@ import { screen } from '@testing-library/react'
 import { renderWithIntl } from '@/test/renderWithIntl'
 import { EmployeeReport, type EmployeeReportOptions } from './EmployeeReport'
 import type { TimeEntry } from '@/lib/api/timeEntries'
+import type { Absence } from '@/lib/api/absences'
 
 const entries = [
   {
@@ -18,7 +19,17 @@ const entries = [
   },
 ] as unknown as TimeEntry[]
 
-const all: EmployeeReportOptions = { category: true, comment: true, items: true, dayTotals: true, projectSummary: true }
+const all: EmployeeReportOptions = {
+  category: true,
+  comment: true,
+  items: true,
+  dayTotals: true,
+  projectSummary: true,
+  absences: true,
+}
+
+const absence = (id: string, date: string, minutes: number, reason: string) =>
+  ({ id, date, minutes, comment: null, reason: { id: reason, name: reason } }) as unknown as Absence
 
 describe('EmployeeReport', () => {
   it('zeigt Eintraege als Liste mit allen gewaehlten Inhalten und Totalen', () => {
@@ -41,12 +52,34 @@ describe('EmployeeReport', () => {
         organizationName="3xGermann"
         employeeName="Anna Muster"
         periodLabel="Oktober 2026"
-        options={{ category: false, comment: false, items: false, dayTotals: false, projectSummary: false }}
+        options={{ category: false, comment: false, items: false, dayTotals: false, projectSummary: false, absences: false }}
       />,
     )
     expect(screen.queryByText('Gerüstbau')).toBeNull()
     expect(screen.queryByText('Gerüst gestellt')).toBeNull()
     expect(screen.queryByText(/Kitt/)).toBeNull()
     expect(screen.queryByText('Zusammenfassung pro Projekt')).toBeNull()
+  })
+
+  it('weist Abwesenheiten getrennt aus, mit Summe pro Grund', () => {
+    renderWithIntl(
+      <EmployeeReport
+        entries={entries}
+        absences={[
+          absence('x', '2026-10-14', 525, 'Krankheit'),
+          absence('y', '2026-10-15', 525, 'Krankheit'),
+          absence('z', '2026-10-16', 150, 'Feuerwehr'),
+        ]}
+        organizationName="3xGermann"
+        employeeName="Anna Muster"
+        periodLabel="Oktober 2026"
+        options={all}
+      />,
+    )
+    expect(screen.getByRole('heading', { name: 'Abwesenheiten' })).toBeTruthy()
+    expect(screen.getByText('Total Arbeitszeit').nextSibling?.textContent).toBe('5:00')
+    expect(screen.getAllByText('Krankheit').at(-1)!.nextSibling?.textContent).toBe('17:30')
+    expect(screen.getAllByText('Feuerwehr').at(-1)!.nextSibling?.textContent).toBe('2:30')
+    expect(screen.getByText('Total inkl. Abwesenheiten').nextSibling?.textContent).toBe('25:00')
   })
 })

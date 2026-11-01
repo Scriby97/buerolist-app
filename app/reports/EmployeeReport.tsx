@@ -4,6 +4,7 @@ import { Fragment, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import type { TimeEntry } from '@/lib/api/timeEntries';
+import type { Absence } from '@/lib/api/absences';
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { buildReportData, formatHm, formatTime, projectLabel } from '@/lib/reports/reportData';
 
@@ -13,10 +14,13 @@ export interface EmployeeReportOptions {
   items: boolean;
   dayTotals: boolean;
   projectSummary: boolean;
+  absences: boolean;
 }
 
 interface EmployeeReportProps {
   entries: TimeEntry[];
+  /** Abwesenheiten im Zeitraum (Krankheit, Militär, ...) - getrennt von der Arbeitszeit */
+  absences?: Absence[];
   organizationName: string;
   employeeName: string;
   periodLabel: string;
@@ -35,6 +39,7 @@ const td = 'px-2 py-1 align-top';
  */
 export const EmployeeReport: FC<EmployeeReportProps> = ({
   entries,
+  absences: allAbsences = [],
   organizationName,
   employeeName,
   periodLabel,
@@ -45,6 +50,17 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
   const tItems = useTranslations('entryItems');
   const dateLocale = useDateLocale();
   const data = buildReportData(entries);
+  const absences = options.absences ? [...allAbsences].sort((a, b) => a.date.localeCompare(b.date)) : [];
+  const absenceMinutes = absences.reduce((sum, a) => sum + a.minutes, 0);
+  // Summe pro Grund, in der Reihenfolge des ersten Auftretens
+  const absenceByReason = [...absences.reduce((map, a) => {
+    map.set(a.reason.name, (map.get(a.reason.name) ?? 0) + a.minutes);
+    return map;
+  }, new Map<string, number>())];
+  const absenceDate = (date: string) => {
+    const [y, m, d] = date.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
   const columnCount = 4 + (options.category ? 1 : 0) + (options.comment ? 1 : 0);
 
   return (
@@ -63,71 +79,111 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
         </p>
       </header>
 
-      {entries.length === 0 ? (
+      {entries.length === 0 && absences.length === 0 ? (
         <p className="text-sm text-zinc-600">{t('noEntries')}</p>
       ) : (
         <>
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr>
-                <th className={th}>{t('colDate')}</th>
-                <th className={th}>{t('colTime')}</th>
-                <th className={`${th} text-right`}>{t('colHours')}</th>
-                <th className={th}>{t('colProject')}</th>
-                {options.category && <th className={th}>{t('colCategory')}</th>}
-                {options.comment && <th className={th}>{t('colComment')}</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {data.days.map((day) => (
-                <Fragment key={day.key}>
-                  {day.entries.map((entry, index) => (
-                    <Fragment key={entry.id}>
-                      <tr className="break-inside-avoid border-t border-zinc-200">
-                        <td className={`${td} whitespace-nowrap`}>
-                          {index === 0 &&
-                            day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
-                        </td>
-                        <td className={`${td} whitespace-nowrap tabular-nums`}>
-                          {formatTime(entry.startAt)}–{formatTime(entry.endAt)}
-                        </td>
-                        <td className={`${td} text-right tabular-nums`}>{formatHm(Math.round((new Date(entry.endAt).getTime() - new Date(entry.startAt).getTime()) / 60000))}</td>
-                        <td className={td}>{projectLabel(entry)}</td>
-                        {options.category && <td className={td}>{entry.category?.name ?? '–'}</td>}
-                        {options.comment && <td className={`${td} whitespace-pre-wrap`}>{entry.comment ?? ''}</td>}
+          {entries.length > 0 && (
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr>
+                  <th className={th}>{t('colDate')}</th>
+                  <th className={th}>{t('colTime')}</th>
+                  <th className={`${th} text-right`}>{t('colHours')}</th>
+                  <th className={th}>{t('colProject')}</th>
+                  {options.category && <th className={th}>{t('colCategory')}</th>}
+                  {options.comment && <th className={th}>{t('colComment')}</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {data.days.map((day) => (
+                  <Fragment key={day.key}>
+                    {day.entries.map((entry, index) => (
+                      <Fragment key={entry.id}>
+                        <tr className="break-inside-avoid border-t border-zinc-200">
+                          <td className={`${td} whitespace-nowrap`}>
+                            {index === 0 &&
+                              day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
+                          </td>
+                          <td className={`${td} whitespace-nowrap tabular-nums`}>
+                            {formatTime(entry.startAt)}–{formatTime(entry.endAt)}
+                          </td>
+                          <td className={`${td} text-right tabular-nums`}>{formatHm(Math.round((new Date(entry.endAt).getTime() - new Date(entry.startAt).getTime()) / 60000))}</td>
+                          <td className={td}>{projectLabel(entry)}</td>
+                          {options.category && <td className={td}>{entry.category?.name ?? '–'}</td>}
+                          {options.comment && <td className={`${td} whitespace-pre-wrap`}>{entry.comment ?? ''}</td>}
+                        </tr>
+                        {options.items &&
+                          (entry.items ?? []).map((item) => (
+                            <tr key={item.id} className="text-xs text-zinc-600">
+                              <td className={td} />
+                              <td className={td} colSpan={columnCount - 1}>
+                                {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}:{' '}
+                                {formatQuantity(item.quantity)}× {item.description}
+                                {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}
+                              </td>
+                            </tr>
+                          ))}
+                      </Fragment>
+                    ))}
+                    {options.dayTotals && (
+                      <tr className="text-xs font-semibold text-zinc-700">
+                        <td className={td} />
+                        <td className={`${td} text-right`}>{t('dayTotal')}</td>
+                        <td className={`${td} text-right tabular-nums`}>{formatHm(day.minutes)}</td>
+                        <td className={td} colSpan={columnCount - 3} />
                       </tr>
-                      {options.items &&
-                        (entry.items ?? []).map((item) => (
-                          <tr key={item.id} className="text-xs text-zinc-600">
-                            <td className={td} />
-                            <td className={td} colSpan={columnCount - 1}>
-                              {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}:{' '}
-                              {formatQuantity(item.quantity)}× {item.description}
-                              {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}
-                            </td>
-                          </tr>
-                        ))}
-                    </Fragment>
-                  ))}
-                  {options.dayTotals && (
-                    <tr className="text-xs font-semibold text-zinc-700">
-                      <td className={td} />
-                      <td className={`${td} text-right`}>{t('dayTotal')}</td>
-                      <td className={`${td} text-right tabular-nums`}>{formatHm(day.minutes)}</td>
-                      <td className={td} colSpan={columnCount - 3} />
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {absences.length > 0 && (
+            <section className="mt-6 break-inside-avoid">
+              <h2 className="mb-1 text-sm font-semibold">{t('absencesTitle')}</h2>
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr>
+                    <th className={th}>{t('colDate')}</th>
+                    <th className={th}>{t('colReason')}</th>
+                    <th className={`${th} text-right`}>{t('colHours')}</th>
+                    {options.comment && <th className={th}>{t('colComment')}</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {absences.map((absence) => (
+                    <tr key={absence.id} className="break-inside-avoid border-t border-zinc-200">
+                      <td className={`${td} whitespace-nowrap`}>{absenceDate(absence.date)}</td>
+                      <td className={td}>{absence.reason.name}</td>
+                      <td className={`${td} text-right tabular-nums`}>{formatHm(absence.minutes)}</td>
+                      {options.comment && <td className={`${td} whitespace-pre-wrap`}>{absence.comment ?? ''}</td>}
                     </tr>
-                  )}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           <table className="mt-4 ml-auto text-sm">
             <tbody>
               <tr className="border-t-2 border-zinc-900 font-bold">
-                <td className="px-2 py-1">{t('totalHours')}</td>
+                <td className="px-2 py-1">{absences.length > 0 ? t('totalWorkHours') : t('totalHours')}</td>
                 <td className="px-2 py-1 text-right tabular-nums">{formatHm(data.totalMinutes)}</td>
               </tr>
+              {absenceByReason.map(([reason, minutes]) => (
+                <tr key={reason}>
+                  <td className="px-2 py-0.5">{reason}</td>
+                  <td className="px-2 py-0.5 text-right tabular-nums">{formatHm(minutes)}</td>
+                </tr>
+              ))}
+              {absences.length > 0 && (
+                <tr className="border-t border-zinc-400 font-bold">
+                  <td className="px-2 py-1">{t('totalInclAbsences')}</td>
+                  <td className="px-2 py-1 text-right tabular-nums">{formatHm(data.totalMinutes + absenceMinutes)}</td>
+                </tr>
+              )}
               {options.items && data.materialRappen > 0 && (
                 <tr>
                   <td className="px-2 py-0.5">{tItems('materialTitle')}</td>
@@ -143,7 +199,7 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
             </tbody>
           </table>
 
-          {options.projectSummary && (
+          {options.projectSummary && data.projects.length > 0 && (
             <section className="mt-6 break-inside-avoid">
               <h2 className="mb-1 text-sm font-semibold">{t('projectSummaryTitle')}</h2>
               <table className="w-full border-collapse text-sm">

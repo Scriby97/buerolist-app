@@ -13,6 +13,7 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
 import { getOrganizationMembers } from '@/lib/api/organizationMembers'
 import { getProjectDetail, getProjects, type Project, type ProjectDetail } from '@/lib/api/projects'
 import { getTimeEntries, type TimeEntry } from '@/lib/api/timeEntries'
+import { getAbsences, type Absence } from '@/lib/api/absences'
 import { getCustomerDetail } from '@/lib/api/customers'
 import type { Note } from '@/lib/api/notes'
 import type { OrganizationMemberDetail } from '@/lib/types/user'
@@ -57,6 +58,7 @@ function ReportsPageContent() {
     items: true,
     dayTotals: true,
     projectSummary: true,
+    absences: true,
   })
   const [projectOptions, setProjectOptions] = useState<ProjectReportOptions>({
     summary: true,
@@ -72,6 +74,8 @@ function ReportsPageContent() {
   const [result, setResult] = useState<{
     key: string
     entries: TimeEntry[]
+    /** Mitarbeiter-Rapport ohne Projektfilter: Abwesenheiten im Zeitraum */
+    absences?: Absence[]
     detail?: ProjectDetail
     customerNotes?: Note[]
   } | null>(null)
@@ -129,8 +133,12 @@ function ReportsPageContent() {
     try {
       const range = period ? rangeToIso(period.from, period.to) : {}
       if (reportType === 'employee') {
-        const page = await getTimeEntries(selectedOrgId, { creatorId, ...range, projectId: projectId || undefined })
-        setResult({ key: selectionKey, entries: page.timeEntries })
+        // Abwesenheiten gehoeren zu keinem Projekt - nur ohne Projektfilter
+        const [page, absences] = await Promise.all([
+          getTimeEntries(selectedOrgId, { creatorId, ...range, projectId: projectId || undefined }),
+          projectId || !period ? [] : getAbsences(selectedOrgId, { creatorId, from: period.from, to: period.to }),
+        ])
+        setResult({ key: selectionKey, entries: page.timeEntries, absences })
       } else {
         const customerId = projects.find((p) => p.id === projectId)?.customerId
         const [detail, page, customer] = await Promise.all([
@@ -152,7 +160,7 @@ function ReportsPageContent() {
     return null
   }
 
-  const optionKeys: (keyof EmployeeReportOptions)[] = ['category', 'comment', 'items', 'dayTotals', 'projectSummary']
+  const optionKeys: (keyof EmployeeReportOptions)[] = ['category', 'comment', 'items', 'dayTotals', 'projectSummary', 'absences']
   const projectOptionKeys: (keyof ProjectReportOptions)[] = ['summary', 'chart', 'costs', 'entries', 'comments', 'notes', 'photos']
   const projectComboboxOptions = projects.map((p) => ({
     id: p.id,
@@ -370,6 +378,7 @@ function ReportsPageContent() {
         {entries && !current?.detail && (
           <EmployeeReport
             entries={entries}
+            absences={current?.absences ?? []}
             organizationName={organizationName}
             employeeName={member ? memberName(member) : ''}
             periodLabel={periodLabel}

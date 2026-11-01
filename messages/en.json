@@ -357,7 +357,12 @@
     "projectOption_comments": "Comments",
     "projectOption_notes": "Notes",
     "projectOption_photos": "Photos",
-    "customerNote": "Customer note"
+    "customerNote": "Customer note",
+    "option_absences": "Absences",
+    "absencesTitle": "Absences",
+    "colReason": "Reason",
+    "totalWorkHours": "Total working time",
+    "totalInclAbsences": "Total incl. absences"
   },
   "settingsCategories": {
     "title": "Categories",
@@ -455,7 +460,9 @@
     "workScheduleTitle": "Working hours",
     "workScheduleDescription": "Your normal workday, e.g. 07:15–12:00 and 13:00–17:00.",
     "itemPresetsTitle": "Material & expenses",
-    "itemPresetsDescription": "Predefined items, e.g. lunch CHF 22.–, for quick selection when recording."
+    "itemPresetsDescription": "Predefined items, e.g. lunch CHF 22.–, for quick selection when recording.",
+    "absenceReasonsTitle": "Absences",
+    "absenceReasonsDescription": "Reasons for absences, e.g. illness, accident, military/civil protection, fire brigade."
   },
   "impressum": {
     "title": "Legal Notice",
@@ -945,7 +952,11 @@
     "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login.",
     "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order.",
     "ITEM_PRESET_NOT_FOUND": "The item was not found.",
-    "TIME_ENTRY_OVERLAP_FOR": "There is already an entry for {name} in this period – nothing was saved for anyone."
+    "TIME_ENTRY_OVERLAP_FOR": "There is already an entry for {name} in this period – nothing was saved for anyone.",
+    "ABSENCE_NOT_FOUND": "The absence was not found.",
+    "ABSENCE_REASON_NOT_FOUND": "The absence reason was not found.",
+    "ABSENCE_REASON_IN_USE": "This reason is still used by {count} absence(s) and cannot be deleted. You can rename it, though.",
+    "ABSENCE_INVALID_RANGE": "Invalid period: the end date must be after the start date, the period may span at most one year and must contain at least one working day."
   },
   "settingsOrganization": {
     "title": "Organization",
@@ -1040,5 +1051,52 @@
     "deleteError": "Failed to delete item",
     "confirmDeleteTitle": "Delete item",
     "confirmDeleteMessage": "Really delete \"{name}\"? Existing entries stay unchanged."
+  },
+  "absences": {
+    "modeLabel": "Type of entry",
+    "modeWork": "Working time",
+    "modeAbsence": "Absence",
+    "reasonLabel": "Reason",
+    "reasonsLoadError": "The absence reasons could not be loaded.",
+    "noReasons": "No absence reasons have been set up yet. Please contact your admin.",
+    "noReasonsManager": "No absence reasons have been set up yet – add them under Settings → Absences.",
+    "fromLabel": "From",
+    "toLabel": "To",
+    "dateLabel": "Date",
+    "rangeHint": "One entry is created for every working day in the period (without Saturday and Sunday).",
+    "rangeInvalid": "The end date is before the start date.",
+    "portionLabel": "Extent",
+    "portionFull": "Full day",
+    "portionHalf": "Half day",
+    "portionHours": "Hours",
+    "portionHint": "Based on your working hours: {hours} h per day.",
+    "portionHintOthers": "Based on the working hours of each person.",
+    "hoursLabel": "Hours",
+    "hoursPlaceholder": "e.g. 2.5",
+    "hoursInvalid": "Please enter the hours as a decimal number, e.g. 2.5.",
+    "commentLabel": "Comment (optional)",
+    "submitButton": "Save absence",
+    "submitting": "Saving...",
+    "saveSuccess": "Absence saved",
+    "saveSuccessMultiple": "{count} absences saved",
+    "saveError": "The absence could not be saved.",
+    "cardTitle": "Absence: {reason}",
+    "durationLabel": "Duration:",
+    "editTitle": "Edit absence",
+    "confirmDeleteTitle": "Delete absence",
+    "confirmDeleteMessage": "Do you really want to delete the absence “{reason}”?"
+  },
+  "absenceReasons": {
+    "title": "Absences",
+    "subtitle": "Reasons to choose from when recording an absence, e.g. illness or military/civil protection.",
+    "empty": "No reasons yet.",
+    "nameLabel": "Reason",
+    "newPlaceholder": "New reason, e.g. holidays",
+    "addButton": "Add",
+    "loadError": "The absence reasons could not be loaded.",
+    "saveError": "The reason could not be saved.",
+    "deleteError": "The reason could not be deleted.",
+    "confirmDeleteTitle": "Delete reason",
+    "confirmDeleteMessage": "Do you really want to delete “{name}”? This is only possible as long as no absence uses this reason."
   }
 }

@@ -209,6 +209,23 @@ export default function SettingsPage() {
               </Link>
             )}
 
+            {isOrganizationManager && (
+              <Link
+                href="/settings/absence-reasons"
+                className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-600"
+              >
+                <SettingsIcon>
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <path d="M16 2v4M8 2v4M3 10h18" />
+                  <path d="M10 14l4 4M14 14l-4 4" />
+                </SettingsIcon>
+                <div className="mt-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('absenceReasonsTitle')}</div>
+                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  {t('absenceReasonsDescription')}
+                </p>
+              </Link>
+            )}
+
 
             {isOrganizationManager && (
               <Link

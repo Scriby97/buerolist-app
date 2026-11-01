@@ -357,7 +357,12 @@
     "projectOption_comments": "Bemerkungen",
     "projectOption_notes": "Notizen",
     "projectOption_photos": "Fotos",
-    "customerNote": "Notiz zum Kunden"
+    "customerNote": "Notiz zum Kunden",
+    "option_absences": "Abwesenheiten",
+    "absencesTitle": "Abwesenheiten",
+    "colReason": "Grund",
+    "totalWorkHours": "Total Arbeitszeit",
+    "totalInclAbsences": "Total inkl. Abwesenheiten"
   },
   "settingsCategories": {
     "title": "Kategorien",
@@ -455,7 +460,9 @@
     "workScheduleTitle": "Arbeitszeiten",
     "workScheduleDescription": "Dein normaler Arbeitstag, z.B. 07:15–12:00 und 13:00–17:00.",
     "itemPresetsTitle": "Material & Spesen",
-    "itemPresetsDescription": "Vordefinierte Positionen, z.B. Mittagessen CHF 22.–, zur schnellen Auswahl beim Erfassen."
+    "itemPresetsDescription": "Vordefinierte Positionen, z.B. Mittagessen CHF 22.–, zur schnellen Auswahl beim Erfassen.",
+    "absenceReasonsTitle": "Abwesenheiten",
+    "absenceReasonsDescription": "Gründe für Abwesenheiten, z.B. Krankheit, Unfall, Militär/Zivilschutz, Feuerwehr."
   },
   "impressum": {
     "title": "Impressum",
@@ -945,7 +952,11 @@
     "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich.",
     "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein.",
     "ITEM_PRESET_NOT_FOUND": "Die Position wurde nicht gefunden.",
-    "TIME_ENTRY_OVERLAP_FOR": "Für {name} ist in diesem Zeitraum bereits ein Eintrag erfasst – es wurde für niemanden gespeichert."
+    "TIME_ENTRY_OVERLAP_FOR": "Für {name} ist in diesem Zeitraum bereits ein Eintrag erfasst – es wurde für niemanden gespeichert.",
+    "ABSENCE_NOT_FOUND": "Die Abwesenheit wurde nicht gefunden.",
+    "ABSENCE_REASON_NOT_FOUND": "Der Abwesenheitsgrund wurde nicht gefunden.",
+    "ABSENCE_REASON_IN_USE": "Dieser Grund wird noch von {count} Abwesenheit(en) verwendet und kann nicht gelöscht werden. Du kannst ihn aber umbenennen.",
+    "ABSENCE_INVALID_RANGE": "Ungültiger Zeitraum: Das Enddatum muss nach dem Startdatum liegen, der Zeitraum höchstens ein Jahr umfassen und mindestens einen Arbeitstag enthalten."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -1040,5 +1051,52 @@
     "deleteError": "Fehler beim Löschen der Position",
     "confirmDeleteTitle": "Position löschen",
     "confirmDeleteMessage": "„{name}“ wirklich löschen? Bereits erfasste Einträge bleiben unverändert."
+  },
+  "absences": {
+    "modeLabel": "Art der Erfassung",
+    "modeWork": "Arbeitszeit",
+    "modeAbsence": "Abwesenheit",
+    "reasonLabel": "Grund",
+    "reasonsLoadError": "Die Abwesenheitsgründe konnten nicht geladen werden.",
+    "noReasons": "Es sind noch keine Abwesenheitsgründe erfasst. Bitte wende dich an deinen Admin.",
+    "noReasonsManager": "Es sind noch keine Abwesenheitsgründe erfasst – lege sie unter Einstellungen → Abwesenheiten an.",
+    "fromLabel": "Von",
+    "toLabel": "Bis",
+    "dateLabel": "Datum",
+    "rangeHint": "Für jeden Arbeitstag im Zeitraum wird ein Eintrag erstellt (ohne Samstag und Sonntag).",
+    "rangeInvalid": "Das Enddatum liegt vor dem Startdatum.",
+    "portionLabel": "Umfang",
+    "portionFull": "Ganzer Tag",
+    "portionHalf": "Halber Tag",
+    "portionHours": "Stunden",
+    "portionHint": "Gemäss deinen Arbeitszeiten: {hours} h pro Tag.",
+    "portionHintOthers": "Gemäss den Arbeitszeiten der jeweiligen Person.",
+    "hoursLabel": "Stunden",
+    "hoursPlaceholder": "z.B. 2.5",
+    "hoursInvalid": "Bitte Stunden als Dezimalzahl eingeben, z.B. 2.5.",
+    "commentLabel": "Bemerkung (optional)",
+    "submitButton": "Abwesenheit speichern",
+    "submitting": "Wird gespeichert...",
+    "saveSuccess": "Abwesenheit gespeichert",
+    "saveSuccessMultiple": "{count} Abwesenheiten gespeichert",
+    "saveError": "Die Abwesenheit konnte nicht gespeichert werden.",
+    "cardTitle": "Abwesenheit: {reason}",
+    "durationLabel": "Dauer:",
+    "editTitle": "Abwesenheit bearbeiten",
+    "confirmDeleteTitle": "Abwesenheit löschen",
+    "confirmDeleteMessage": "Möchtest du die Abwesenheit „{reason}“ wirklich löschen?"
+  },
+  "absenceReasons": {
+    "title": "Abwesenheiten",
+    "subtitle": "Gründe, die beim Erfassen einer Abwesenheit zur Auswahl stehen, z.B. Krankheit oder Militär/Zivilschutz.",
+    "empty": "Noch keine Gründe erfasst.",
+    "nameLabel": "Grund",
+    "newPlaceholder": "Neuer Grund, z.B. Ferien",
+    "addButton": "Hinzufügen",
+    "loadError": "Die Abwesenheitsgründe konnten nicht geladen werden.",
+    "saveError": "Der Grund konnte nicht gespeichert werden.",
+    "deleteError": "Der Grund konnte nicht gelöscht werden.",
+    "confirmDeleteTitle": "Grund löschen",
+    "confirmDeleteMessage": "Möchtest du „{name}“ wirklich löschen? Das geht nur, solange keine Abwesenheit diesen Grund verwendet."
   }
 }

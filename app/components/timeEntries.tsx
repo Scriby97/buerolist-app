@@ -28,6 +28,8 @@ import CalendarView from './CalendarView';
 import { formatDecimalHours, minutesToDecimalInput, parseDecimalHours } from '@/lib/format/hours';
 import { personName } from '@/lib/format/personName';
 import { getItemPresets, type ItemPreset } from '@/lib/api/itemPresets';
+import { deleteAbsence, getAbsences, type Absence } from '@/lib/api/absences';
+import { ABSENCE_COLOR, AbsenceEditDialog, AbsenceItem, absenceDay, dateKeyOf } from './AbsenceItem';
 
 // Listenansicht: so viele Eintraege pro Seite, weitere laden beim Scrollen nach.
 const PAGE_SIZE = 10;
@@ -76,6 +78,28 @@ export function groupByDay(entries: TimeEntry[]): DayGroup[] {
     group.entries.sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
   }
   return groups;
+}
+
+interface DayView extends DayGroup {
+  absences: Absence[];
+}
+
+// Abwesenheiten in die Tagesgruppen einsortieren (Tage nur mit Abwesenheit
+// kommen dazu); das Tagestotal enthaelt beides.
+function withAbsences(groups: DayGroup[], absences: Absence[]): DayView[] {
+  const byKey = new Map<string, DayView>(groups.map((g) => [g.key, { ...g, absences: [] }]));
+  for (const absence of absences) {
+    const date = absenceDay(absence);
+    const key = date.toDateString();
+    let group = byKey.get(key);
+    if (!group) {
+      group = { key, date, entries: [], totalMinutes: 0, absences: [] };
+      byKey.set(key, group);
+    }
+    group.absences.push(absence);
+    group.totalMinutes += absence.minutes;
+  }
+  return [...byKey.values()].sort((a, b) => b.date.getTime() - a.date.getTime());
 }
 
 function toDateInputValue(iso: string): string {
@@ -257,6 +281,7 @@ const MyEntries: FC = () => {
   const t = useTranslations('myEntries');
   const tItems = useTranslations('entryItems');
   const tCommon = useTranslations('common');
+  const tAbsences = useTranslations('absences');
   const getApiErrorMessage = useApiErrorMessage();
   // Admin/Owner: alles. Mitarbeiter: eigene Eintraege nur in der laufenden
   // Woche (aeltere sind gesperrt - siehe Backend assertCanModifyTimeEntry).
@@ -270,6 +295,14 @@ const MyEntries: FC = () => {
   const canEditEntry = (entry: TimeEntry) =>
     canManageSelectedOrganization ||
     (entry.creatorId === userProfile?.id && !entry.createdBy && isInCurrentWeek(entry.startAt));
+  const absenceLockedHint = (absence: Absence): string | null => {
+    if (canManageSelectedOrganization || absence.creatorId !== userProfile?.id) return null;
+    if (absence.createdBy) return t('lockedByManagerHint');
+    return absence.date >= currentWeekStartKey() ? null : t('lockedHint');
+  };
+  const canEditAbsence = (absence: Absence) =>
+    canManageSelectedOrganization ||
+    (absence.creatorId === userProfile?.id && !absence.createdBy && absence.date >= currentWeekStartKey());
   const { toasts, showToast, removeToast } = useToast();
 
   const [entries, setEntries] = useState<TimeEntry[]>([]);
@@ -336,6 +369,12 @@ const MyEntries: FC = () => {
   });
   // Kalenderansicht: laedt genau den sichtbaren Monat/die sichtbare Woche.
   const [calendarEntries, setCalendarEntries] = useState<TimeEntry[]>([]);
+  // Abwesenheiten: im Kalender fuer den sichtbaren Zeitraum, in der Liste
+  // fuer den Zeitraum der bereits geladenen Eintraege.
+  const [calendarAbsences, setCalendarAbsences] = useState<Absence[]>([]);
+  const [listAbsences, setListAbsences] = useState<Absence[]>([]);
+  const [editingAbsence, setEditingAbsence] = useState<Absence | null>(null);
+  const [confirmDeleteAbsence, setConfirmDeleteAbsence] = useState<Absence | null>(null);
   const [calendarRange, setCalendarRange] = useState<{ start: string; end: string } | null>(null);
   const handleVisibleRangeChange = useCallback(({ start, end }: { start: Date; end: Date }) => {
     setCalendarRange({ start: start.toISOString(), end: end.toISOString() });
@@ -343,17 +382,29 @@ const MyEntries: FC = () => {
     setSelectedDay((day) => (day && day >= start && day <= end ? day : null));
   }, []);
 
-  const dayGroups = useMemo(() => groupByDay(entries), [entries]);
+  const dayGroups = useMemo(() => withAbsences(groupByDay(entries), listAbsences), [entries, listAbsences]);
   const calendarEvents = useMemo(
-    () =>
-      calendarEntries.map((entry) => ({
+    () => [
+      ...calendarEntries.map((entry) => ({
         id: entry.id,
         title: `${entry.project.customerName} - ${entry.project.title}`,
         start: entry.startAt,
         end: entry.endAt,
         color: projectColor(entry.project.customerNumber, entry.project.number),
       })),
-    [calendarEntries],
+      // Abwesenheiten zaehlen im Tagestotal mit (neutrale Farbe)
+      ...calendarAbsences.map((absence) => {
+        const start = absenceDay(absence);
+        return {
+          id: `absence-${absence.id}`,
+          title: absence.reason.name,
+          start: start.toISOString(),
+          end: new Date(start.getTime() + absence.minutes * 60_000).toISOString(),
+          color: ABSENCE_COLOR,
+        };
+      }),
+    ],
+    [calendarEntries, calendarAbsences],
   );
 
   const [editingEntry, setEditingEntry] = useState<TimeEntry | null>(null);
@@ -448,6 +499,24 @@ const MyEntries: FC = () => {
       showToast(t('updateErrorToast'), 'error');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const applyAbsenceUpdate = (updated: Absence) => {
+    const apply = (prev: Absence[]) => prev.map((a) => (a.id === updated.id ? updated : a));
+    setCalendarAbsences(apply);
+    setListAbsences(apply);
+  };
+
+  const handleDeleteAbsence = async (absence: Absence) => {
+    try {
+      await deleteAbsence(absence.id);
+      const remove = (prev: Absence[]) => prev.filter((a) => a.id !== absence.id);
+      setCalendarAbsences(remove);
+      setListAbsences(remove);
+      showToast(t('deleteSuccess'), 'success');
+    } catch (err) {
+      showToast(getApiErrorMessage(err, t('deleteErrorToast')), 'error');
     }
   };
 
@@ -562,14 +631,28 @@ const MyEntries: FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const page = await getTimeEntries(selectedOrgId, {
-          startDate: calendarRange.start,
-          endDate: calendarRange.end,
-          creatorId,
-          signal: controller.signal,
-        });
+        const [page, absences] = await Promise.all([
+          getTimeEntries(selectedOrgId, {
+            startDate: calendarRange.start,
+            endDate: calendarRange.end,
+            creatorId,
+            signal: controller.signal,
+          }),
+          // Fehlende Abwesenheiten sollen die Zeiteintraege nicht verhindern
+          getAbsences(selectedOrgId, {
+            from: dateKeyOf(new Date(calendarRange.start)),
+            to: dateKeyOf(new Date(calendarRange.end)),
+            creatorId,
+            signal: controller.signal,
+          }).catch((err) => {
+            if (err instanceof Error && err.name === 'AbortError') throw err;
+            console.error('Fehler beim Laden der Abwesenheiten:', err);
+            return [] as Absence[];
+          }),
+        ]);
         if (cancelled) return;
         setCalendarEntries(page.timeEntries);
+        setCalendarAbsences(absences);
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') return;
         if (cancelled) return;
@@ -589,12 +672,50 @@ const MyEntries: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, selectedOrgId, calendarRange, creatorId]);
 
+  // Liste: Abwesenheiten ab dem aeltesten geladenen Tag (alle, wenn die
+  // Liste komplett geladen ist) - inkl. kuenftiger (z.B. Militaerdienst).
+  const oldestLoadedKey =
+    nextCursor && entries.length > 0 ? dateKeyOf(new Date(entries[entries.length - 1].startAt)) : undefined;
+  useEffect(() => {
+    if (view !== 'list' || !getApiBaseUrlOrNull() || !selectedOrgId) return;
+    const controller = new AbortController();
+    getAbsences(selectedOrgId, { from: oldestLoadedKey, creatorId, signal: controller.signal })
+      .then(setListAbsences)
+      .catch((err) => {
+        if (err instanceof Error && err.name === 'AbortError') return;
+        console.error('Fehler beim Laden der Abwesenheiten:', err);
+      });
+    return () => controller.abort();
+  }, [view, selectedOrgId, creatorId, oldestLoadedKey]);
+
   const selectedDayGroup = useMemo(() => {
     if (!selectedDay) return null;
     const key = selectedDay.toDateString();
     const dayEntries = calendarEntries.filter((entry) => new Date(entry.startAt).toDateString() === key);
-    return groupByDay(dayEntries)[0] ?? { key, date: selectedDay, entries: [], totalMinutes: 0 };
-  }, [selectedDay, calendarEntries]);
+    const dayAbsences = calendarAbsences.filter((absence) => absenceDay(absence).toDateString() === key);
+    return (
+      withAbsences(groupByDay(dayEntries), dayAbsences)[0] ?? {
+        key,
+        date: selectedDay,
+        entries: [],
+        totalMinutes: 0,
+        absences: [],
+      }
+    );
+  }, [selectedDay, calendarEntries, calendarAbsences]);
+
+  const absenceCards = (absences: Absence[]) =>
+    absences.map((absence) => (
+      <AbsenceItem
+        key={absence.id}
+        absence={absence}
+        canManage={canManageSelectedOrganization}
+        canEdit={canEditAbsence(absence)}
+        lockedHint={absenceLockedHint(absence)}
+        onEdit={setEditingAbsence}
+        onDelete={setConfirmDeleteAbsence}
+      />
+    ));
 
   return (
     <section className="space-y-4">
@@ -854,17 +975,18 @@ const MyEntries: FC = () => {
                 <h2 className="min-w-0 truncate text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                   {selectedDayGroup.date.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
                 </h2>
-                {selectedDayGroup.entries.length > 0 && (
+                {selectedDayGroup.totalMinutes > 0 && (
                   <span className="shrink-0 text-sm text-zinc-600 dark:text-zinc-400">
                     {t('dayTotal', { duration: `${formatDecimalHours(selectedDayGroup.totalMinutes)} h` })}
                   </span>
                 )}
               </div>
               <DayCostLine entries={selectedDayGroup.entries} />
-              {selectedDayGroup.entries.length === 0 ? (
+              {selectedDayGroup.entries.length === 0 && selectedDayGroup.absences.length === 0 ? (
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">{isLoading ? t('loadingEntriesEllipsis') : t('noEntriesOnDay')}</p>
               ) : (
                 <div className="grid grid-cols-1 gap-3">
+                  {absenceCards(selectedDayGroup.absences)}
                   {selectedDayGroup.entries.map((entry) => (
                     <EntryItem
                       key={entry.id}
@@ -888,7 +1010,7 @@ const MyEntries: FC = () => {
         <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 p-4 text-center">
           <p className="text-zinc-600 dark:text-zinc-400">{t('loadingEntriesEllipsis')}</p>
         </div>
-      ) : entries.length > 0 ? (
+      ) : dayGroups.length > 0 ? (
         <>
           <div className="grid grid-cols-1 gap-5">
             {dayGroups.map((group) => (
@@ -903,6 +1025,7 @@ const MyEntries: FC = () => {
                 </div>
                 <DayCostLine entries={group.entries} />
                 <div className="grid grid-cols-1 gap-3">
+                  {absenceCards(group.absences)}
                   {group.entries.map((entry) => (
                     <EntryItem
                       key={entry.id}
@@ -952,6 +1075,32 @@ const MyEntries: FC = () => {
           cancelLabel={tCommon('cancel')}
           onConfirm={() => { handleDelete(confirmDeleteId); setConfirmDeleteId(null); }}
           onCancel={() => setConfirmDeleteId(null)}
+        />
+      )}
+      {editingAbsence && (
+        <AbsenceEditDialog
+          key={editingAbsence.id}
+          absence={editingAbsence}
+          canManage={canManageSelectedOrganization}
+          onClose={() => setEditingAbsence(null)}
+          onSaved={(updated) => {
+            applyAbsenceUpdate(updated);
+            setEditingAbsence(null);
+            showToast(t('updateSuccess'), 'success');
+          }}
+        />
+      )}
+      {confirmDeleteAbsence && (
+        <ConfirmDialog
+          title={tAbsences('confirmDeleteTitle')}
+          message={tAbsences('confirmDeleteMessage', { reason: confirmDeleteAbsence.reason.name })}
+          confirmLabel={tCommon('delete')}
+          cancelLabel={tCommon('cancel')}
+          onConfirm={() => {
+            void handleDeleteAbsence(confirmDeleteAbsence);
+            setConfirmDeleteAbsence(null);
+          }}
+          onCancel={() => setConfirmDeleteAbsence(null)}
         />
       )}
     </section>

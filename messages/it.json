@@ -357,7 +357,12 @@
     "projectOption_comments": "Osservazioni",
     "projectOption_notes": "Note",
     "projectOption_photos": "Foto",
-    "customerNote": "Nota sul cliente"
+    "customerNote": "Nota sul cliente",
+    "option_absences": "Assenze",
+    "absencesTitle": "Assenze",
+    "colReason": "Motivo",
+    "totalWorkHours": "Totale tempo di lavoro",
+    "totalInclAbsences": "Totale incl. assenze"
   },
   "settingsCategories": {
     "title": "Categorie",
@@ -455,7 +460,9 @@
     "workScheduleTitle": "Orari di lavoro",
     "workScheduleDescription": "La tua giornata lavorativa normale, es. 07:15–12:00 e 13:00–17:00.",
     "itemPresetsTitle": "Materiale & spese",
-    "itemPresetsDescription": "Posizioni predefinite, es. pranzo CHF 22.–, da scegliere rapidamente durante la registrazione."
+    "itemPresetsDescription": "Posizioni predefinite, es. pranzo CHF 22.–, da scegliere rapidamente durante la registrazione.",
+    "absenceReasonsTitle": "Assenze",
+    "absenceReasonsDescription": "Motivi di assenza, es. malattia, infortunio, militare/protezione civile, pompieri."
   },
   "impressum": {
     "title": "Note legali",
@@ -945,7 +952,11 @@
     "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login.",
     "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti.",
     "ITEM_PRESET_NOT_FOUND": "La posizione non è stata trovata.",
-    "TIME_ENTRY_OVERLAP_FOR": "Per {name} esiste già una registrazione in questo periodo – non è stato salvato nulla."
+    "TIME_ENTRY_OVERLAP_FOR": "Per {name} esiste già una registrazione in questo periodo – non è stato salvato nulla.",
+    "ABSENCE_NOT_FOUND": "L’assenza non è stata trovata.",
+    "ABSENCE_REASON_NOT_FOUND": "Il motivo di assenza non è stato trovato.",
+    "ABSENCE_REASON_IN_USE": "Questo motivo è ancora usato da {count} assenza/e e non può essere eliminato. Puoi però rinominarlo.",
+    "ABSENCE_INVALID_RANGE": "Periodo non valido: la data di fine deve seguire quella di inizio, il periodo può durare al massimo un anno e deve contenere almeno un giorno lavorativo."
   },
   "settingsOrganization": {
     "title": "Organizzazione",
@@ -1040,5 +1051,52 @@
     "deleteError": "Errore nell'eliminazione della posizione",
     "confirmDeleteTitle": "Elimina posizione",
     "confirmDeleteMessage": "Eliminare davvero «{name}»? Le registrazioni esistenti restano invariate."
+  },
+  "absences": {
+    "modeLabel": "Tipo di registrazione",
+    "modeWork": "Tempo di lavoro",
+    "modeAbsence": "Assenza",
+    "reasonLabel": "Motivo",
+    "reasonsLoadError": "Non è stato possibile caricare i motivi di assenza.",
+    "noReasons": "Non sono ancora stati registrati motivi di assenza. Rivolgiti al tuo admin.",
+    "noReasonsManager": "Non sono ancora stati registrati motivi di assenza – aggiungili in Impostazioni → Assenze.",
+    "fromLabel": "Dal",
+    "toLabel": "Al",
+    "dateLabel": "Data",
+    "rangeHint": "Viene creata una registrazione per ogni giorno lavorativo del periodo (senza sabato e domenica).",
+    "rangeInvalid": "La data di fine è precedente alla data di inizio.",
+    "portionLabel": "Durata",
+    "portionFull": "Giorno intero",
+    "portionHalf": "Mezza giornata",
+    "portionHours": "Ore",
+    "portionHint": "Secondo i tuoi orari di lavoro: {hours} h al giorno.",
+    "portionHintOthers": "Secondo gli orari di lavoro di ogni persona.",
+    "hoursLabel": "Ore",
+    "hoursPlaceholder": "es. 2.5",
+    "hoursInvalid": "Inserisci le ore come numero decimale, es. 2.5.",
+    "commentLabel": "Osservazione (facoltativa)",
+    "submitButton": "Salva assenza",
+    "submitting": "Salvataggio...",
+    "saveSuccess": "Assenza salvata",
+    "saveSuccessMultiple": "{count} assenze salvate",
+    "saveError": "Non è stato possibile salvare l’assenza.",
+    "cardTitle": "Assenza: {reason}",
+    "durationLabel": "Durata:",
+    "editTitle": "Modifica assenza",
+    "confirmDeleteTitle": "Elimina assenza",
+    "confirmDeleteMessage": "Vuoi davvero eliminare l’assenza «{reason}»?"
+  },
+  "absenceReasons": {
+    "title": "Assenze",
+    "subtitle": "Motivi selezionabili quando si registra un’assenza, es. malattia o militare/protezione civile.",
+    "empty": "Ancora nessun motivo.",
+    "nameLabel": "Motivo",
+    "newPlaceholder": "Nuovo motivo, es. vacanze",
+    "addButton": "Aggiungi",
+    "loadError": "Non è stato possibile caricare i motivi di assenza.",
+    "saveError": "Non è stato possibile salvare il motivo.",
+    "deleteError": "Non è stato possibile eliminare il motivo.",
+    "confirmDeleteTitle": "Elimina motivo",
+    "confirmDeleteMessage": "Vuoi davvero eliminare «{name}»? È possibile solo finché nessuna assenza usa questo motivo."
   }
 }

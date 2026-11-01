@@ -26,6 +26,8 @@ import { parseDecimalHours } from '@/lib/format/hours';
 import { scheduleOf, suggestStartTime } from '@/lib/workSchedule';
 import { getItemPresets, type ItemPreset } from '@/lib/api/itemPresets';
 import { MultiSelectDropdown } from './MultiSelectDropdown';
+import { CreateAbsenceForm } from './CreateAbsenceForm';
+import { workdayMinutes } from '@/lib/workSchedule';
 
 interface FormState {
   projectId: string;
@@ -130,8 +132,16 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
   const autoStartTimeRef = useRef<string>('');
   const [activeDraftOrgId, setActiveDraftOrgId] = useState<string | null>(null);
   const [dismissedNoProjectsDialog, setDismissedNoProjectsDialog] = useState(false);
+  // Arbeitszeit (Projekt) oder Abwesenheit (Krankheit, Militär, ...)
+  const [mode, setMode] = useState<'work' | 'absence'>('work');
+  const tAbsences = useTranslations('absences');
   const showNoProjectsDialog =
-    !projectsLoading && !projectsError && projects.length === 0 && !!selectedOrgId && !dismissedNoProjectsDialog;
+    mode === 'work' &&
+    !projectsLoading &&
+    !projectsError &&
+    projects.length === 0 &&
+    !!selectedOrgId &&
+    !dismissedNoProjectsDialog;
 
   // Entwurf laden, sobald (und jedes Mal wenn) die ausgewaehlte Organisation
   // bekannt ist bzw. wechselt.
@@ -403,6 +413,42 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrgId]);
 
+  // Erfassen fuer (nur Admin/Owner, wenn es weitere Mitglieder gibt) -
+  // mehrere Personen: derselbe Eintrag wird fuer alle angelegt. Geteilt
+  // zwischen Arbeitszeit und Abwesenheit.
+  const employeesField = canManageSelectedOrganization && otherMembers.length > 0 && (
+      <div className="space-y-2">
+        <label htmlFor="entryEmployees" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          {t('employeesLabel')}
+        </label>
+        <MultiSelectDropdown
+          id="entryEmployees"
+          options={[
+            { id: myId, label: t('employeeSelf', { name: personName(userProfile, '') }) },
+            ...otherMembers.map((m) => ({
+              id: m.userId,
+              label: `${personName(m.user, '?')}${m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}`,
+            })),
+          ]}
+          selected={selectedIds}
+          onChange={(next) => {
+            setSelection(next);
+            // Vorgeschlagene Startzeit fuer die (neue) Hauptperson neu bestimmen
+            setFormData((prev) => (prev.startTime === autoStartTimeRef.current ? { ...prev, startTime: '' } : prev));
+            autoStartTimeRef.current = '';
+          }}
+          emptyText={t('employeesNone')}
+          searchPlaceholder={t('employeesSearch')}
+          noMatchesText={t('employeesNoMatches')}
+        />
+        {selectedIds.some((id) => id !== myId) && (
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {selectedIds.length > 1 ? t('employeesHint', { count: selectedIds.length }) : t('employeeHint')}
+          </p>
+        )}
+      </div>
+  );
+
   return (
     <section className="space-y-6">
       <div>
@@ -430,47 +476,47 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
+      <div role="tablist" aria-label={tAbsences('modeLabel')} className="grid max-w-2xl grid-cols-2 gap-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 p-1">
+        {(['work', 'absence'] as const).map((value) => (
+          <button
+            key={value}
+            type="button"
+            role="tab"
+            aria-selected={mode === value}
+            onClick={() => setMode(value)}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              mode === value
+                ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 shadow-sm'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+            }`}
+          >
+            {value === 'work' ? tAbsences('modeWork') : tAbsences('modeAbsence')}
+          </button>
+        ))}
+      </div>
+
+      {mode === 'absence' && selectedOrgId && (
+        <CreateAbsenceForm
+          organizationId={selectedOrgId}
+          selectedIds={selectedIds}
+          myId={myId}
+          employeesField={employeesField}
+          canManage={canManageSelectedOrganization}
+          ownWorkdayMinutes={workdayMinutes(scheduleOf(userProfile))}
+          onSaved={(count) =>
+            showToast(count > 1 ? tAbsences('saveSuccessMultiple', { count }) : tAbsences('saveSuccess'), 'success')
+          }
+        />
+      )}
+
+      <form onSubmit={handleSubmit} className={`max-w-2xl space-y-5 ${mode === 'work' ? '' : 'hidden'}`}>
         {error && (
           <div className="rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
             <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
           </div>
         )}
 
-        {/* Erfassen fuer (nur Admin/Owner, wenn es weitere Mitglieder gibt) -
-            mehrere Personen: derselbe Eintrag wird fuer alle angelegt */}
-        {canManageSelectedOrganization && otherMembers.length > 0 && (
-          <div className="space-y-2">
-            <label htmlFor="entryEmployees" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              {t('employeesLabel')}
-            </label>
-            <MultiSelectDropdown
-              id="entryEmployees"
-              options={[
-                { id: myId, label: t('employeeSelf', { name: personName(userProfile, '') }) },
-                ...otherMembers.map((m) => ({
-                  id: m.userId,
-                  label: `${personName(m.user, '?')}${m.user.isPlaceholder ? ` (${t('withoutLogin')})` : ''}`,
-                })),
-              ]}
-              selected={selectedIds}
-              onChange={(next) => {
-                setSelection(next);
-                // Vorgeschlagene Startzeit fuer die (neue) Hauptperson neu bestimmen
-                setFormData((prev) => (prev.startTime === autoStartTimeRef.current ? { ...prev, startTime: '' } : prev));
-                autoStartTimeRef.current = '';
-              }}
-              emptyText={t('employeesNone')}
-              searchPlaceholder={t('employeesSearch')}
-              noMatchesText={t('employeesNoMatches')}
-            />
-            {selectedIds.some((id) => id !== myId) && (
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {selectedIds.length > 1 ? t('employeesHint', { count: selectedIds.length }) : t('employeeHint')}
-              </p>
-            )}
-          </div>
-        )}
+        {mode === 'work' && employeesField}
 
         {/* Projekt */}
         <div className="space-y-2">

@@ -357,7 +357,12 @@
     "projectOption_comments": "Remarques",
     "projectOption_notes": "Notes",
     "projectOption_photos": "Photos",
-    "customerNote": "Note sur le client"
+    "customerNote": "Note sur le client",
+    "option_absences": "Absences",
+    "absencesTitle": "Absences",
+    "colReason": "Motif",
+    "totalWorkHours": "Total temps de travail",
+    "totalInclAbsences": "Total y c. absences"
   },
   "settingsCategories": {
     "title": "Catégories",
@@ -455,7 +460,9 @@
     "workScheduleTitle": "Horaires de travail",
     "workScheduleDescription": "Ta journée de travail normale, p. ex. 07:15–12:00 et 13:00–17:00.",
     "itemPresetsTitle": "Matériel & frais",
-    "itemPresetsDescription": "Positions prédéfinies, p. ex. repas de midi CHF 22.–, à choisir rapidement lors de la saisie."
+    "itemPresetsDescription": "Positions prédéfinies, p. ex. repas de midi CHF 22.–, à choisir rapidement lors de la saisie.",
+    "absenceReasonsTitle": "Absences",
+    "absenceReasonsDescription": "Motifs d’absence, p. ex. maladie, accident, militaire/protection civile, pompiers."
   },
   "impressum": {
     "title": "Mentions légales",
@@ -945,7 +952,11 @@
     "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login.",
     "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants.",
     "ITEM_PRESET_NOT_FOUND": "La position n'a pas été trouvée.",
-    "TIME_ENTRY_OVERLAP_FOR": "Une saisie existe déjà pour {name} sur cette période – rien n’a été enregistré."
+    "TIME_ENTRY_OVERLAP_FOR": "Une saisie existe déjà pour {name} sur cette période – rien n’a été enregistré.",
+    "ABSENCE_NOT_FOUND": "L’absence est introuvable.",
+    "ABSENCE_REASON_NOT_FOUND": "Le motif d’absence est introuvable.",
+    "ABSENCE_REASON_IN_USE": "Ce motif est encore utilisé par {count} absence(s) et ne peut pas être supprimé. Tu peux toutefois le renommer.",
+    "ABSENCE_INVALID_RANGE": "Période invalide : la date de fin doit suivre la date de début, la période peut couvrir au maximum un an et doit contenir au moins un jour ouvrable."
   },
   "settingsOrganization": {
     "title": "Organisation",
@@ -1040,5 +1051,52 @@
     "deleteError": "Erreur lors de la suppression de la position",
     "confirmDeleteTitle": "Supprimer la position",
     "confirmDeleteMessage": "Vraiment supprimer « {name} » ? Les saisies existantes restent inchangées."
+  },
+  "absences": {
+    "modeLabel": "Type de saisie",
+    "modeWork": "Temps de travail",
+    "modeAbsence": "Absence",
+    "reasonLabel": "Motif",
+    "reasonsLoadError": "Les motifs d’absence n’ont pas pu être chargés.",
+    "noReasons": "Aucun motif d’absence n’a encore été saisi. Adresse-toi à ton admin.",
+    "noReasonsManager": "Aucun motif d’absence n’a encore été saisi – ajoute-les sous Paramètres → Absences.",
+    "fromLabel": "Du",
+    "toLabel": "Au",
+    "dateLabel": "Date",
+    "rangeHint": "Une saisie est créée pour chaque jour ouvrable de la période (sans samedi ni dimanche).",
+    "rangeInvalid": "La date de fin est antérieure à la date de début.",
+    "portionLabel": "Étendue",
+    "portionFull": "Journée entière",
+    "portionHalf": "Demi-journée",
+    "portionHours": "Heures",
+    "portionHint": "Selon tes horaires de travail : {hours} h par jour.",
+    "portionHintOthers": "Selon les horaires de travail de chaque personne.",
+    "hoursLabel": "Heures",
+    "hoursPlaceholder": "p. ex. 2.5",
+    "hoursInvalid": "Saisis les heures en nombre décimal, p. ex. 2.5.",
+    "commentLabel": "Remarque (facultatif)",
+    "submitButton": "Enregistrer l’absence",
+    "submitting": "Enregistrement...",
+    "saveSuccess": "Absence enregistrée",
+    "saveSuccessMultiple": "{count} absences enregistrées",
+    "saveError": "L’absence n’a pas pu être enregistrée.",
+    "cardTitle": "Absence : {reason}",
+    "durationLabel": "Durée :",
+    "editTitle": "Modifier l’absence",
+    "confirmDeleteTitle": "Supprimer l’absence",
+    "confirmDeleteMessage": "Veux-tu vraiment supprimer l’absence « {reason} » ?"
+  },
+  "absenceReasons": {
+    "title": "Absences",
+    "subtitle": "Motifs proposés lors de la saisie d’une absence, p. ex. maladie ou militaire/protection civile.",
+    "empty": "Aucun motif pour l’instant.",
+    "nameLabel": "Motif",
+    "newPlaceholder": "Nouveau motif, p. ex. vacances",
+    "addButton": "Ajouter",
+    "loadError": "Les motifs d’absence n’ont pas pu être chargés.",
+    "saveError": "Le motif n’a pas pu être enregistré.",
+    "deleteError": "Le motif n’a pas pu être supprimé.",
+    "confirmDeleteTitle": "Supprimer le motif",
+    "confirmDeleteMessage": "Veux-tu vraiment supprimer « {name} » ? Ce n’est possible que tant qu’aucune absence n’utilise ce motif."
   }
 }
