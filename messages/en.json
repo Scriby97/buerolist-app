@@ -462,7 +462,7 @@
     "itemPresetsTitle": "Material & expenses",
     "itemPresetsDescription": "Predefined items, e.g. lunch CHF 22.–, for quick selection when recording.",
     "absenceReasonsTitle": "Absences",
-    "absenceReasonsDescription": "Reasons for absences, e.g. illness, accident, military/civil protection, fire brigade."
+    "absenceReasonsDescription": "Reasons for absences, e.g. illness, accident, military/civil protection, fire brigade, holidays."
   },
   "impressum": {
     "title": "Legal Notice",
@@ -1058,8 +1058,6 @@
     "modeAbsence": "Absence",
     "reasonLabel": "Reason",
     "reasonsLoadError": "The absence reasons could not be loaded.",
-    "noReasons": "No absence reasons have been set up yet. Please contact your admin.",
-    "noReasonsManager": "No absence reasons have been set up yet – add them under Settings → Absences.",
     "fromLabel": "From",
     "toLabel": "To",
     "dateLabel": "Date",
@@ -1084,14 +1082,17 @@
     "durationLabel": "Duration:",
     "editTitle": "Edit absence",
     "confirmDeleteTitle": "Delete absence",
-    "confirmDeleteMessage": "Do you really want to delete the absence “{reason}”?"
+    "confirmDeleteMessage": "Do you really want to delete the absence “{reason}”?",
+    "otherReasonOption": "Other reason…",
+    "otherReasonLabel": "Own reason",
+    "otherReasonPlaceholder": "e.g. doctor’s appointment, moving house"
   },
   "absenceReasons": {
     "title": "Absences",
-    "subtitle": "Reasons to choose from when recording an absence, e.g. illness or military/civil protection.",
+    "subtitle": "Reasons to choose from when recording an absence, e.g. illness or holidays. Employees can also enter their own reason.",
     "empty": "No reasons yet.",
     "nameLabel": "Reason",
-    "newPlaceholder": "New reason, e.g. holidays",
+    "newPlaceholder": "New reason, e.g. training",
     "addButton": "Add",
     "loadError": "The absence reasons could not be loaded.",
     "saveError": "The reason could not be saved.",

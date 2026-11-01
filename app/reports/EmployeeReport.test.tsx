@@ -29,7 +29,7 @@ const all: EmployeeReportOptions = {
 }
 
 const absence = (id: string, date: string, minutes: number, reason: string) =>
-  ({ id, date, minutes, comment: null, reason: { id: reason, name: reason } }) as unknown as Absence
+  ({ id, date, minutes, comment: null, reason: { id: null, number: null, name: reason } }) as unknown as Absence
 
 describe('EmployeeReport', () => {
   it('zeigt Eintraege als Liste mit allen gewaehlten Inhalten und Totalen', () => {

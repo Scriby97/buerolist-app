@@ -10,6 +10,7 @@ import { useAuth } from '@/lib/auth/AuthProvider'
 import { useOrganization } from '@/lib/contexts/OrganizationContext'
 import { useToast } from '@/lib/hooks/useToast'
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
+import { formatAbsenceReasonNumber } from '@/lib/format/numbers'
 import {
   createAbsenceReason,
   deleteAbsenceReason,
@@ -23,7 +24,9 @@ const inputClass =
 
 /**
  * Abwesenheitsgruende der Organisation (nur Admin/Owner), z.B. Krankheit,
- * Unfall, Militär/Zivilschutz, Feuerwehr. Ein Grund, der schon verwendet
+ * Unfall, Militär/Zivilschutz, Feuerwehr, Ferien - nummeriert A-001, A-002, ...
+ * Mitarbeiter koennen beim Erfassen zusaetzlich einen eigenen Grund
+ * eingeben. Ein Grund, der schon verwendet
  * wird, kann nicht geloescht werden (Backend: ABSENCE_REASON_IN_USE).
  */
 export default function AbsenceReasonsPage() {
@@ -117,6 +120,9 @@ export default function AbsenceReasonsPage() {
               {reasons.map((reason) =>
                 editing?.id === reason.id ? (
                   <li key={reason.id} className="flex flex-wrap items-center gap-2 py-2">
+                    <span className="w-14 shrink-0 font-mono text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                      {formatAbsenceReasonNumber(reason.number)}
+                    </span>
                     <input
                       value={editing.name}
                       onChange={(e) => setEditing({ ...editing, name: e.target.value })}
@@ -144,6 +150,9 @@ export default function AbsenceReasonsPage() {
                   </li>
                 ) : (
                   <li key={reason.id} className="flex items-center gap-2 py-2">
+                    <span className="w-14 shrink-0 font-mono text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                      {formatAbsenceReasonNumber(reason.number)}
+                    </span>
                     <span className="min-w-0 flex-1 text-sm text-zinc-900 dark:text-zinc-50">{reason.name}</span>
                     <button
                       onClick={() => setEditing({ id: reason.id, name: reason.name })}

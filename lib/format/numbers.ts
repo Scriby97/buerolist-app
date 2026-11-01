@@ -9,6 +9,16 @@ export function formatPresetNumber(type: 'material' | 'expense', number: number)
   return `${type === 'material' ? 'M' : 'S'}-${pad(number, 3)}`
 }
 
+/** Abwesenheitsgrund: A-001, A-002, ... */
+export function formatAbsenceReasonNumber(number: number): string {
+  return `A-${pad(number, 3)}`
+}
+
+/** "A-001 Krankheit" bzw. ein eigener Grund ohne Nummer. */
+export function absenceReasonLabel(reason: { number: number | null; name: string }): string {
+  return reason.number ? `${formatAbsenceReasonNumber(reason.number)} ${reason.name}` : reason.name
+}
+
 export function formatCustomerNumber(customerNumber?: number | null): string {
   return customerNumber ? pad(customerNumber, 3) : ''
 }

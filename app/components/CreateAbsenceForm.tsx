@@ -7,9 +7,12 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { createAbsences, getAbsenceReasons, type AbsencePortion, type AbsenceReason } from '@/lib/api/absences';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
 import { formatDecimalHours, parseDecimalHours } from '@/lib/format/hours';
+import { absenceReasonLabel } from '@/lib/format/numbers';
 import { DateInput } from './DateInput';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
+/** Auswahlwert fuer "Anderer Grund" (frei eingegeben) */
+export const OTHER_REASON = 'other';
 const todayKey = () => {
   const d = new Date();
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
@@ -47,6 +50,7 @@ export const CreateAbsenceForm: FC<CreateAbsenceFormProps> = ({
 
   const [reasons, setReasons] = useState<AbsenceReason[]>([]);
   const [reasonId, setReasonId] = useState('');
+  const [reasonText, setReasonText] = useState('');
   const [from, setFrom] = useState(todayKey);
   const [to, setTo] = useState(todayKey);
   const [portion, setPortion] = useState<AbsencePortion>('full');
@@ -62,7 +66,9 @@ export const CreateAbsenceForm: FC<CreateAbsenceFormProps> = ({
       .then((list) => {
         if (cancelled) return;
         setReasons(list);
-        setReasonId((current) => (list.some((r) => r.id === current) ? current : (list[0]?.id ?? '')));
+        setReasonId((current) =>
+          current === OTHER_REASON || list.some((r) => r.id === current) ? current : (list[0]?.id ?? OTHER_REASON),
+        );
       })
       .catch((err) => {
         if (!cancelled) setError(getApiErrorMessage(err, t('reasonsLoadError')));
@@ -77,16 +83,18 @@ export const CreateAbsenceForm: FC<CreateAbsenceFormProps> = ({
   const hoursInvalid = portion === 'hours' && !hoursMinutes;
   const rangeInvalid = Boolean(to) && to < from;
   const isRange = Boolean(to) && to !== from;
+  const isOther = reasonId === OTHER_REASON;
+  const reasonMissing = !reasonId || (isOther && !reasonText.trim());
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!reasonId || hoursInvalid || rangeInvalid || selectedIds.length === 0) return;
+    if (reasonMissing || hoursInvalid || rangeInvalid || selectedIds.length === 0) return;
     setIsSubmitting(true);
     setError(null);
     try {
       const created = await createAbsences({
         organizationId,
-        reasonId,
+        ...(isOther ? { reasonText: reasonText.trim() } : { reasonId }),
         from,
         to: isRange ? to : undefined,
         portion,
@@ -137,12 +145,23 @@ export const CreateAbsenceForm: FC<CreateAbsenceFormProps> = ({
         >
           {reasons.map((reason) => (
             <option key={reason.id} value={reason.id}>
-              {reason.name}
+              {absenceReasonLabel(reason)}
             </option>
           ))}
+          <option value={OTHER_REASON}>{t('otherReasonOption')}</option>
         </select>
-        {reasons.length === 0 && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">{canManage ? t('noReasonsManager') : t('noReasons')}</p>
+        {isOther && (
+          <input
+            type="text"
+            value={reasonText}
+            onChange={(e) => setReasonText(e.target.value)}
+            aria-label={t('otherReasonLabel')}
+            placeholder={t('otherReasonPlaceholder')}
+            maxLength={100}
+            required
+            autoFocus
+            className="block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50"
+          />
         )}
       </div>
 
@@ -246,7 +265,7 @@ export const CreateAbsenceForm: FC<CreateAbsenceFormProps> = ({
 
       <button
         type="submit"
-        disabled={isSubmitting || !reasonId || hoursInvalid || rangeInvalid || selectedIds.length === 0}
+        disabled={isSubmitting || reasonMissing || hoursInvalid || rangeInvalid || selectedIds.length === 0}
         className="w-full rounded-lg bg-brown-600 hover:bg-brown-700 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5 font-medium text-white transition-colors"
       >
         {isSubmitting ? t('submitting') : t('submitButton')}

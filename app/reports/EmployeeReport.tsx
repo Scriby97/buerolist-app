@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import type { TimeEntry } from '@/lib/api/timeEntries';
 import type { Absence } from '@/lib/api/absences';
+import { absenceReasonLabel } from '@/lib/format/numbers';
 import { formatChf, formatQuantity } from '@/lib/format/money';
 import { buildReportData, formatHm, formatTime, projectLabel } from '@/lib/reports/reportData';
 
@@ -54,7 +55,8 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
   const absenceMinutes = absences.reduce((sum, a) => sum + a.minutes, 0);
   // Summe pro Grund, in der Reihenfolge des ersten Auftretens
   const absenceByReason = [...absences.reduce((map, a) => {
-    map.set(a.reason.name, (map.get(a.reason.name) ?? 0) + a.minutes);
+    const label = absenceReasonLabel(a.reason);
+    map.set(label, (map.get(label) ?? 0) + a.minutes);
     return map;
   }, new Map<string, number>())];
   const absenceDate = (date: string) => {
@@ -156,7 +158,7 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
                   {absences.map((absence) => (
                     <tr key={absence.id} className="break-inside-avoid border-t border-zinc-200">
                       <td className={`${td} whitespace-nowrap`}>{absenceDate(absence.date)}</td>
-                      <td className={td}>{absence.reason.name}</td>
+                      <td className={td}>{absenceReasonLabel(absence.reason)}</td>
                       <td className={`${td} text-right tabular-nums`}>{formatHm(absence.minutes)}</td>
                       {options.comment && <td className={`${td} whitespace-pre-wrap`}>{absence.comment ?? ''}</td>}
                     </tr>

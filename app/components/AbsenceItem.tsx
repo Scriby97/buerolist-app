@@ -7,7 +7,9 @@ import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
 import { formatDecimalHours, minutesToDecimalInput, parseDecimalHours } from '@/lib/format/hours';
 import { personName } from '@/lib/format/personName';
 import { currentWeekStartKey } from '@/lib/time/workWeek';
+import { absenceReasonLabel } from '@/lib/format/numbers';
 import { DateInput } from './DateInput';
+import { OTHER_REASON } from './CreateAbsenceForm';
 
 const pad2 = (n: number) => String(n).padStart(2, '0');
 
@@ -122,7 +124,8 @@ export const AbsenceEditDialog: FC<AbsenceEditDialogProps> = ({ absence, canMana
   const tCommon = useTranslations('common');
   const getApiErrorMessage = useApiErrorMessage();
   const [reasons, setReasons] = useState<AbsenceReason[]>([]);
-  const [reasonId, setReasonId] = useState(absence.reason.id);
+  const [reasonId, setReasonId] = useState(absence.reason.id ?? OTHER_REASON);
+  const [reasonText, setReasonText] = useState(absence.reason.id ? '' : absence.reason.name);
   const [date, setDate] = useState(absence.date);
   const [hours, setHours] = useState(minutesToDecimalInput(absence.minutes));
   const [comment, setComment] = useState(absence.comment ?? '');
@@ -136,7 +139,8 @@ export const AbsenceEditDialog: FC<AbsenceEditDialogProps> = ({ absence, canMana
   }, [absence.organizationId]);
 
   const minutes = parseDecimalHours(hours);
-  const invalid = !minutes || !date;
+  const isOther = reasonId === OTHER_REASON;
+  const invalid = !minutes || !date || (isOther && !reasonText.trim());
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -144,7 +148,14 @@ export const AbsenceEditDialog: FC<AbsenceEditDialogProps> = ({ absence, canMana
     setSaving(true);
     setError(null);
     try {
-      onSaved(await updateAbsence(absence.id, { reasonId, date, minutes, comment: comment.trim() || null }));
+      onSaved(
+        await updateAbsence(absence.id, {
+          ...(isOther ? { reasonText: reasonText.trim() } : { reasonId }),
+          date,
+          minutes,
+          comment: comment.trim() || null,
+        }),
+      );
     } catch (err) {
       setError(getApiErrorMessage(err, t('saveError')));
     } finally {
@@ -155,8 +166,6 @@ export const AbsenceEditDialog: FC<AbsenceEditDialogProps> = ({ absence, canMana
   const labelClass = 'block text-sm font-medium text-zinc-700 dark:text-zinc-300';
   const inputClass =
     'block w-full rounded-lg border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 px-4 py-2 text-zinc-900 dark:text-zinc-50';
-  // Der aktuelle Grund bleibt waehlbar, auch wenn er inzwischen fehlt
-  const reasonOptions = reasons.some((r) => r.id === absence.reason.id) ? reasons : [absence.reason, ...reasons];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="absence-edit-title">
@@ -170,12 +179,24 @@ export const AbsenceEditDialog: FC<AbsenceEditDialogProps> = ({ absence, canMana
             {t('reasonLabel')}
           </label>
           <select id="absenceEditReason" value={reasonId} onChange={(e) => setReasonId(e.target.value)} className={inputClass}>
-            {reasonOptions.map((reason) => (
+            {reasons.map((reason) => (
               <option key={reason.id} value={reason.id}>
-                {reason.name}
+                {absenceReasonLabel(reason)}
               </option>
             ))}
+            <option value={OTHER_REASON}>{t('otherReasonOption')}</option>
           </select>
+          {isOther && (
+            <input
+              type="text"
+              value={reasonText}
+              onChange={(e) => setReasonText(e.target.value)}
+              aria-label={t('otherReasonLabel')}
+              placeholder={t('otherReasonPlaceholder')}
+              maxLength={100}
+              className={inputClass}
+            />
+          )}
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">

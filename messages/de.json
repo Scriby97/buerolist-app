@@ -462,7 +462,7 @@
     "itemPresetsTitle": "Material & Spesen",
     "itemPresetsDescription": "Vordefinierte Positionen, z.B. Mittagessen CHF 22.–, zur schnellen Auswahl beim Erfassen.",
     "absenceReasonsTitle": "Abwesenheiten",
-    "absenceReasonsDescription": "Gründe für Abwesenheiten, z.B. Krankheit, Unfall, Militär/Zivilschutz, Feuerwehr."
+    "absenceReasonsDescription": "Gründe für Abwesenheiten, z.B. Krankheit, Unfall, Militär/Zivilschutz, Feuerwehr, Ferien."
   },
   "impressum": {
     "title": "Impressum",
@@ -1058,8 +1058,6 @@
     "modeAbsence": "Abwesenheit",
     "reasonLabel": "Grund",
     "reasonsLoadError": "Die Abwesenheitsgründe konnten nicht geladen werden.",
-    "noReasons": "Es sind noch keine Abwesenheitsgründe erfasst. Bitte wende dich an deinen Admin.",
-    "noReasonsManager": "Es sind noch keine Abwesenheitsgründe erfasst – lege sie unter Einstellungen → Abwesenheiten an.",
     "fromLabel": "Von",
     "toLabel": "Bis",
     "dateLabel": "Datum",
@@ -1084,14 +1082,17 @@
     "durationLabel": "Dauer:",
     "editTitle": "Abwesenheit bearbeiten",
     "confirmDeleteTitle": "Abwesenheit löschen",
-    "confirmDeleteMessage": "Möchtest du die Abwesenheit „{reason}“ wirklich löschen?"
+    "confirmDeleteMessage": "Möchtest du die Abwesenheit „{reason}“ wirklich löschen?",
+    "otherReasonOption": "Anderer Grund…",
+    "otherReasonLabel": "Eigener Grund",
+    "otherReasonPlaceholder": "z.B. Arzttermin, Umzug"
   },
   "absenceReasons": {
     "title": "Abwesenheiten",
-    "subtitle": "Gründe, die beim Erfassen einer Abwesenheit zur Auswahl stehen, z.B. Krankheit oder Militär/Zivilschutz.",
+    "subtitle": "Gründe, die beim Erfassen einer Abwesenheit zur Auswahl stehen, z.B. Krankheit oder Ferien. Mitarbeiter können zusätzlich einen eigenen Grund eingeben.",
     "empty": "Noch keine Gründe erfasst.",
     "nameLabel": "Grund",
-    "newPlaceholder": "Neuer Grund, z.B. Ferien",
+    "newPlaceholder": "Neuer Grund, z.B. Weiterbildung",
     "addButton": "Hinzufügen",
     "loadError": "Die Abwesenheitsgründe konnten nicht geladen werden.",
     "saveError": "Der Grund konnte nicht gespeichert werden.",

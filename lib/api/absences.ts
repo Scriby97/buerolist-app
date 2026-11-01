@@ -7,7 +7,8 @@ export interface AbsenceReason {
   id: string
   organizationId: string
   name: string
-  sortOrder: number
+  /** Fortlaufend pro Organisation, Anzeige A-001 */
+  number: number
 }
 
 interface AbsencePerson {
@@ -27,7 +28,8 @@ export interface Absence {
   date: string
   minutes: number
   comment: string | null
-  reason: { id: string; name: string }
+  /** Vordefinierter Grund - oder eigener (id/number null, name = eingegebener Text) */
+  reason: { id: string | null; number: number | null; name: string }
   creator: AbsencePerson
   /** Wer erfasst hat, falls nicht die Person selbst (Admin/Owner) */
   createdBy: AbsencePerson | null
@@ -83,7 +85,9 @@ export async function getAbsences(
 
 export async function createAbsences(data: {
   organizationId: string
-  reasonId: string
+  /** Vordefinierter Grund - oder reasonText (eigener Grund) */
+  reasonId?: string
+  reasonText?: string
   from: string
   to?: string
   portion: AbsencePortion
@@ -102,7 +106,7 @@ export async function createAbsences(data: {
 
 export async function updateAbsence(
   id: string,
-  data: { reasonId?: string; date?: string; minutes?: number; comment?: string | null },
+  data: { reasonId?: string; reasonText?: string; date?: string; minutes?: number; comment?: string | null },
 ): Promise<Absence> {
   const res = await authenticatedFetch(buildApiUrl(`/absences/${id}`), {
     method: 'PUT',

@@ -45,7 +45,7 @@ const sick = {
   date: today,
   minutes: 525,
   comment: 'Grippe',
-  reason: { id: 'r1', name: 'Krankheit' },
+  reason: { id: 'r1', number: 1, name: 'Krankheit' },
   creator: { id: 'me', firstName: 'Nicolas', lastName: 'Balmer' },
   createdBy: null,
 }

@@ -462,7 +462,7 @@
     "itemPresetsTitle": "Matériel & frais",
     "itemPresetsDescription": "Positions prédéfinies, p. ex. repas de midi CHF 22.–, à choisir rapidement lors de la saisie.",
     "absenceReasonsTitle": "Absences",
-    "absenceReasonsDescription": "Motifs d’absence, p. ex. maladie, accident, militaire/protection civile, pompiers."
+    "absenceReasonsDescription": "Motifs d’absence, p. ex. maladie, accident, militaire/protection civile, pompiers, vacances."
   },
   "impressum": {
     "title": "Mentions légales",
@@ -1058,8 +1058,6 @@
     "modeAbsence": "Absence",
     "reasonLabel": "Motif",
     "reasonsLoadError": "Les motifs d’absence n’ont pas pu être chargés.",
-    "noReasons": "Aucun motif d’absence n’a encore été saisi. Adresse-toi à ton admin.",
-    "noReasonsManager": "Aucun motif d’absence n’a encore été saisi – ajoute-les sous Paramètres → Absences.",
     "fromLabel": "Du",
     "toLabel": "Au",
     "dateLabel": "Date",
@@ -1084,14 +1082,17 @@
     "durationLabel": "Durée :",
     "editTitle": "Modifier l’absence",
     "confirmDeleteTitle": "Supprimer l’absence",
-    "confirmDeleteMessage": "Veux-tu vraiment supprimer l’absence « {reason} » ?"
+    "confirmDeleteMessage": "Veux-tu vraiment supprimer l’absence « {reason} » ?",
+    "otherReasonOption": "Autre motif…",
+    "otherReasonLabel": "Motif personnel",
+    "otherReasonPlaceholder": "p. ex. rendez-vous médical, déménagement"
   },
   "absenceReasons": {
     "title": "Absences",
-    "subtitle": "Motifs proposés lors de la saisie d’une absence, p. ex. maladie ou militaire/protection civile.",
+    "subtitle": "Motifs proposés lors de la saisie d’une absence, p. ex. maladie ou vacances. Les collaborateurs peuvent aussi saisir leur propre motif.",
     "empty": "Aucun motif pour l’instant.",
     "nameLabel": "Motif",
-    "newPlaceholder": "Nouveau motif, p. ex. vacances",
+    "newPlaceholder": "Nouveau motif, p. ex. formation",
     "addButton": "Ajouter",
     "loadError": "Les motifs d’absence n’ont pas pu être chargés.",
     "saveError": "Le motif n’a pas pu être enregistré.",

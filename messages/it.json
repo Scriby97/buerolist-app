@@ -462,7 +462,7 @@
     "itemPresetsTitle": "Materiale & spese",
     "itemPresetsDescription": "Posizioni predefinite, es. pranzo CHF 22.–, da scegliere rapidamente durante la registrazione.",
     "absenceReasonsTitle": "Assenze",
-    "absenceReasonsDescription": "Motivi di assenza, es. malattia, infortunio, militare/protezione civile, pompieri."
+    "absenceReasonsDescription": "Motivi di assenza, es. malattia, infortunio, militare/protezione civile, pompieri, vacanze."
   },
   "impressum": {
     "title": "Note legali",
@@ -1058,8 +1058,6 @@
     "modeAbsence": "Assenza",
     "reasonLabel": "Motivo",
     "reasonsLoadError": "Non è stato possibile caricare i motivi di assenza.",
-    "noReasons": "Non sono ancora stati registrati motivi di assenza. Rivolgiti al tuo admin.",
-    "noReasonsManager": "Non sono ancora stati registrati motivi di assenza – aggiungili in Impostazioni → Assenze.",
     "fromLabel": "Dal",
     "toLabel": "Al",
     "dateLabel": "Data",
@@ -1084,14 +1082,17 @@
     "durationLabel": "Durata:",
     "editTitle": "Modifica assenza",
     "confirmDeleteTitle": "Elimina assenza",
-    "confirmDeleteMessage": "Vuoi davvero eliminare l’assenza «{reason}»?"
+    "confirmDeleteMessage": "Vuoi davvero eliminare l’assenza «{reason}»?",
+    "otherReasonOption": "Altro motivo…",
+    "otherReasonLabel": "Motivo personale",
+    "otherReasonPlaceholder": "es. visita medica, trasloco"
   },
   "absenceReasons": {
     "title": "Assenze",
-    "subtitle": "Motivi selezionabili quando si registra un’assenza, es. malattia o militare/protezione civile.",
+    "subtitle": "Motivi selezionabili quando si registra un’assenza, es. malattia o vacanze. I collaboratori possono anche inserire un motivo proprio.",
     "empty": "Ancora nessun motivo.",
     "nameLabel": "Motivo",
-    "newPlaceholder": "Nuovo motivo, es. vacanze",
+    "newPlaceholder": "Nuovo motivo, es. formazione",
     "addButton": "Aggiungi",
     "loadError": "Non è stato possibile caricare i motivi di assenza.",
     "saveError": "Non è stato possibile salvare il motivo.",
