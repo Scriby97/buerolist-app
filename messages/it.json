@@ -1104,5 +1104,13 @@
     "deleteError": "Non è stato possibile eliminare il motivo.",
     "confirmDeleteTitle": "Elimina motivo",
     "confirmDeleteMessage": "Vuoi davvero eliminare «{name}»? È possibile solo finché nessuna assenza usa questo motivo."
+  },
+  "overFreeLimitBanner": {
+    "message": "La vostra organizzazione supera il piano Free: {items}. I dati esistenti restano pienamente utilizzabili – per aggiungerne altri serve l’upgrade a Pro.",
+    "customers": "{used} clienti su {max}",
+    "projects": "{used} progetti attivi su {max}",
+    "members": "{used} collaboratori su {max}",
+    "actionLabel": "Vedi piano",
+    "dismissLabel": "Chiudi"
   }
 }

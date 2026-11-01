@@ -9,6 +9,7 @@ import { PendingInvitesProvider } from "@/lib/contexts/PendingInvitesContext";
 import { BackendLoadingWrapper } from "./components/BackendLoadingWrapper";
 import { InvitePopup } from "./components/InvitePopup";
 import { PastDueSubscriptionBanner } from "./components/PastDueSubscriptionBanner";
+import { OverFreeLimitBanner } from "./components/OverFreeLimitBanner";
 import { AppChrome } from "./components/AppChrome";
 import { ApiLoadingProvider } from "@/lib/api/ApiLoadingContext";
 import { ApiLoadingOverlay } from "./components/ApiLoadingOverlay";
@@ -133,6 +134,7 @@ export default async function RootLayout({
                   <PendingInvitesProvider>
                     <InvitePopup />
                     <PastDueSubscriptionBanner />
+                    <OverFreeLimitBanner />
                     <AppChrome />
                     {children}
                   </PendingInvitesProvider>

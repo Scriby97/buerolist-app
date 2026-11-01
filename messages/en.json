@@ -1104,5 +1104,13 @@
     "deleteError": "The reason could not be deleted.",
     "confirmDeleteTitle": "Delete reason",
     "confirmDeleteMessage": "Do you really want to delete “{name}”? This is only possible as long as no absence uses this reason."
+  },
+  "overFreeLimitBanner": {
+    "message": "Your organization is above the Free plan: {items}. Existing data remains fully usable – adding more requires an upgrade to Pro.",
+    "customers": "{used} of {max} customers",
+    "projects": "{used} of {max} active projects",
+    "members": "{used} of {max} members",
+    "actionLabel": "View plan",
+    "dismissLabel": "Dismiss"
   }
 }

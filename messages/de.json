@@ -1104,5 +1104,13 @@
     "deleteError": "Der Grund konnte nicht gelöscht werden.",
     "confirmDeleteTitle": "Grund löschen",
     "confirmDeleteMessage": "Möchtest du „{name}“ wirklich löschen? Das geht nur, solange keine Abwesenheit diesen Grund verwendet."
+  },
+  "overFreeLimitBanner": {
+    "message": "Eure Organisation liegt über dem Free-Tarif: {items}. Bestehende Daten bleiben vollständig nutzbar – für neue Einträge ist ein Upgrade auf Pro nötig.",
+    "customers": "{used} von {max} Kunden",
+    "projects": "{used} von {max} aktiven Projekten",
+    "members": "{used} von {max} Mitarbeitern",
+    "actionLabel": "Tarif ansehen",
+    "dismissLabel": "Hinweis schliessen"
   }
 }

@@ -80,10 +80,13 @@ export interface OrganizationSubscription {
   createdAt: string
   updatedAt: string
   limits?: SubscriptionLimits
-  // true, wenn die Organisation aktuell mehr aktive Projekte oder Mitarbeiter
-  // hat, als der kostenlose Free-Tarif erlaubt - steuert die verschärfte
-  // Kündigungswarnung (Kündigen trennt in diesem Fall alle Mitgliedschaften).
+  // true, wenn die Organisation aktuell mehr aktive Projekte, Mitarbeiter oder
+  // Kunden hat, als der kostenlose Free-Tarif erlaubt - steuert die verschärfte
+  // Kündigungswarnung (Kündigen trennt in diesem Fall alle Mitgliedschaften)
+  // und den Hinweis OverFreeLimitBanner.
   overFreeLimit?: boolean
+  // Aktuelle Nutzung (aktive Projekte, Mitglieder, Kunden)
+  usage?: { projects: number; members: number; customers: number }
 }
 
 // Antwort von PATCH /organizations/:id/subscription - bei einem Upgrade vom
