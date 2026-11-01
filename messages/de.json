@@ -257,7 +257,7 @@
     "submitButton": "Notiz hinzufügen",
     "createError": "Fehler beim Speichern der Notiz",
     "noNotes": "Noch keine Notizen vorhanden.",
-    "photoInvalid": "Dieses Bild kann nicht verarbeitet werden. Bitte wähle ein JPEG-, PNG- oder WebP-Bild.",
+    "photoInvalid": "Dieses Bild kann nicht verarbeitet werden. Bitte versuche es mit einem anderen Foto oder mache ein Bildschirmfoto davon.",
     "photoTooLarge": "Das Bild ist zu gross (max. 30 MB).",
     "photoUploadError": "Fehler beim Hochladen des Fotos",
     "photoDeleteError": "Fehler beim Löschen des Fotos",
@@ -269,7 +269,9 @@
     "confirmDeletePhotoMessage": "Möchtest du dieses Foto wirklich löschen?",
     "openPhoto": "Foto gross anzeigen",
     "previousPhoto": "Vorheriges Foto",
-    "nextPhoto": "Nächstes Foto"
+    "nextPhoto": "Nächstes Foto",
+    "photosFailed": "{failed} von {total} Fotos konnten nicht hochgeladen werden.",
+    "addPhotos": "Fotos hinzufügen"
   },
   "categoryPicker": {
     "empty": "Noch keine Kategorien angelegt (Einstellungen → Kategorien).",

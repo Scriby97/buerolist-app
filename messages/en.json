@@ -257,7 +257,7 @@
     "submitButton": "Add note",
     "createError": "Error saving the note",
     "noNotes": "No notes yet.",
-    "photoInvalid": "This image can't be processed. Please choose a JPEG, PNG or WebP image.",
+    "photoInvalid": "This image cannot be processed. Please try another photo or take a screenshot of it.",
     "photoTooLarge": "The image is too large (max. 30 MB).",
     "photoUploadError": "Error uploading the photo",
     "photoDeleteError": "Error deleting the photo",
@@ -269,7 +269,9 @@
     "confirmDeletePhotoMessage": "Are you sure you want to delete this photo?",
     "openPhoto": "View photo",
     "previousPhoto": "Previous photo",
-    "nextPhoto": "Next photo"
+    "nextPhoto": "Next photo",
+    "photosFailed": "{failed} of {total} photos could not be uploaded.",
+    "addPhotos": "Add photos"
   },
   "categoryPicker": {
     "empty": "No categories yet (Settings → Categories).",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FC, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FC, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDateLocale } from '@/lib/i18n/formatDate';
 import { useAuth } from '@/lib/auth/AuthProvider';
@@ -36,6 +36,14 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadingNoteId, setUploadingNoteId] = useState<string | null>(null);
+  // Fortschritt beim Hochladen mehrerer Fotos, z.B. "2/5"
+  const [uploadProgress, setUploadProgress] = useState<{ done: number; total: number } | null>(null);
+  // Aktuelle Notizen fuer laufende Uploads (die Liste kann sich waehrenddessen
+  // aendern, z.B. durch einen Upload an einer anderen Notiz)
+  const notesRef = useRef(notes);
+  useEffect(() => {
+    notesRef.current = notes;
+  }, [notes]);
   const [confirmDeleteNoteId, setConfirmDeleteNoteId] = useState<string | null>(null);
   const [confirmDeletePhoto, setConfirmDeletePhoto] = useState<{ noteId: string; photoId: string } | null>(null);
   const [lightbox, setLightbox] = useState<{ noteId: string; index: number } | null>(null);
@@ -60,24 +68,38 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
     }
   };
 
-  const handlePhotoPicked = async (noteId: string, file: File) => {
+  const photoErrorMessage = (err: unknown) =>
+    err instanceof ImageValidationError
+      ? t(err.message === 'too-large' ? 'photoTooLarge' : 'photoInvalid')
+      : getApiErrorMessage(err, t('photoUploadError'));
+
+  // Mehrere Fotos nacheinander hochladen; jedes erfolgreiche erscheint sofort,
+  // fehlgeschlagene werden am Schluss gemeldet.
+  const handlePhotosPicked = async (noteId: string, files: File[]) => {
     setUploadingNoteId(noteId);
+    setUploadProgress({ done: 0, total: files.length });
     setError(null);
-    try {
-      const blob = await resizePhoto(file);
-      const photo = await addNotePhoto(noteId, blob);
-      onChanged(
-        notes.map((n) => (n.id === noteId ? { ...n, photos: [...n.photos, photo] } : n)),
-      );
-    } catch (err) {
-      if (err instanceof ImageValidationError) {
-        setError(t(err.message === 'too-large' ? 'photoTooLarge' : 'photoInvalid'));
-      } else {
-        setError(getApiErrorMessage(err, t('photoUploadError')));
+    let failed = 0;
+    let lastError: string | null = null;
+    for (const [index, file] of files.entries()) {
+      try {
+        const blob = await resizePhoto(file);
+        const photo = await addNotePhoto(noteId, blob);
+        const updated = notesRef.current.map((n) => (n.id === noteId ? { ...n, photos: [...n.photos, photo] } : n));
+        notesRef.current = updated;
+        onChanged(updated);
+      } catch (err) {
+        console.error('Foto-Upload fehlgeschlagen:', file.type, file.size, err);
+        failed += 1;
+        lastError = photoErrorMessage(err);
       }
-    } finally {
-      setUploadingNoteId(null);
+      setUploadProgress({ done: index + 1, total: files.length });
     }
+    if (lastError) {
+      setError(files.length > 1 ? `${t('photosFailed', { failed, total: files.length })} ${lastError}` : lastError);
+    }
+    setUploadingNoteId(null);
+    setUploadProgress(null);
   };
 
   const handleDeletePhoto = async (noteId: string, photoId: string) => {
@@ -187,7 +209,9 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
 
                 <label className="w-16 h-16 rounded-lg border-2 border-dashed border-zinc-300 dark:border-zinc-600 flex items-center justify-center cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
                   {uploadingNoteId === note.id ? (
-                    <span className="text-xs text-zinc-500">…</span>
+                    <span className="text-xs tabular-nums text-zinc-500">
+                      {uploadProgress && uploadProgress.total > 1 ? `${uploadProgress.done}/${uploadProgress.total}` : '…'}
+                    </span>
                   ) : (
                     <svg className="w-5 h-5 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 5v14M5 12h14" />
@@ -195,13 +219,15 @@ export const NotesSection: FC<NotesSectionProps> = ({ customerId, projectId, not
                   )}
                   <input
                     type="file"
-                    accept="image/png,image/jpeg,image/webp"
+                    accept="image/*"
+                    multiple
+                    aria-label={t('addPhotos')}
                     className="hidden"
                     disabled={uploadingNoteId === note.id}
                     onChange={(e) => {
-                      const file = e.target.files?.[0];
+                      const files = Array.from(e.target.files ?? []);
                       e.target.value = '';
-                      if (file) handlePhotoPicked(note.id, file);
+                      if (files.length > 0) void handlePhotosPicked(note.id, files);
                     }}
                   />
                 </label>

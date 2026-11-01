@@ -257,7 +257,7 @@
     "submitButton": "Ajouter la note",
     "createError": "Erreur lors de l'enregistrement de la note",
     "noNotes": "Aucune note pour l'instant.",
-    "photoInvalid": "Cette image ne peut pas être traitée. Choisis une image JPEG, PNG ou WebP.",
+    "photoInvalid": "Cette image ne peut pas être traitée. Essaie avec une autre photo ou fais-en une capture d’écran.",
     "photoTooLarge": "L'image est trop volumineuse (max. 30 Mo).",
     "photoUploadError": "Erreur lors du téléversement de la photo",
     "photoDeleteError": "Erreur lors de la suppression de la photo",
@@ -269,7 +269,9 @@
     "confirmDeletePhotoMessage": "Voulez-vous vraiment supprimer cette photo ?",
     "openPhoto": "Afficher la photo",
     "previousPhoto": "Photo précédente",
-    "nextPhoto": "Photo suivante"
+    "nextPhoto": "Photo suivante",
+    "photosFailed": "{failed} photo(s) sur {total} n’ont pas pu être téléversées.",
+    "addPhotos": "Ajouter des photos"
   },
   "categoryPicker": {
     "empty": "Aucune catégorie (Paramètres → Catégories).",

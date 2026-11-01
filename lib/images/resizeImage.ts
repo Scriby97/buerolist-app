@@ -59,22 +59,23 @@ export async function resizeToSquareWebp(
 // oft 3-15 MB gross - sie werden ohnehin verkleinert, daher nur ein grobes
 // Limit gegen Speicherprobleme beim Dekodieren.
 const MAX_PHOTO_INPUT_BYTES = 30 * 1024 * 1024
-// HEIC/HEIF: iOS konvertiert beim Auswählen meist selbst nach JPEG; falls
-// nicht, kann Safari HEIC trotzdem dekodieren (andere Browser: decode-failed).
-const ACCEPTED_PHOTO_TYPES = [...ACCEPTED_TYPES, 'image/heic', 'image/heif']
+// Jedes Bildformat, das der Browser dekodieren kann (z.B. HEIC in Safari) -
+// hochgeladen wird ohnehin das neu kodierte JPEG.
 
 /**
  * Verkleinert ein Foto auf max. `maxDimension` px an der längeren Seite,
  * OHNE Zuschnitt (anders als resizeToSquareWebp fürs Logo), und kodiert als
  * JPEG - überall unterstützt (Safari < 17 kann kein WebP-Encoding) und für
  * Fotos kompakt (typisch 200-600 KB statt mehrerer MB).
+ * Scheitert das Kodieren (Speicherknappheit bei sehr grossen Handyfotos,
+ * v.a. iOS), wird es mit kleinerer Kantenlänge nochmals versucht.
  * Wirft ImageValidationError bei falschem Typ / zu grosser / defekter Datei.
  */
 export async function resizePhoto(
   file: File,
   maxDimension = 1600,
 ): Promise<Blob> {
-  if (file.type && !ACCEPTED_PHOTO_TYPES.includes(file.type)) {
+  if (file.type && !file.type.startsWith('image/')) {
     throw new ImageValidationError('unsupported-type')
   }
   if (file.size > MAX_PHOTO_INPUT_BYTES) {
@@ -88,34 +89,42 @@ export async function resizePhoto(
     throw new ImageValidationError('decode-failed')
   }
   try {
-    const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height))
-    const canvas = document.createElement('canvas')
-    canvas.width = Math.round(bitmap.width * scale)
-    canvas.height = Math.round(bitmap.height * scale)
-    const ctx = canvas.getContext('2d')
-    if (!ctx) throw new ImageValidationError('canvas-unavailable')
-    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
-
-    return await new Promise<Blob>((resolve, reject) => {
-      canvas.toBlob(
-        (blob) =>
-          blob
-            ? resolve(blob)
-            : reject(new ImageValidationError('encode-failed')),
-        'image/jpeg',
-        0.85,
-      )
-    })
+    for (const dimension of [maxDimension, Math.min(maxDimension, 1024)]) {
+      const blob = await drawToJpeg(bitmap, dimension).catch(() => null)
+      if (blob) return blob
+    }
+    throw new ImageValidationError('encode-failed')
   } finally {
     if ('close' in bitmap) (bitmap as ImageBitmap).close()
   }
 }
 
+function drawToJpeg(bitmap: ImageBitmap | HTMLImageElement, maxDimension: number): Promise<Blob | null> {
+  const width = bitmap.width || (bitmap as HTMLImageElement).naturalWidth
+  const height = bitmap.height || (bitmap as HTMLImageElement).naturalHeight
+  const scale = Math.min(1, maxDimension / Math.max(width, height))
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.max(1, Math.round(width * scale))
+  canvas.height = Math.max(1, Math.round(height * scale))
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return Promise.resolve(null)
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+  return new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85))
+}
+
+/**
+ * Dekodiert das Bild - zuerst per createImageBitmap, und falls das scheitert
+ * (z.B. Safari bei sehr grossen bzw. HEIC-Fotos), ueber ein <img>-Element,
+ * das solche Dateien oft trotzdem laden kann.
+ */
 async function loadBitmap(file: File): Promise<ImageBitmap | HTMLImageElement> {
   if (typeof createImageBitmap === 'function') {
-    return createImageBitmap(file)
+    try {
+      return await createImageBitmap(file)
+    } catch {
+      // weiter mit dem <img>-Fallback
+    }
   }
-  // Fallback für ältere Browser
   const url = URL.createObjectURL(file)
   try {
     const img = new Image()
