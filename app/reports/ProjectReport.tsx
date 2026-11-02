@@ -10,7 +10,8 @@ import { formatChf, formatQuantity } from '@/lib/format/money';
 import { projectDisplayName } from '@/lib/format/numbers';
 import { buildCategoryMatrix, formatHoursMinutes, type SummaryRowInput } from '@/lib/timeReport/buildTimeMatrix';
 import { buildReportData, entryMinutes, formatHm, formatTime } from '@/lib/reports/reportData';
-import { itemsTotalRappen } from '@/lib/timeEntryItems';
+import { aggregateItems } from '@/lib/timeEntryItems';
+import { CostItemsTable } from '@/app/components/CostItemsTable';
 import { personName } from '@/lib/format/personName';
 
 export interface ProjectReportOptions {
@@ -82,15 +83,14 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
   const showTotalColumn = matrix.employees.length > 1;
   const maxCategory = Math.max(0, ...matrix.rows.map((r) => r.totalMinutes));
 
-  // Material/Spesen pro Mitarbeiter
-  const costs = matrix.employees.map((employee) => {
-    const own = entries.filter((e) => e.creatorId === employee.id).flatMap((e) => e.items ?? []);
-    return {
-      employee,
-      material: itemsTotalRappen(own.filter((i) => i.type === 'material')),
-      expense: itemsTotalRappen(own.filter((i) => i.type === 'expense')),
-    };
-  });
+  const costLines = aggregateItems(entries.flatMap((e) => e.items ?? []));
+  // Fahrzeit pro Mitarbeiter und gesamt (Minuten)
+  const travelOf = (creatorId?: string) =>
+    entries
+      .filter((e) => creatorId === undefined || e.creatorId === creatorId)
+      .reduce((sum, e) => sum + (e.travelMinutes ?? 0), 0);
+  const totalTravel = travelOf();
+  const travelCell = (minutes: number) => (minutes ? formatHm(minutes) : '');
   const photos = notes.flatMap(({ note, fromCustomer }) => note.photos.map((photo) => ({ photo, note, fromCustomer })));
 
   return (
@@ -108,6 +108,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
 
       <p className="text-sm">
         {t('totalHours')}: <span className="font-bold tabular-nums">{formatHm(data.totalMinutes)}</span>
+        {totalTravel > 0 && <> · {t('colTravel')} <span className="tabular-nums">{formatHm(totalTravel)}</span></>}
         {data.materialRappen > 0 && <> · {tItems('materialTitle')} CHF {formatChf(data.materialRappen)}</>}
         {data.expenseRappen > 0 && <> · {tItems('expensesTitle')} CHF {formatChf(data.expenseRappen)}</>}
       </p>
@@ -142,6 +143,15 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                 ))}
                 {showTotalColumn && <td className={`${td} text-right tabular-nums`}>{formatHoursMinutes(matrix.totalMinutes)}</td>}
               </tr>
+              {totalTravel > 0 && (
+                <tr className="border-t border-zinc-200">
+                  <td className={td}>{t('colTravel')}</td>
+                  {matrix.employees.map((e) => (
+                    <td key={e.id} className={`${td} text-right tabular-nums`}>{travelCell(travelOf(e.id))}</td>
+                  ))}
+                  {showTotalColumn && <td className={`${td} text-right font-semibold tabular-nums`}>{formatHm(totalTravel)}</td>}
+                </tr>
+              )}
             </tbody>
           </table>
         </section>
@@ -179,37 +189,10 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
         </section>
       )}
 
-      {options.costs && costs.some((c) => c.material || c.expense) && (
-        <section className="break-inside-avoid">
+      {options.costs && costLines.length > 0 && (
+        <section>
           <h2 className={sectionTitle}>{t('sectionCosts')}</h2>
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr>
-                <th className={th}>CHF</th>
-                {costs.map((c) => (
-                  <th key={c.employee.id} className={`${th} text-right`}>{c.employee.name}</th>
-                ))}
-                {showTotalColumn && <th className={`${th} text-right`}>{t('colTotal')}</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {(['material', 'expense'] as const).map((type) => (
-                <tr key={type} className="border-t border-zinc-200">
-                  <td className={td}>{type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}</td>
-                  {costs.map((c) => (
-                    <td key={c.employee.id} className={`${td} text-right tabular-nums`}>
-                      {c[type] ? formatChf(c[type]) : ''}
-                    </td>
-                  ))}
-                  {showTotalColumn && (
-                    <td className={`${td} text-right font-semibold tabular-nums`}>
-                      {formatChf(type === 'material' ? data.materialRappen : data.expenseRappen)}
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <CostItemsTable lines={costLines} print />
         </section>
       )}
 
@@ -222,6 +205,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                 <th className={th}>{t('colDate')}</th>
                 <th className={th}>{t('colTime')}</th>
                 <th className={`${th} text-right`}>{t('colHours')}</th>
+                {totalTravel > 0 && <th className={`${th} text-right`}>{t('colTravel')}</th>}
                 <th className={th}>{t('employeeLabel')}</th>
                 <th className={th}>{t('colCategory')}</th>
                 {options.comments && <th className={th}>{t('colComment')}</th>}
@@ -238,6 +222,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                       </td>
                       <td className={`${td} whitespace-nowrap tabular-nums`}>{formatTime(entry.startAt)}–{formatTime(entry.endAt)}</td>
                       <td className={`${td} text-right tabular-nums`}>{formatHm(entryMinutes(entry))}</td>
+                      {totalTravel > 0 && <td className={`${td} text-right tabular-nums`}>{travelCell(entry.travelMinutes ?? 0)}</td>}
                       <td className={td}>{creatorName(entry)}</td>
                       <td className={td}>{entry.category?.name ?? '–'}</td>
                       {options.comments && <td className={`${td} whitespace-pre-wrap`}>{entry.comment ?? ''}</td>}
@@ -246,7 +231,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                       (entry.items ?? []).map((item) => (
                         <tr key={item.id} className="text-xs text-zinc-600">
                           <td className={td} />
-                          <td className={td} colSpan={options.comments ? 5 : 4}>
+                          <td className={td} colSpan={(options.comments ? 5 : 4) + (totalTravel > 0 ? 1 : 0)}>
                             {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}: {formatQuantity(item.quantity)}×{' '}
                             {item.description}
                             {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}

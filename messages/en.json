@@ -91,6 +91,7 @@
     "unitPrice": "CHF/unit",
     "remove": "Remove",
     "total": "Total",
+    "grandTotal": "Total material & expenses",
     "invalid": "Please enter a description, a valid quantity and a price for each material and expense line."
   },
   "myEntries": {
@@ -332,6 +333,7 @@
     "colDate": "Date",
     "colTime": "Time",
     "colHours": "Hrs",
+    "colTravel": "Travel time",
     "colProject": "Project",
     "colCategory": "Category",
     "colComment": "Comment",

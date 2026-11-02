@@ -91,6 +91,7 @@
     "unitPrice": "CHF/pz.",
     "remove": "Rimuovi",
     "total": "Totale",
+    "grandTotal": "Totale materiale & spese",
     "invalid": "Per ogni riga di materiale e spese indica una descrizione, una quantità e un prezzo validi."
   },
   "myEntries": {
@@ -332,6 +333,7 @@
     "colDate": "Data",
     "colTime": "Ora",
     "colHours": "Ore",
+    "colTravel": "Tempo di viaggio",
     "colProject": "Progetto",
     "colCategory": "Categoria",
     "colComment": "Osservazione",

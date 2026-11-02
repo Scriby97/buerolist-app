@@ -91,6 +91,7 @@
     "unitPrice": "CHF/Stk.",
     "remove": "Entfernen",
     "total": "Total",
+    "grandTotal": "Total Material & Spesen",
     "invalid": "Bitte bei Material und Spesen jeweils eine Bezeichnung sowie eine gültige Menge und einen Preis angeben."
   },
   "myEntries": {
@@ -332,6 +333,7 @@
     "colDate": "Datum",
     "colTime": "Zeit",
     "colHours": "Std.",
+    "colTravel": "Fahrzeit",
     "colProject": "Projekt",
     "colCategory": "Kategorie",
     "colComment": "Bemerkung",

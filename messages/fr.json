@@ -91,6 +91,7 @@
     "unitPrice": "CHF/pce",
     "remove": "Supprimer",
     "total": "Total",
+    "grandTotal": "Total matériel & frais",
     "invalid": "Indique pour chaque ligne de matériel et de frais une désignation, une quantité et un prix valides."
   },
   "myEntries": {
@@ -332,6 +333,7 @@
     "colDate": "Date",
     "colTime": "Heure",
     "colHours": "H",
+    "colTravel": "Temps de trajet",
     "colProject": "Projet",
     "colCategory": "Catégorie",
     "colComment": "Remarque",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { formatChf, parseChfToRappen, parseQuantity, sanitizeDecimalInput } from './format/money'
-import { entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow } from './timeEntryItems'
+import { aggregateItems, entriesCostTotals, itemsToRows, itemsTotalRappen, rowsToItems, withTrailingEmptyRow } from './timeEntryItems'
 
 describe('money', () => {
   it.each([
@@ -113,5 +113,22 @@ describe('entriesCostTotals', () => {
         {},
       ]),
     ).toEqual({ material: 1940, expense: 500 })
+  })
+})
+
+describe('aggregateItems', () => {
+  it('fasst gleiche Positionen zusammen, Material vor Spesen', () => {
+    expect(
+      aggregateItems([
+        { type: 'expense', quantity: 1, description: 'Parkgebühr', unitPriceRappen: 500 },
+        { type: 'material', quantity: 2, description: 'Kitt ', unitPriceRappen: 1040 },
+        { type: 'material', quantity: 1.5, description: 'kitt', unitPriceRappen: 1040 },
+        { type: 'material', quantity: 1, description: 'Kitt', unitPriceRappen: 900 },
+      ]),
+    ).toEqual([
+      { type: 'material', description: 'Kitt', unitPriceRappen: 1040, quantity: 3.5, totalRappen: 3640 },
+      { type: 'material', description: 'Kitt', unitPriceRappen: 900, quantity: 1, totalRappen: 900 },
+      { type: 'expense', description: 'Parkgebühr', unitPriceRappen: 500, quantity: 1, totalRappen: 500 },
+    ])
   })
 })

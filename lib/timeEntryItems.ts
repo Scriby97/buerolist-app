@@ -65,3 +65,33 @@ export function entriesCostTotals(entries: { items?: TimeEntryItem[] }[]): { mat
     expense: itemsTotalRappen(all.filter((item) => item.type === 'expense')),
   }
 }
+
+/** Eine Zeile der Material-/Spesenliste (gleiche Positionen zusammengefasst). */
+export interface CostLine {
+  type: TimeEntryItemType
+  description: string
+  unitPriceRappen: number
+  quantity: number
+  totalRappen: number
+}
+
+/**
+ * Fasst gleiche Positionen (Typ, Bezeichnung ohne Gross-/Kleinschreibung,
+ * Stueckpreis) zu einer Zeile mit summierter Menge zusammen - wie costItems
+ * im Backend. Material vor Spesen, innerhalb alphabetisch.
+ */
+export function aggregateItems(items: Pick<TimeEntryItem, 'type' | 'quantity' | 'description' | 'unitPriceRappen'>[]): CostLine[] {
+  const lines = new Map<string, CostLine>()
+  for (const item of items) {
+    const description = item.description.trim()
+    const key = `${item.type}|${description.toLowerCase()}|${item.unitPriceRappen}`
+    const line = lines.get(key) ?? { type: item.type, description, unitPriceRappen: item.unitPriceRappen, quantity: 0, totalRappen: 0 }
+    line.quantity = Math.round((line.quantity + item.quantity) * 100) / 100
+    line.totalRappen += Math.round(item.quantity * item.unitPriceRappen)
+    lines.set(key, line)
+  }
+  const typeOrder = (type: TimeEntryItemType) => (type === 'expense' ? 1 : 0)
+  return [...lines.values()].sort(
+    (a, b) => typeOrder(a.type) - typeOrder(b.type) || a.description.localeCompare(b.description, 'de'),
+  )
+}

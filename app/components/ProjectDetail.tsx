@@ -11,7 +11,7 @@ import { ProjectEntryComments } from './ProjectEntryComments';
 import { formatProjectNumber } from '@/lib/format/numbers';
 import { colorVars, employeeColors, ENTITY_BORDER_TOP, ENTITY_TINT, projectColor } from '@/lib/colors/entityColors';
 import { ColorDot } from './ColorDot';
-import { formatChf } from '@/lib/format/money';
+import { CostItemsTable } from './CostItemsTable';
 import { buildCategoryMatrix, formatHoursMinutes } from '@/lib/timeReport/buildTimeMatrix';
 import { useOrganization } from '@/lib/contexts/OrganizationContext';
 import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage';
@@ -148,7 +148,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
     );
   }
 
-  const { project, categories, notes, timeSummary, costSummary = [], travelSummary = [] } = detail;
+  const { project, categories, notes, timeSummary, costItems = [], travelSummary = [] } = detail;
   const travelOf = (creatorId?: string) =>
     travelSummary
       .filter((row) => creatorId === undefined || row.creatorId === creatorId)
@@ -172,13 +172,6 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
           className: `${className} ${head ? `border-t-4 ${ENTITY_BORDER_TOP}` : ''} ${ENTITY_TINT}`,
         }
       : { className };
-  // Material/Spesen pro Mitarbeiter und gesamt (Rappen).
-  const costOf = (type: 'material' | 'expense', creatorId?: string) =>
-    costSummary
-      .filter((row) => row.type === type && (creatorId === undefined || row.creatorId === creatorId))
-      .reduce((sum, row) => sum + row.totalRappen, 0);
-  const hasCosts = costSummary.some((row) => row.totalRappen > 0);
-  const chf = (rappen: number) => (rappen ? formatChf(rappen) : '');
   // Kategorie-Spalte bleibt beim seitlichen Scrollen (viele Mitarbeiter) stehen.
   const stickyCell = 'sticky left-0 z-10 bg-white dark:bg-zinc-800';
   // Namen zweizeilig (Vorname / Rest), damit auch auf dem Handy mehrere
@@ -333,57 +326,11 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
             </table>
           </div>
         )}
-        {hasCosts && (
+        {costItems.length > 0 && (
           <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 space-y-2">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t('costsTitle')}</h3>
-            <div className="-mx-1.5 overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="text-zinc-500 dark:text-zinc-400">
-                    <th scope="col" className={`${stickyCell} px-1.5 py-1.5 text-left align-bottom font-medium`}>CHF</th>
-                    {summaryMatrix.employees.map((employee) => (
-                      <th key={employee.id} scope="col" {...employeeCol(employee.id, 'px-1.5 py-1.5 text-right align-bottom font-medium leading-tight', true)}>
-                        {splitName(employee.name).map((part, idx) => (
-                          <span key={idx} className="block whitespace-nowrap">{part}</span>
-                        ))}
-                      </th>
-                    ))}
-                    {showTotalColumn && (
-                      <th scope="col" className="px-1.5 py-1.5 text-right align-bottom font-semibold text-zinc-700 dark:text-zinc-300">
-                        {t('totalLabel')}
-                      </th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="text-zinc-700 dark:text-zinc-300">
-                  {(['material', 'expense'] as const).map((type) => (
-                    <tr key={type} className="border-t border-zinc-100 dark:border-zinc-700/60">
-                      <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left font-normal`}>
-                        {type === 'material' ? t('costsMaterial') : t('costsExpenses')}
-                      </th>
-                      {summaryMatrix.employees.map((employee) => (
-                        <td key={employee.id} {...employeeCol(employee.id, numCell)}>{chf(costOf(type, employee.id))}</td>
-                      ))}
-                      {showTotalColumn && (
-                        <td className={`${numCell} font-medium text-zinc-900 dark:text-zinc-100`}>{chf(costOf(type))}</td>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot>
-                  <tr className="border-t-2 border-zinc-200 dark:border-zinc-600 font-semibold text-zinc-900 dark:text-zinc-50">
-                    <th scope="row" className={`${stickyCell} px-1.5 py-1.5 text-left`}>{t('totalLabel')}</th>
-                    {summaryMatrix.employees.map((employee) => (
-                      <td key={employee.id} {...employeeCol(employee.id, numCell)}>
-                        {chf(costOf('material', employee.id) + costOf('expense', employee.id))}
-                      </td>
-                    ))}
-                    {showTotalColumn && (
-                      <td className={numCell}>{formatChf(costOf('material') + costOf('expense'))}</td>
-                    )}
-                  </tr>
-                </tfoot>
-              </table>
+            <div className="-mx-1.5 overflow-x-auto text-zinc-700 dark:text-zinc-300">
+              <CostItemsTable lines={costItems} />
             </div>
           </div>
         )}

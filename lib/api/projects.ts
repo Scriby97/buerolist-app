@@ -1,3 +1,4 @@
+import type { CostLine } from '@/lib/timeEntryItems'
 import { authenticatedFetch } from './authenticatedFetch'
 import { buildApiUrl } from './url'
 import { throwApiError } from './ApiError'
@@ -50,6 +51,8 @@ export interface ProjectDetail {
   timeSummary: ProjectTimeSummaryRow[]
   /** Material/Spesen pro Mitarbeiter (fehlt bei aelteren Backends) */
   costSummary?: ProjectCostSummaryRow[]
+  /** Alle Material-/Spesenpositionen, gleiche zusammengefasst (fehlt bei aelteren Backends) */
+  costItems?: CostLine[]
   /** Fahrzeit pro Mitarbeiter in Minuten (fehlt bei aelteren Backends) */
   travelSummary?: { creatorId: string; totalMinutes: number }[]
 }

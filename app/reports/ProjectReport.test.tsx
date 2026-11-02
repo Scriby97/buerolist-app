@@ -28,7 +28,13 @@ const entries = [
     comment: 'Gerüst gestellt',
     items: [{ id: 'i', type: 'material', quantity: 2, description: 'Kitt', unitPriceRappen: 1040 }],
   }),
-  entry('b', 'u2', 'c2', '2026-10-14T07:00:00', '2026-10-14T09:30:00'),
+  entry('b', 'u2', 'c2', '2026-10-14T07:00:00', '2026-10-14T09:30:00', {
+    travelMinutes: 45,
+    items: [
+      { id: 'j', type: 'material', quantity: 1, description: 'kitt', unitPriceRappen: 1040 },
+      { id: 'k', type: 'expense', quantity: 1, description: 'Parkgebühr', unitPriceRappen: 500 },
+    ],
+  }),
 ] as unknown as TimeEntry[]
 
 const detail = {
@@ -69,6 +75,20 @@ describe('ProjectReport', () => {
     expect(screen.getByText(/2× Kitt · CHF 20.80/)).toBeTruthy()
     expect(screen.getByText('Fassade Nordseite beachten')).toBeTruthy()
     expect(container.querySelector('img')?.getAttribute('src')).toBe('https://example.com/a.jpg')
+  })
+
+  it('listet Material und Spesen einzeln mit Totalen und zeigt die Fahrzeit', () => {
+    renderWithIntl(
+      <ProjectReport detail={detail} entries={entries} organizationName="3xGermann" periodLabel="Ganzes Projekt" options={all} />,
+    )
+    // "Kitt" und "kitt" zum gleichen Preis werden zusammengefasst: 3 x 10.40
+    const kitt = screen.getByRole('cell', { name: 'Kitt' }).closest('tr')!
+    expect(kitt.textContent).toContain('31.20')
+    expect(screen.getByRole('cell', { name: 'Parkgebühr' })).toBeTruthy()
+    expect(screen.getByText('Total Material').closest('tr')!.textContent).toContain('31.20')
+    expect(screen.getByText('Total Spesen').closest('tr')!.textContent).toContain('5.00')
+    expect(screen.getByText('Total Material & Spesen').closest('tr')!.textContent).toContain('36.20')
+    expect(screen.getAllByText('0:45').length).toBeGreaterThan(0)
   })
 
   it('zeigt auch Notizen und Fotos beim Kunden, gekennzeichnet', () => {
