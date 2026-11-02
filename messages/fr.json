@@ -512,6 +512,7 @@
   },
   "subscriptionTiers": {
     "free": "Free",
+    "standard": "Standard",
     "pro": "Pro"
   },
   "settingsBilling": {
@@ -542,9 +543,9 @@
     "cancelSuccessNotice": "Résiliation envoyée. Ton forfait actuel reste actif jusqu'à la fin de la période de facturation en cours, puis l'organisation repasse automatiquement au forfait gratuit Free.",
     "cancelSuccessOverLimitNotice": "Résiliation envoyée. Ton forfait actuel reste actif jusqu'à la fin de la période de facturation en cours. Si vous êtes encore au-dessus de la limite Free à ce moment-là, tous les utilisateurs seront automatiquement déconnectés de l'organisation (vos données restent intactes).",
     "cancelConfirmTitle": "Résilier l'abonnement ?",
-    "cancelConfirmMessage": "Ton accès reste actif jusqu'à la fin de la période de facturation en cours. Ensuite, l'organisation repasse automatiquement au forfait gratuit Free (max. 100 projets actifs, 20 collaborateurs, 50 clients).",
+    "cancelConfirmMessage": "Ton accès reste actif jusqu'à la fin de la période de facturation en cours. Ensuite, l'organisation repasse automatiquement au forfait gratuit Free (max. 2 collaborateurs, 10 projets actifs).",
     "cancelConfirmOverLimitTitle": "Attention : tous les utilisateurs perdront l'accès",
-    "cancelConfirmOverLimitMessage": "Votre organisation utilise actuellement plus de projets actifs, de collaborateurs ou de clients que ne le permet le forfait gratuit Free (max. 100 projets actifs, 20 collaborateurs, 50 clients). Si tu résilies et que vous êtes toujours au-dessus de la limite à la fin de la période de facturation, TOUS les utilisateurs (y compris toi en tant que propriétaire) seront automatiquement déconnectés de l'organisation - plus personne ne pourra y accéder. Vos données (clients, projets, entrées de temps, etc.) ne seront PAS supprimées, seul l'accès est perdu jusqu'à ce que vous souscriviez à nouveau à un forfait adapté.",
+    "cancelConfirmOverLimitMessage": "Votre organisation utilise actuellement plus de projets actifs, de collaborateurs ou de clients que ne le permet le forfait gratuit Free (max. 2 collaborateurs, 10 projets actifs). Si tu résilies et que vous êtes toujours au-dessus de la limite à la fin de la période de facturation, TOUS les utilisateurs (y compris toi en tant que propriétaire) seront automatiquement déconnectés de l'organisation - plus personne ne pourra y accéder. Vos données (clients, projets, entrées de temps, etc.) ne seront PAS supprimées, seul l'accès est perdu jusqu'à ce que vous souscriviez à nouveau à un forfait adapté.",
     "cancelConfirmButton": "Oui, résilier",
     "switchConfirmTitle": "Changer de forfait ?",
     "switchConfirmMessage": "Le nouveau forfait est activé immédiatement, la différence est calculée au prorata.",
@@ -961,7 +962,8 @@
     "ABSENCE_NOT_FOUND": "L’absence est introuvable.",
     "ABSENCE_REASON_NOT_FOUND": "Le motif d’absence est introuvable.",
     "ABSENCE_REASON_IN_USE": "Ce motif est encore utilisé par {count} absence(s) et ne peut pas être supprimé. Tu peux toutefois le renommer.",
-    "ABSENCE_INVALID_RANGE": "Période invalide : la date de fin doit suivre la date de début, la période peut couvrir au maximum un an et doit contenir au moins un jour ouvrable."
+    "ABSENCE_INVALID_RANGE": "Période invalide : la date de fin doit suivre la date de début, la période peut couvrir au maximum un an et doit contenir au moins un jour ouvrable.",
+    "SUBSCRIPTION_DOWNGRADE_OVER_LIMIT": "Vous avez trop de collaborateurs ou de projets actifs pour cette offre ({members} sur max. {maxMembers} collaborateurs, {projects} sur max. {maxProjects} projets actifs). Réduisez-les d’abord ou choisissez une offre plus grande."
   },
   "settingsOrganization": {
     "title": "Organisation",

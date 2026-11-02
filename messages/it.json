@@ -512,6 +512,7 @@
   },
   "subscriptionTiers": {
     "free": "Free",
+    "standard": "Standard",
     "pro": "Pro"
   },
   "settingsBilling": {
@@ -542,9 +543,9 @@
     "cancelSuccessNotice": "Disdetta inviata. Il tuo piano attuale resta attivo fino alla fine del periodo di fatturazione in corso, dopodiché l'organizzazione torna automaticamente al piano gratuito Free.",
     "cancelSuccessOverLimitNotice": "Disdetta inviata. Il tuo piano attuale resta attivo fino alla fine del periodo di fatturazione in corso. Se a quel punto siete ancora oltre il limite Free, tutti gli utenti verranno automaticamente scollegati dall'organizzazione (i vostri dati restano completamente intatti).",
     "cancelConfirmTitle": "Disdire l'abbonamento?",
-    "cancelConfirmMessage": "Il tuo accesso resta attivo fino alla fine del periodo di fatturazione in corso. Dopodiché l'organizzazione torna automaticamente al piano gratuito Free (max. 100 progetti attivi, 20 collaboratori, 50 clienti).",
+    "cancelConfirmMessage": "Il tuo accesso resta attivo fino alla fine del periodo di fatturazione in corso. Dopodiché l'organizzazione torna automaticamente al piano gratuito Free (max. 2 collaboratori, 10 progetti attivi).",
     "cancelConfirmOverLimitTitle": "Attenzione: tutti gli utenti perderanno l'accesso",
-    "cancelConfirmOverLimitMessage": "La vostra organizzazione utilizza attualmente più progetti attivi, collaboratori o clienti di quanti ne consenta il piano gratuito Free (max. 100 progetti attivi, 20 collaboratori, 50 clienti). Se disdici e alla fine del periodo di fatturazione siete ancora oltre il limite, TUTTI gli utenti (incluso te come proprietario) verranno automaticamente scollegati dall'organizzazione - nessuno potrà più accedervi. I vostri dati (clienti, progetti, voci di tempo, ecc.) NON verranno eliminati, si perde solo l'accesso finché non sottoscriverete di nuovo un piano adeguato.",
+    "cancelConfirmOverLimitMessage": "La vostra organizzazione utilizza attualmente più progetti attivi, collaboratori o clienti di quanti ne consenta il piano gratuito Free (max. 2 collaboratori, 10 progetti attivi). Se disdici e alla fine del periodo di fatturazione siete ancora oltre il limite, TUTTI gli utenti (incluso te come proprietario) verranno automaticamente scollegati dall'organizzazione - nessuno potrà più accedervi. I vostri dati (clienti, progetti, voci di tempo, ecc.) NON verranno eliminati, si perde solo l'accesso finché non sottoscriverete di nuovo un piano adeguato.",
     "cancelConfirmButton": "Sì, disdici",
     "switchConfirmTitle": "Cambiare piano?",
     "switchConfirmMessage": "Il nuovo piano diventa attivo immediatamente, la differenza viene calcolata proporzionalmente.",
@@ -961,7 +962,8 @@
     "ABSENCE_NOT_FOUND": "L’assenza non è stata trovata.",
     "ABSENCE_REASON_NOT_FOUND": "Il motivo di assenza non è stato trovato.",
     "ABSENCE_REASON_IN_USE": "Questo motivo è ancora usato da {count} assenza/e e non può essere eliminato. Puoi però rinominarlo.",
-    "ABSENCE_INVALID_RANGE": "Periodo non valido: la data di fine deve seguire quella di inizio, il periodo può durare al massimo un anno e deve contenere almeno un giorno lavorativo."
+    "ABSENCE_INVALID_RANGE": "Periodo non valido: la data di fine deve seguire quella di inizio, il periodo può durare al massimo un anno e deve contenere almeno un giorno lavorativo.",
+    "SUBSCRIPTION_DOWNGRADE_OVER_LIMIT": "Avete troppi collaboratori o progetti attivi per questo piano ({members} su max. {maxMembers} collaboratori, {projects} su max. {maxProjects} progetti attivi). Riduceteli prima o scegliete un piano più grande."
   },
   "settingsOrganization": {
     "title": "Organizzazione",

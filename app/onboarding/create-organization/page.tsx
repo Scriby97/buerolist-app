@@ -18,17 +18,7 @@ import {
 import { OrgAvatar } from '@/app/components/OrgAvatar'
 import { PENDING_ORG_LOGO_KEY } from '@/lib/organizations/pendingLogo'
 import type { SubscriptionTier } from '@/lib/types/user'
-
-interface PlanDefinition {
-  id: SubscriptionTier
-  label: string
-  price: string
-  maxProjects: string
-  maxMembers: string
-  maxCustomers: string
-  paid: boolean
-  highlight?: boolean
-}
+import { SUBSCRIPTION_PLANS, planDisplay } from '@/lib/subscriptionPlans'
 
 export default function CreateOrganizationOnboardingPage() {
   const { refreshOrganizations, hasOrganization } = useAuth()
@@ -39,27 +29,10 @@ export default function CreateOrganizationOnboardingPage() {
   const tTier = useTranslations('subscriptionTiers')
   const getApiErrorMessage = useApiErrorMessage()
 
-  const plans: PlanDefinition[] = useMemo(() => [
-    {
-      id: 'free',
-      label: tTier('free'),
-      price: t('freeLabel'),
-      maxProjects: '100',
-      maxMembers: '20',
-      maxCustomers: '50',
-      paid: false,
-    },
-    {
-      id: 'pro',
-      label: tTier('pro'),
-      price: `CHF 39.- ${t('perMonthSuffix')}`,
-      maxProjects: t('unlimitedLabel'),
-      maxMembers: t('unlimitedLabel'),
-      maxCustomers: t('unlimitedLabel'),
-      paid: true,
-      highlight: true,
-    },
-  ], [t, tTier])
+  const plans = useMemo(
+    () => SUBSCRIPTION_PLANS.map((plan) => ({ ...plan, label: tTier(plan.id), paid: plan.priceChf > 0, ...planDisplay(plan, t) })),
+    [t, tTier],
+  )
 
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionTier>('free')
   const [organizationName, setOrganizationName] = useState('')
@@ -195,7 +168,7 @@ export default function CreateOrganizationOnboardingPage() {
         <form onSubmit={handleSubmit} className="space-y-8">
           <section>
             <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4">{t('planSectionTitle')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {plans.map((plan) => {
                 const isSelected = plan.id === selectedPlan
                 return (
@@ -218,9 +191,9 @@ export default function CreateOrganizationOnboardingPage() {
                     <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{plan.label}</h3>
                     <p className="mt-1 text-blue-700 dark:text-blue-300 font-medium">{plan.price}</p>
                     <ul className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-                      <li>{plan.maxProjects} {t('projectsSuffix')}</li>
-                      <li>{plan.maxMembers} {t('membersSuffix')}</li>
-                      <li>{plan.maxCustomers} {t('customersSuffix')}</li>
+                      {plan.features.map((feature) => (
+                        <li key={feature}>{feature}</li>
+                      ))}
                     </ul>
                   </button>
                 )

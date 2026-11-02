@@ -15,16 +15,7 @@ import {
   updateOrganizationSubscription,
 } from '@/lib/api/organizations'
 import type { OrganizationSubscription, SubscriptionTier } from '@/lib/types/user'
-
-interface PlanDefinition {
-  id: SubscriptionTier
-  label: string
-  price: string
-  maxProjects: string
-  maxMembers: string
-  maxCustomers: string
-  paid: boolean
-}
+import { SUBSCRIPTION_PLANS, planDisplay } from '@/lib/subscriptionPlans'
 
 export default function SettingsBillingPage() {
   const router = useRouter()
@@ -47,10 +38,12 @@ export default function SettingsBillingPage() {
   const [confirmTier, setConfirmTier] = useState<SubscriptionTier | null>(null)
   const [portalLoading, setPortalLoading] = useState(false)
 
-  const plans: PlanDefinition[] = [
-    { id: 'free', label: tTier('free'), price: t('freeLabel'), maxProjects: '100', maxMembers: '20', maxCustomers: '50', paid: false },
-    { id: 'pro', label: tTier('pro'), price: `CHF 39.- ${t('perMonthSuffix')}`, maxProjects: t('unlimitedLabel'), maxMembers: t('unlimitedLabel'), maxCustomers: t('unlimitedLabel'), paid: true },
-  ]
+  const plans = SUBSCRIPTION_PLANS.map((plan) => ({
+    ...plan,
+    label: tTier(plan.id),
+    paid: plan.priceChf > 0,
+    ...planDisplay(plan, t),
+  }))
 
   useEffect(() => {
     if (authLoading || orgLoading) return
@@ -232,7 +225,7 @@ export default function SettingsBillingPage() {
 
             <div>
               <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50 mb-4">{t('choosePlanTitle')}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {plans.map((plan) => {
                   const isCurrent = plan.id === subscription.tier
                   const isBusy = switchingTier === plan.id
@@ -249,9 +242,9 @@ export default function SettingsBillingPage() {
                       <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{plan.label}</h3>
                       <p className="mt-1 text-blue-700 dark:text-blue-300 font-medium">{plan.price}</p>
                       <ul className="mt-3 text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-                        <li>{plan.maxProjects} {t('projectsSuffix')}</li>
-                        <li>{plan.maxMembers} {t('membersSuffix')}</li>
-                        <li>{plan.maxCustomers} {t('customersSuffix')}</li>
+                        {plan.features.map((feature) => (
+                          <li key={feature}>{feature}</li>
+                        ))}
                       </ul>
                       <button
                         type="button"

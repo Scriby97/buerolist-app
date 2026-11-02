@@ -512,6 +512,7 @@
   },
   "subscriptionTiers": {
     "free": "Free",
+    "standard": "Standard",
     "pro": "Pro"
   },
   "settingsBilling": {
@@ -542,9 +543,9 @@
     "cancelSuccessNotice": "Kündigung eingereicht. Dein aktueller Tarif bleibt bis zum Ende der laufenden Abrechnungsperiode aktiv, danach fällt die Organisation automatisch auf den kostenlosen Free-Tarif zurück.",
     "cancelSuccessOverLimitNotice": "Kündigung eingereicht. Dein aktueller Tarif bleibt bis zum Ende der laufenden Abrechnungsperiode aktiv. Seid ihr zu diesem Zeitpunkt weiterhin über dem Free-Limit, werden alle Nutzer automatisch von der Organisation getrennt (eure Daten bleiben dabei vollständig erhalten).",
     "cancelConfirmTitle": "Abonnement kündigen?",
-    "cancelConfirmMessage": "Dein Zugriff bleibt bis zum Ende der aktuellen Abrechnungsperiode bestehen. Danach fällt die Organisation automatisch auf den kostenlosen Free-Tarif zurück (max. 100 aktive Projekte, 20 Mitarbeiter, 50 Kunden).",
+    "cancelConfirmMessage": "Dein Zugriff bleibt bis zum Ende der aktuellen Abrechnungsperiode bestehen. Danach fällt die Organisation automatisch auf den kostenlosen Free-Tarif zurück (max. 2 Mitarbeiter, 10 aktive Projekte).",
     "cancelConfirmOverLimitTitle": "Achtung: Alle Nutzer verlieren den Zugriff",
-    "cancelConfirmOverLimitMessage": "Eure Organisation nutzt aktuell mehr aktive Projekte, Mitarbeiter oder Kunden, als der kostenlose Free-Tarif erlaubt (max. 100 aktive Projekte, 20 Mitarbeiter, 50 Kunden). Wenn ihr kündigt und bis zum Ende der Abrechnungsperiode weiterhin über dem Limit liegt, werden ALLE Nutzer (inklusive dir als Owner) automatisch von der Organisation getrennt - niemand kann dann mehr darauf zugreifen. Eure Daten (Kunden, Projekte, Zeiteinträge usw.) werden dabei NICHT gelöscht, nur der Zugriff geht verloren, bis ihr erneut einen passenden Tarif abschliesst.",
+    "cancelConfirmOverLimitMessage": "Eure Organisation nutzt aktuell mehr aktive Projekte, Mitarbeiter oder Kunden, als der kostenlose Free-Tarif erlaubt (max. 2 Mitarbeiter, 10 aktive Projekte). Wenn ihr kündigt und bis zum Ende der Abrechnungsperiode weiterhin über dem Limit liegt, werden ALLE Nutzer (inklusive dir als Owner) automatisch von der Organisation getrennt - niemand kann dann mehr darauf zugreifen. Eure Daten (Kunden, Projekte, Zeiteinträge usw.) werden dabei NICHT gelöscht, nur der Zugriff geht verloren, bis ihr erneut einen passenden Tarif abschliesst.",
     "cancelConfirmButton": "Ja, kündigen",
     "switchConfirmTitle": "Tarif wechseln?",
     "switchConfirmMessage": "Der neue Tarif wird sofort aktiv, die Differenz wird anteilig verrechnet (Proration).",
@@ -961,7 +962,8 @@
     "ABSENCE_NOT_FOUND": "Die Abwesenheit wurde nicht gefunden.",
     "ABSENCE_REASON_NOT_FOUND": "Der Abwesenheitsgrund wurde nicht gefunden.",
     "ABSENCE_REASON_IN_USE": "Dieser Grund wird noch von {count} Abwesenheit(en) verwendet und kann nicht gelöscht werden. Du kannst ihn aber umbenennen.",
-    "ABSENCE_INVALID_RANGE": "Ungültiger Zeitraum: Das Enddatum muss nach dem Startdatum liegen, der Zeitraum höchstens ein Jahr umfassen und mindestens einen Arbeitstag enthalten."
+    "ABSENCE_INVALID_RANGE": "Ungültiger Zeitraum: Das Enddatum muss nach dem Startdatum liegen, der Zeitraum höchstens ein Jahr umfassen und mindestens einen Arbeitstag enthalten.",
+    "SUBSCRIPTION_DOWNGRADE_OVER_LIMIT": "Für diesen Tarif habt ihr zu viele Mitarbeiter oder aktive Projekte ({members} von max. {maxMembers} Mitarbeitern, {projects} von max. {maxProjects} aktiven Projekten). Bitte zuerst reduzieren oder einen grösseren Tarif wählen."
   },
   "settingsOrganization": {
     "title": "Organisation",

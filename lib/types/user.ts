@@ -22,7 +22,7 @@ export interface Organization {
 }
 
 export type OrganizationRole = 'employee' | 'admin' | 'owner'
-export type SubscriptionTier = 'free' | 'pro'
+export type SubscriptionTier = 'free' | 'standard' | 'pro'
 export type SubscriptionStatus = 'active' | 'past_due' | 'canceled'
 
 export interface OrganizationMembership {

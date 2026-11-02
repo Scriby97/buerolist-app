@@ -512,6 +512,7 @@
   },
   "subscriptionTiers": {
     "free": "Free",
+    "standard": "Standard",
     "pro": "Pro"
   },
   "settingsBilling": {
@@ -542,9 +543,9 @@
     "cancelSuccessNotice": "Cancellation submitted. Your current plan stays active until the end of the current billing period, after which the organization automatically falls back to the free Free plan.",
     "cancelSuccessOverLimitNotice": "Cancellation submitted. Your current plan stays active until the end of the current billing period. If you're still over the Free limit at that point, all users will automatically be disconnected from the organization (your data stays fully intact).",
     "cancelConfirmTitle": "Cancel subscription?",
-    "cancelConfirmMessage": "Your access stays active until the end of the current billing period. After that, the organization automatically falls back to the free Free plan (max. 100 active projects, 20 members, 50 customers).",
+    "cancelConfirmMessage": "Your access stays active until the end of the current billing period. After that, the organization automatically falls back to the free Free plan (max. 2 members, 10 active projects).",
     "cancelConfirmOverLimitTitle": "Warning: All users will lose access",
-    "cancelConfirmOverLimitMessage": "Your organization currently uses more active projects, members or customers than the free Free plan allows (max. 100 active projects, 20 members, 50 customers). If you cancel and are still over the limit by the end of the billing period, ALL users (including you as owner) will automatically be disconnected from the organization - no one will be able to access it anymore. Your data (customers, projects, time entries, etc.) will NOT be deleted, only access is lost until you subscribe to a suitable plan again.",
+    "cancelConfirmOverLimitMessage": "Your organization currently uses more active projects, members or customers than the free Free plan allows (max. 2 members, 10 active projects). If you cancel and are still over the limit by the end of the billing period, ALL users (including you as owner) will automatically be disconnected from the organization - no one will be able to access it anymore. Your data (customers, projects, time entries, etc.) will NOT be deleted, only access is lost until you subscribe to a suitable plan again.",
     "cancelConfirmButton": "Yes, cancel",
     "switchConfirmTitle": "Switch plan?",
     "switchConfirmMessage": "The new plan becomes active immediately, the difference is prorated.",
@@ -961,7 +962,8 @@
     "ABSENCE_NOT_FOUND": "The absence was not found.",
     "ABSENCE_REASON_NOT_FOUND": "The absence reason was not found.",
     "ABSENCE_REASON_IN_USE": "This reason is still used by {count} absence(s) and cannot be deleted. You can rename it, though.",
-    "ABSENCE_INVALID_RANGE": "Invalid period: the end date must be after the start date, the period may span at most one year and must contain at least one working day."
+    "ABSENCE_INVALID_RANGE": "Invalid period: the end date must be after the start date, the period may span at most one year and must contain at least one working day.",
+    "SUBSCRIPTION_DOWNGRADE_OVER_LIMIT": "You have too many members or active projects for this plan ({members} of max. {maxMembers} members, {projects} of max. {maxProjects} active projects). Please reduce them first or choose a larger plan."
   },
   "settingsOrganization": {
     "title": "Organization",
