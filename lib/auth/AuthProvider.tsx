@@ -8,6 +8,7 @@ import { authenticatedFetch } from '@/lib/api/authenticatedFetch'
 import { checkBackendHealth } from '@/lib/api/healthCheck'
 import { buildApiUrl, getApiBaseUrlOrNull } from '@/lib/api/url'
 import { getMyOrganizations } from '@/lib/api/organizations'
+import { markDeviceKnown } from './knownDevice'
 import type { User, Organization, OrganizationMembership, OrganizationRole } from '@/lib/types/user'
 
 interface AuthContextType {
@@ -211,6 +212,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setSupabaseUser(session?.user ?? null)
+      if (session?.user) markDeviceKnown()
 
       if (session?.user) {
         if (isResetPasswordRoute) {
@@ -242,6 +244,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const nextUserId = session?.user?.id ?? null
 
       setSupabaseUser(session?.user ?? null)
+      if (session?.user) markDeviceKnown()
 
       // Manche Events (Token-Refresh nach Rueckkehr aus einem gedrosselten
       // Hintergrund-Tab, Metadaten-Updates, Supabases interne

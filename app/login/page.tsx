@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/lib/auth/AuthProvider'
+import { useIsKnownDevice } from '@/lib/auth/knownDevice'
 
 const LoginPage: FC = () => {
   const router = useRouter()
@@ -19,6 +20,7 @@ const LoginPage: FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [isRecoveryRedirect, setIsRecoveryRedirect] = useState(false)
   const [redirecting, setRedirecting] = useState(false)
+  const isKnownDevice = useIsKnownDevice()
 
   // Reine Ableitung aus den URL-Query-Params - useSearchParams() liefert die
   // bereits waehrend des Renders (kein Browser-only-API wie window.location),
@@ -110,6 +112,19 @@ const LoginPage: FC = () => {
         </div>
 
         <div className="bg-white dark:bg-zinc-800 shadow-lg rounded-lg p-8">
+          {!isKnownDevice && !infoMessage && (
+            <div className="mb-6 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
+              <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">{t('newHereTitle')}</p>
+              <p className="mt-1 text-sm text-blue-800 dark:text-blue-200">{t('newHereText')}</p>
+              <Link
+                href="/register"
+                className="mt-3 block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+              >
+                {t('newHereButton')}
+              </Link>
+            </div>
+          )}
+
           {infoMessage && (
             <div className="mb-6 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-3">
               <p className="text-sm text-green-800 dark:text-green-200">{infoMessage}</p>
