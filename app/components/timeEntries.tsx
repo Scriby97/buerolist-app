@@ -38,14 +38,9 @@ function durationMinutes(startAt: string, endAt: string): number {
   return Math.round((new Date(endAt).getTime() - new Date(startAt).getTime()) / 60000);
 }
 
-function formatMinutes(minutes: number): string {
-  const hours = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-  return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
-}
-
+// Dezimalstunden wie beim Tagestotal und der Fahrzeit: 270 min -> "4.50 h"
 function formatDuration(startAt: string, endAt: string): string {
-  return formatMinutes(durationMinutes(startAt, endAt));
+  return `${formatDecimalHours(durationMinutes(startAt, endAt))} h`;
 }
 
 interface DayGroup {
