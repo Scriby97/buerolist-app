@@ -940,6 +940,7 @@
     "ORG_CATEGORY_MANAGE_FORBIDDEN": "Seuls les administrateurs ou le propriétaire de l'organisation peuvent gérer les catégories.",
     "PROJECT_NOT_FOUND": "Projet introuvable.",
     "PROJECT_NOT_IN_YOUR_ORG": "Ce projet n'appartient pas à votre organisation.",
+    "PROJECT_COMPLETED": "Ce projet est terminé, on ne peut plus y saisir d’heures. Remets-le en actif pour en ajouter.",
     "PROJECT_LIMIT_REACHED": "La limite de {limit} projets pour le forfait actuel est atteinte. Veuillez mettre à niveau votre abonnement pour ajouter davantage de projets.",
     "CUSTOMER_LIMIT_REACHED": "La limite de {limit} clients pour le forfait actuel est atteinte. Veuillez mettre à niveau votre abonnement pour ajouter davantage de clients.",
     "ORG_PROJECT_MANAGE_FORBIDDEN": "Seuls les administrateurs ou le propriétaire de l'organisation peuvent gérer les projets.",

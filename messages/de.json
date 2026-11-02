@@ -940,6 +940,7 @@
     "ORG_CATEGORY_MANAGE_FORBIDDEN": "Nur Admins oder der Eigentümer der Organisation dürfen Kategorien verwalten.",
     "PROJECT_NOT_FOUND": "Projekt wurde nicht gefunden.",
     "PROJECT_NOT_IN_YOUR_ORG": "Projekt gehört nicht zu deiner Organisation.",
+    "PROJECT_COMPLETED": "Dieses Projekt ist abgeschlossen, darauf kann keine Zeit mehr gebucht werden. Setze es wieder auf aktiv, um nachzubuchen.",
     "PROJECT_LIMIT_REACHED": "Das Projekt-Limit von {limit} für den aktuellen Tarif ist erreicht. Bitte upgrade das Abonnement, um weitere Projekte zu erfassen.",
     "CUSTOMER_LIMIT_REACHED": "Das Kunden-Limit von {limit} für den aktuellen Tarif ist erreicht. Bitte upgrade das Abonnement, um weitere Kunden zu erfassen.",
     "ORG_PROJECT_MANAGE_FORBIDDEN": "Nur Admins oder der Eigentümer der Organisation dürfen Projekte verwalten.",

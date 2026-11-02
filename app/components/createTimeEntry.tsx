@@ -387,7 +387,10 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
       setProjectsLoading(true);
       setProjectsError(null);
       try {
-        const data = await getProjects(selectedOrgId, { signal: controller.signal });
+        // Auf abgeschlossene Projekte kann nicht mehr gebucht werden
+        const data = (await getProjects(selectedOrgId, { signal: controller.signal })).filter(
+          (p) => p.status !== 'completed',
+        );
         setProjects(data);
         const currentValid = data.find((p) => p.id === currentProjectIdRef.current);
         const selectedProjectId = currentValid ? currentProjectIdRef.current : data[0]?.id ?? '';
