@@ -16,7 +16,7 @@ describe('subscriptionPlans', () => {
     expect(SUBSCRIPTION_PLANS.map((p) => [p.id, p.priceChf, p.maxMembers])).toEqual([
       ['free', 0, 2],
       ['standard', 29, 10],
-      ['pro', 69, 30],
+      ['pro', 69, null],
     ])
   })
 

@@ -17,7 +17,7 @@ export interface SubscriptionPlan {
 export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   { id: 'free', priceChf: 0, maxProjects: 10, maxMembers: 2 },
   { id: 'standard', priceChf: 29, maxProjects: null, maxMembers: 10, highlight: true },
-  { id: 'pro', priceChf: 69, maxProjects: null, maxMembers: 30 },
+  { id: 'pro', priceChf: 69, maxProjects: null, maxMembers: null },
 ]
 
 /** Texte einer Tarifkarte: Preis und Leistungen, z.B. "10 Mitarbeiter". */
