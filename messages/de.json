@@ -301,6 +301,7 @@
   },
   "reports": {
     "title": "Rapporte",
+    "backToProject": "← Zurück zum Projekt",
     "subtitle": "Arbeitsrapporte für Mitarbeiter oder Projektrapporte erstellen, drucken oder als PDF speichern.",
     "employeeReportTitle": "Arbeitsrapport",
     "employeeLabel": "Mitarbeiter",

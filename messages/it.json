@@ -301,6 +301,7 @@
   },
   "reports": {
     "title": "Rapporti",
+    "backToProject": "← Torna al progetto",
     "subtitle": "Crea rapporti di lavoro per collaboratori o rapporti di progetto, stampali o salvali come PDF.",
     "employeeReportTitle": "Rapporto di lavoro",
     "employeeLabel": "Collaboratore",

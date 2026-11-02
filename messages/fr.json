@@ -301,6 +301,7 @@
   },
   "reports": {
     "title": "Rapports",
+    "backToProject": "← Retour au projet",
     "subtitle": "Créer des rapports de travail par collaborateur ou des rapports de projet, les imprimer ou les enregistrer en PDF.",
     "employeeReportTitle": "Rapport de travail",
     "employeeLabel": "Collaborateur",

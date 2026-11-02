@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Breadcrumbs from '@/app/components/Breadcrumbs'
@@ -52,6 +53,13 @@ function ReportsPageContent() {
   const [from, setFrom] = useState(monthRange(now.getFullYear(), now.getMonth() + 1).from)
   const [to, setTo] = useState(monthRange(now.getFullYear(), now.getMonth() + 1).to)
   const [projectId, setProjectId] = useState(searchParams.get('projectId') ?? '')
+  // Vom Projekt aus geoeffnet: Link zurueck, solange dasselbe Projekt gewaehlt ist.
+  // Nur app-interne Pfade zulassen (kein //evil.com).
+  const fromParam = searchParams.get('from')
+  const backToProjectHref =
+    fromParam?.startsWith('/') && !fromParam.startsWith('//') && reportType === 'project' && projectId === searchParams.get('projectId')
+      ? fromParam
+      : null
   const [options, setOptions] = useState<EmployeeReportOptions>({
     category: true,
     comment: true,
@@ -178,6 +186,11 @@ function ReportsPageContent() {
     <div className="min-h-dvh bg-zinc-50 dark:bg-zinc-900 px-4 pt-20 pb-24 md:pt-8 md:pb-8 print:bg-white print:p-0">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="space-y-6 print:hidden">
+          {backToProjectHref && (
+            <Link href={backToProjectHref} className="inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              {t('backToProject')}
+            </Link>
+          )}
           <Breadcrumbs
             items={[
               { label: 'Dashboard', href: '/' },

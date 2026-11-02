@@ -301,6 +301,7 @@
   },
   "reports": {
     "title": "Reports",
+    "backToProject": "← Back to project",
     "subtitle": "Create work reports for employees or project reports, print them or save them as PDF.",
     "employeeReportTitle": "Work report",
     "employeeLabel": "Employee",

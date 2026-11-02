@@ -3,6 +3,7 @@
 import { useState, useEffect, type FC } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import CreateProjectModal from './createProject';
 import { ProjectTimeReport } from './ProjectTimeReport';
 import { CategoryEffortChart } from './CategoryEffortChart';
@@ -44,6 +45,10 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
   const { toasts, showToast, removeToast } = useToast();
 
   const [detail, setDetail] = useState<ProjectDetailData | null>(null);
+  // Aktuelle Adresse, damit der Rapport einen Weg zurueck zum Projekt anbieten kann
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentUrl = `${pathname}${searchParams.size ? `?${searchParams}` : ''}`;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [categoryGroups, setCategoryGroups] = useState<CategoryGroup[]>([]);
@@ -230,7 +235,7 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
             {project.status === 'active' ? t('markCompletedButton') : t('markActiveButton')}
           </button>
           <Link
-            href={`/reports?type=project&projectId=${project.id}`}
+            href={`/reports?type=project&projectId=${project.id}&from=${encodeURIComponent(currentUrl)}`}
             className="px-3 py-1.5 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
           >
             {t('reportButton')}
