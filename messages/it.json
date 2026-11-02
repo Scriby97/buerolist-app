@@ -929,6 +929,7 @@
     "ORG_LOGO_INVALID": "L'immagine non è valida. Formati consentiti: PNG, JPEG o WebP (max 3 MB).",
     "CUSTOMER_NOT_FOUND": "Cliente non trovato.",
     "CUSTOMER_NOT_IN_YOUR_ORG": "Questo cliente non appartiene alla tua organizzazione.",
+    "CUSTOMER_HAS_PROJECTS": "Questo cliente ha ancora {projectCount} progetto/i, compresi quelli archiviati. Elimina prima i progetti, poi potrai eliminare il cliente.",
     "ORG_CUSTOMER_MANAGE_FORBIDDEN": "Solo gli amministratori o il proprietario dell'organizzazione possono gestire i clienti.",
     "CATEGORY_NOT_FOUND": "Categoria non trovata.",
     "CATEGORY_NOT_IN_YOUR_ORG": "Questa categoria non appartiene alla tua organizzazione.",

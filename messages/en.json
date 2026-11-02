@@ -929,6 +929,7 @@
     "ORG_LOGO_INVALID": "The image is invalid. Allowed formats are PNG, JPEG or WebP (max. 3 MB).",
     "CUSTOMER_NOT_FOUND": "Customer was not found.",
     "CUSTOMER_NOT_IN_YOUR_ORG": "This customer does not belong to your organization.",
+    "CUSTOMER_HAS_PROJECTS": "This customer still has {projectCount} project(s), archived ones included. Delete the projects first, then you can delete the customer.",
     "ORG_CUSTOMER_MANAGE_FORBIDDEN": "Only organization admins or owners may manage customers.",
     "CATEGORY_NOT_FOUND": "Category was not found.",
     "CATEGORY_NOT_IN_YOUR_ORG": "This category does not belong to your organization.",

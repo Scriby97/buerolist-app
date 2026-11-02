@@ -929,6 +929,7 @@
     "ORG_LOGO_INVALID": "L'image n'est pas valide. Formats autorisés : PNG, JPEG ou WebP (max. 3 Mo).",
     "CUSTOMER_NOT_FOUND": "Client introuvable.",
     "CUSTOMER_NOT_IN_YOUR_ORG": "Ce client n'appartient pas à votre organisation.",
+    "CUSTOMER_HAS_PROJECTS": "Ce client a encore {projectCount} projet(s), archivés compris. Supprime d’abord les projets, puis tu pourras supprimer le client.",
     "ORG_CUSTOMER_MANAGE_FORBIDDEN": "Seuls les administrateurs ou le propriétaire de l'organisation peuvent gérer les clients.",
     "CATEGORY_NOT_FOUND": "Catégorie introuvable.",
     "CATEGORY_NOT_IN_YOUR_ORG": "Cette catégorie n'appartient pas à votre organisation.",
