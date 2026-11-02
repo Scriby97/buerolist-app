@@ -44,6 +44,13 @@ describe('OverFreeLimitBanner', () => {
     expect(screen.getByRole('link', { name: 'Tarif ansehen' }).getAttribute('href')).toBe('/settings/billing')
   })
 
+  it('verweist Admins an den Owner statt auf die Tarifseite', async () => {
+    role = 'admin'
+    renderWithIntl(<OverFreeLimitBanner />)
+    expect(await screen.findByText(/nur der Eigentümer/)).toBeTruthy()
+    expect(screen.queryByRole('link', { name: 'Tarif ansehen' })).toBeNull()
+  })
+
   it('bleibt fuer Mitarbeiter aus', async () => {
     role = 'employee'
     renderWithIntl(<OverFreeLimitBanner />)

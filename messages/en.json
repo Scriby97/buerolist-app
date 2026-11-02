@@ -1114,6 +1114,7 @@
     "projects": "{used} of {max} active projects",
     "members": "{used} of {max} members",
     "actionLabel": "View plan",
+    "contactOwner": "Only the owner of the organization can change the plan – please contact them.",
     "dismissLabel": "Dismiss"
   }
 }

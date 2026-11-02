@@ -1114,6 +1114,7 @@
     "projects": "{used} progetti attivi su {max}",
     "members": "{used} collaboratori su {max}",
     "actionLabel": "Vedi piano",
+    "contactOwner": "Solo il proprietario dell’organizzazione può cambiare abbonamento – rivolgiti a questa persona.",
     "dismissLabel": "Chiudi"
   }
 }

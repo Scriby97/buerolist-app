@@ -99,12 +99,17 @@ export const OverFreeLimitBanner: FC = () => {
           ×
         </button>
       </div>
-      <Link
-        href="/settings/billing"
-        className="mt-2 inline-block text-sm font-medium text-amber-900 dark:text-amber-50 hover:underline"
-      >
-        {t('actionLabel')}
-      </Link>
+      {/* Das Abo verwaltet nur der Owner - Admins bekommen stattdessen einen Hinweis. */}
+      {selectedOrganizationRole === 'owner' ? (
+        <Link
+          href="/settings/billing"
+          className="mt-2 inline-block text-sm font-medium text-amber-900 dark:text-amber-50 hover:underline"
+        >
+          {t('actionLabel')}
+        </Link>
+      ) : (
+        <p className="mt-2 text-sm font-medium text-amber-900 dark:text-amber-50">{t('contactOwner')}</p>
+      )}
     </div>
   )
 }

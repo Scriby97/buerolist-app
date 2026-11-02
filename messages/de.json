@@ -1114,6 +1114,7 @@
     "projects": "{used} von {max} aktiven Projekten",
     "members": "{used} von {max} Mitarbeitern",
     "actionLabel": "Tarif ansehen",
+    "contactOwner": "Das Abo kann nur der Eigentümer der Organisation wechseln – bitte wende dich an diese Person.",
     "dismissLabel": "Hinweis schliessen"
   }
 }
