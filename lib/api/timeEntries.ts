@@ -14,6 +14,7 @@ export interface TimeEntryProject {
   id: string
   title: string
   number?: number
+  year?: number
   customerId: string
   customerName: string
   customerNumber?: number

@@ -10,6 +10,7 @@ export interface ProjectOption {
   id: string;
   title: string;
   number?: number | null;
+  year?: number | null;
   customerName?: string;
   customerNumber?: number | null;
 }
@@ -25,11 +26,12 @@ interface ProjectComboboxProps {
 }
 
 function searchText(option: ProjectOption): string {
-  const number = formatProjectNumber(option.customerNumber, option.number);
+  const number = formatProjectNumber(option.customerNumber, option.number, option.year);
   const parts = [option.customerName ?? '', option.title];
   if (number) {
-    // "001-12", "00112" und "1-12" sollen alle treffen.
-    parts.push(number, number.replace('-', ''), `${option.customerNumber}-${option.number}`);
+    // "016-26-01", "0162601" und "16-26-1" sollen alle treffen.
+    const shortYear = option.year ? `-${option.year % 100}` : '';
+    parts.push(number, number.replaceAll('-', ''), `${option.customerNumber}${shortYear}-${option.number}`);
   }
   return normalize(parts.join(' '));
 }
@@ -73,6 +75,7 @@ export const ProjectCombobox: FC<ProjectComboboxProps> = ({
       [...options].sort(
         (a, b) =>
           (a.customerNumber ?? Infinity) - (b.customerNumber ?? Infinity) ||
+          (a.year ?? 0) - (b.year ?? 0) ||
           (a.number ?? Infinity) - (b.number ?? Infinity) ||
           optionLabel(a).localeCompare(optionLabel(b)),
       ),
@@ -81,7 +84,7 @@ export const ProjectCombobox: FC<ProjectComboboxProps> = ({
   const matches = useMemo(() => filterProjectOptions(sorted, query), [sorted, query]);
   const selected = options.find((option) => option.id === value);
   const selectedText = selected
-    ? [formatProjectNumber(selected.customerNumber, selected.number), optionLabel(selected)].filter(Boolean).join(' ')
+    ? [formatProjectNumber(selected.customerNumber, selected.number, selected.year), optionLabel(selected)].filter(Boolean).join(' ')
     : '';
 
   const close = () => {
@@ -192,7 +195,7 @@ export const ProjectCombobox: FC<ProjectComboboxProps> = ({
             <li className="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">{noMatchesText}</li>
           ) : (
             matches.map((option, index) => {
-              const number = formatProjectNumber(option.customerNumber, option.number);
+              const number = formatProjectNumber(option.customerNumber, option.number, option.year);
               const isActive = index === activeIndex;
               const isSelected = option.id === value;
               return (

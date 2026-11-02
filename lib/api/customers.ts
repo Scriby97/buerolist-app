@@ -18,8 +18,9 @@ export interface Customer {
 
 export interface CustomerProjectSummary {
   id: string
-  /** Fortlaufende Projektnummer pro Kunde */
+  /** Fortlaufende Projektnummer pro Kunde und Jahr */
   number?: number
+  year?: number
   title: string
   status: 'active' | 'completed'
   createdAt: string

@@ -102,9 +102,9 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
         className={`w-full text-left rounded-lg border-2 border-l-8 ${ENTITY_BORDER} bg-white dark:bg-zinc-800 p-3 hover:shadow-md transition-all flex items-center justify-between gap-2 ${completed ? 'opacity-75' : ''}`}
       >
         <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
-          {formatProjectNumber(customer.number, project.number) && (
+          {formatProjectNumber(customer.number, project.number, project.year) && (
             <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
-              {formatProjectNumber(customer.number, project.number)}
+              {formatProjectNumber(customer.number, project.number, project.year)}
             </span>
           )}
           {project.title}

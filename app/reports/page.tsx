@@ -174,6 +174,7 @@ function ReportsPageContent() {
     id: p.id,
     title: p.title,
     number: p.number,
+    year: p.year,
     customerName: p.customer?.name,
     customerNumber: p.customer?.number,
   }))

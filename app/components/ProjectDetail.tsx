@@ -191,9 +191,9 @@ const ProjectDetail: FC<ProjectDetailProps> = ({ projectId, onBack, onDeleted })
         <div>
           <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50">
             <ColorDot color={projectColor(project.customer?.number, project.number)} className="h-3.5 w-3.5" />
-            {formatProjectNumber(project.customer?.number, project.number) && (
+            {formatProjectNumber(project.customer?.number, project.number, project.year) && (
               <span className="mr-2 font-mono font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
-                {formatProjectNumber(project.customer?.number, project.number)}
+                {formatProjectNumber(project.customer?.number, project.number, project.year)}
               </span>
             )}
             {project.title}

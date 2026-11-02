@@ -26,6 +26,14 @@ describe('filterProjectOptions', () => {
     expect(ids(filterProjectOptions(options, query))).toEqual(expected)
   })
 
+  it.each(['016-26-01', '0162601', '16-26-1'])('findet Projektnummern mit Jahr: "%s"', (query) => {
+    const withYear: ProjectOption[] = [
+      { id: 'p-26', title: 'Parkett', number: 1, year: 2026, customerName: 'Kurzen', customerNumber: 16 },
+      { id: 'p-27', title: 'Parkett', number: 1, year: 2027, customerName: 'Kurzen', customerNumber: 16 },
+    ]
+    expect(ids(filterProjectOptions(withYear, query))).toEqual(['p-26'])
+  })
+
   it('liefert ohne Suchbegriff alle Projekte', () => {
     expect(filterProjectOptions(options, '  ')).toHaveLength(3)
   })

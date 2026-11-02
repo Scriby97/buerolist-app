@@ -5,6 +5,8 @@ describe('numbers', () => {
   it('formatiert Kunden- und Projektnummern', () => {
     expect(formatCustomerNumber(1)).toBe('001')
     expect(formatCustomerNumber(123)).toBe('123')
+    expect(formatProjectNumber(16, 1, 2026)).toBe('016-26-01')
+    expect(formatProjectNumber(16, 1, 2027)).toBe('016-27-01')
     expect(formatProjectNumber(1, 12)).toBe('001-12')
     expect(formatProjectNumber(1, 2)).toBe('001-02')
   })

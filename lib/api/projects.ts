@@ -17,8 +17,10 @@ export interface Project {
   id: string
   organizationId: string
   customerId: string
-  /** Fortlaufende Projektnummer pro Kunde (Anzeige mit Kundennummer "001-02") */
+  /** Fortlaufende Projektnummer pro Kunde und Jahr (Anzeige "001-26-02") */
   number?: number
+  /** Erstellungsjahr, z.B. 2026 (Teil der Projektnummer) */
+  year?: number
   title: string
   status: ProjectStatus
   archivedAt: string | null

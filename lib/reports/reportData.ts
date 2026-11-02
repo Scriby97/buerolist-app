@@ -36,7 +36,7 @@ export const formatTime = (iso: string) => {
 }
 
 export const projectLabel = (entry: TimeEntry) => {
-  const number = formatProjectNumber(entry.project.customerNumber, entry.project.number)
+  const number = formatProjectNumber(entry.project.customerNumber, entry.project.number, entry.project.year)
   const name = `${entry.project.customerName} – ${entry.project.title}`
   return number ? `${number} ${name}` : name
 }

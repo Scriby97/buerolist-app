@@ -543,6 +543,7 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
                 id: project.id,
                 title: project.title,
                 number: project.number,
+                year: project.year,
                 customerName: project.customer?.name,
                 customerNumber: project.customer?.number,
               }))}
