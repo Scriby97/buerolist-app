@@ -1108,7 +1108,7 @@
     "confirmDeleteMessage": "Vuoi davvero eliminare «{name}»? È possibile solo finché nessuna assenza usa questo motivo."
   },
   "overFreeLimitBanner": {
-    "message": "La vostra organizzazione supera il piano Free: {items}. I dati esistenti restano pienamente utilizzabili – per aggiungerne altri serve l’upgrade a Pro.",
+    "message": "La vostra organizzazione supera il piano Free: {items}. I dati esistenti restano pienamente utilizzabili – per aggiungerne altri serve un abbonamento a pagamento (Standard o Pro).",
     "customers": "{used} clienti su {max}",
     "projects": "{used} progetti attivi su {max}",
     "members": "{used} collaboratori su {max}",
