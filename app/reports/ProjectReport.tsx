@@ -199,7 +199,45 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
       {options.entries && entries.length > 0 && (
         <section>
           <h2 className={sectionTitle}>{t('sectionEntries')}</h2>
-          <table className="w-full border-collapse text-sm">
+          {/* Auf dem Handy passt die breite Tabelle nicht aufs Blatt - dort als
+              Liste pro Tag. Gedruckt wird immer die Tabelle. */}
+          <ul className="space-y-3 text-sm sm:hidden print:hidden">
+            {data.days.map((day) => (
+              <li key={day.key}>
+                <p className="border-b border-zinc-400 pb-1 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+                  {day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
+                </p>
+                <ul>
+                  {day.entries.map((entry) => (
+                    <li key={entry.id} className="border-b border-zinc-200 py-1.5">
+                      <p className="flex flex-wrap gap-x-3 tabular-nums">
+                        <span>{formatTime(entry.startAt)}–{formatTime(entry.endAt)}</span>
+                        <span className="font-semibold">{formatHm(entryMinutes(entry))} h</span>
+                        {(entry.travelMinutes ?? 0) > 0 && (
+                          <span className="text-zinc-600">
+                            {t('colTravel')} {formatHm(entry.travelMinutes ?? 0)} h
+                          </span>
+                        )}
+                      </p>
+                      <p className="text-zinc-700">
+                        {creatorName(entry)} · {entry.category?.name ?? '–'}
+                      </p>
+                      {options.comments && entry.comment && <p className="whitespace-pre-wrap text-zinc-700">{entry.comment}</p>}
+                      {options.costs &&
+                        (entry.items ?? []).map((item) => (
+                          <p key={item.id} className="text-xs text-zinc-600">
+                            {item.type === 'material' ? tItems('materialTitle') : tItems('expensesTitle')}: {formatQuantity(item.quantity)}×{' '}
+                            {item.description}
+                            {item.unitPriceRappen > 0 && <> · CHF {formatChf(Math.round(item.quantity * item.unitPriceRappen))}</>}
+                          </p>
+                        ))}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <table className="hidden w-full border-collapse text-sm sm:table print:table">
             <thead>
               <tr>
                 <th className={th}>{t('colDate')}</th>

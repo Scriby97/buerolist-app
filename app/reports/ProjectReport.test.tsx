@@ -71,8 +71,9 @@ describe('ProjectReport', () => {
     expect(screen.getByText('001-01 Chalet – Holzwerk')).toBeTruthy()
     expect(screen.getByText('Zeit-Zusammenfassung')).toBeTruthy()
     expect(screen.getByText('Aufwand nach Kategorie')).toBeTruthy()
-    expect(screen.getByText('Gerüst gestellt')).toBeTruthy()
-    expect(screen.getByText(/2× Kitt · CHF 20.80/)).toBeTruthy()
+    // Liste (Handy) und Tabelle (breit/Druck) - per CSS ist jeweils nur eine sichtbar
+    expect(screen.getAllByText('Gerüst gestellt')).toHaveLength(2)
+    expect(screen.getAllByText(/2× Kitt · CHF 20.80/)).toHaveLength(2)
     expect(screen.getByText('Fassade Nordseite beachten')).toBeTruthy()
     expect(container.querySelector('img')?.getAttribute('src')).toBe('https://example.com/a.jpg')
   })
