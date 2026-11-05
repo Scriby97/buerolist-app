@@ -90,18 +90,36 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
   const activeProjects = projects.filter((p) => p.status === 'active');
   const completedProjects = projects.filter((p) => p.status === 'completed');
 
-  // Projekt-Karte mit Rand in der Projektfarbe (links breiter), damit die
-  // Projekte eines Kunden auf einen Blick erkennbar sind - reine Anzeige.
+  // Aktive Projekte: Karte mit Rand in der Projektfarbe (links breiter), damit
+  // die Projekte eines Kunden auf einen Blick erkennbar sind. Abgeschlossene
+  // treten bewusst zurueck: neutral grau, ohne Projektfarbe, mit Haekchen.
   const renderProjectCard = (project: CustomerProjectSummary, completed = false) => {
     const color = projectColor(customer.number, project.number);
     return (
       <button
         key={project.id}
         onClick={() => onSelectProject(project.id)}
-        style={colorVars(color)}
-        className={`w-full text-left rounded-lg border-2 border-l-8 ${ENTITY_BORDER} bg-white dark:bg-zinc-800 p-3 hover:shadow-md transition-all flex items-center justify-between gap-2 ${completed ? 'opacity-75' : ''}`}
+        style={completed ? undefined : colorVars(color)}
+        className={`w-full text-left rounded-lg p-3 transition-all flex items-center justify-between gap-2 ${
+          completed
+            ? 'border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-600'
+            : `border-2 border-l-8 ${ENTITY_BORDER} bg-white dark:bg-zinc-800 hover:shadow-md`
+        }`}
       >
-        <span className="flex min-w-0 items-center gap-2 font-medium text-zinc-900 dark:text-zinc-50">
+        <span
+          className={`flex min-w-0 items-center gap-2 ${
+            completed ? 'text-zinc-500 dark:text-zinc-400' : 'font-medium text-zinc-900 dark:text-zinc-50'
+          }`}
+        >
+          {completed && (
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0 text-zinc-400 dark:text-zinc-500">
+              <path
+                fillRule="evenodd"
+                d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          )}
           {formatProjectNumber(customer.number, project.number, project.year) && (
             <span className="mr-2 font-mono text-sm font-normal tabular-nums text-zinc-500 dark:text-zinc-400">
               {formatProjectNumber(customer.number, project.number, project.year)}
@@ -180,7 +198,7 @@ const CustomerDetail: FC<CustomerDetailProps> = ({ customerId, onBack, onSelectP
               </div>
             )}
             {completedProjects.length > 0 && (
-              <div className="space-y-2">
+              <div className={`space-y-2 ${activeProjects.length > 0 ? 'border-t border-zinc-200 dark:border-zinc-700 pt-4' : ''}`}>
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   {t('completedProjectsLabel')}
                 </h3>
