@@ -42,7 +42,7 @@ describe('EmployeeReport', () => {
     expect(screen.getByText('Gerüstbau')).toBeTruthy()
     expect(screen.getByText('Gerüst gestellt')).toBeTruthy()
     expect(screen.getByText(/2× Kitt · CHF 20.80/)).toBeTruthy()
-    expect(screen.getByText('Total Stunden').nextSibling?.textContent).toBe('5:00')
+    expect(screen.getByText('Total Stunden').nextSibling?.textContent).toBe('5.00')
   })
 
   it('laesst abgewaehlte Inhalte weg', () => {
@@ -77,9 +77,9 @@ describe('EmployeeReport', () => {
       />,
     )
     expect(screen.getByRole('heading', { name: 'Abwesenheiten' })).toBeTruthy()
-    expect(screen.getByText('Total Arbeitszeit').nextSibling?.textContent).toBe('5:00')
-    expect(screen.getAllByText('Krankheit').at(-1)!.nextSibling?.textContent).toBe('17:30')
-    expect(screen.getAllByText('Feuerwehr').at(-1)!.nextSibling?.textContent).toBe('2:30')
-    expect(screen.getByText('Total inkl. Abwesenheiten').nextSibling?.textContent).toBe('25:00')
+    expect(screen.getByText('Total Arbeitszeit').nextSibling?.textContent).toBe('5.00')
+    expect(screen.getAllByText('Krankheit').at(-1)!.nextSibling?.textContent).toBe('17.50')
+    expect(screen.getAllByText('Feuerwehr').at(-1)!.nextSibling?.textContent).toBe('2.50')
+    expect(screen.getByText('Total inkl. Abwesenheiten').nextSibling?.textContent).toBe('25.00')
   })
 })

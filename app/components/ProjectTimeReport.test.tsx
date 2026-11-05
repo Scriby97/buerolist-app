@@ -40,8 +40,8 @@ describe('ProjectTimeReport', () => {
 
     expect(await screen.findByRole('columnheader', { name: 'Anna Muster' })).toBeTruthy()
     expect(screen.getByRole('columnheader', { name: 'Beat Beispiel' })).toBeTruthy()
-    // Tageszeile + Wochenzeile + Totalzeile enthalten 8:30 (5:00 + 3:30)
-    expect(screen.getAllByText('8:30').length).toBeGreaterThanOrEqual(3)
+    // Tageszeile + Wochenzeile + Totalzeile enthalten 8.50 (5.00 + 3.50)
+    expect(screen.getAllByText('8.50').length).toBeGreaterThanOrEqual(3)
     expect(screen.queryByText('Gerüst gestellt')).toBeNull()
 
     await userEvent.click(screen.getByRole('button', { expanded: false }))

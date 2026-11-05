@@ -89,7 +89,7 @@ describe('ProjectReport', () => {
     expect(screen.getByText('Total Material').closest('tr')!.textContent).toContain('31.20')
     expect(screen.getByText('Total Spesen').closest('tr')!.textContent).toContain('5.00')
     expect(screen.getByText('Total Material & Spesen').closest('tr')!.textContent).toContain('36.20')
-    expect(screen.getAllByText('0:45').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('0.75').length).toBeGreaterThan(0)
   })
 
   it('zeigt auch Notizen und Fotos beim Kunden, gekennzeichnet', () => {
@@ -126,6 +126,6 @@ describe('ProjectReport', () => {
     expect(screen.queryByText('Fassade Nordseite beachten')).toBeNull()
     expect(container.querySelector('img')).toBeNull()
     // Gesamttotal steht immer im Kopf
-    expect(screen.getByText('7:30')).toBeTruthy()
+    expect(screen.getByText('7.50')).toBeTruthy()
   })
 })

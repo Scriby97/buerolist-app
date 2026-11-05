@@ -1,4 +1,5 @@
 import type { TimeEntry } from '@/lib/api/timeEntries'
+import { formatDecimalHours } from '@/lib/format/hours'
 
 // Aufbereitung der Zeiteintraege eines Projekts fuer die Zeitaufstellung
 // (Matrix Tage x Mitarbeiter, gruppiert nach Kalenderwoche) - bewusst als
@@ -135,10 +136,10 @@ export function buildTimeMatrix(entries: TimeEntry[], unknownEmployeeName = '?')
   }
 }
 
-/** Kompakte Stunden fuer Matrix-Zellen: 510 -> "8:30", 0 -> "". */
+/** Dezimalstunden fuer Matrix-Zellen: 510 -> "8.50", 0 -> "". */
 export function formatHoursMinutes(minutes: number): string {
   if (!minutes) return ''
-  return `${Math.floor(minutes / 60)}:${pad2(minutes % 60)}`
+  return formatDecimalHours(minutes)
 }
 
 // ---------------------------------------------------------------------------

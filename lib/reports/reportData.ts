@@ -1,6 +1,7 @@
 import type { TimeEntry } from '@/lib/api/timeEntries'
 import { formatProjectNumber } from '@/lib/format/numbers'
 import { itemsTotalRappen } from '@/lib/timeEntryItems'
+import { formatDecimalHours } from '@/lib/format/hours'
 
 // Aufbereitung der Zeiteintraege fuer druckbare Rapporte (Mitarbeiter-
 // und Projekt-Rapport) - reine Funktionen, damit testbar.
@@ -27,8 +28,8 @@ export function rangeToIso(from: string, to: string): { startDate: string; endDa
 export const entryMinutes = (entry: Pick<TimeEntry, 'startAt' | 'endAt'>) =>
   Math.max(0, Math.round((new Date(entry.endAt).getTime() - new Date(entry.startAt).getTime()) / 60_000))
 
-/** 510 -> "8:30" */
-export const formatHm = (minutes: number) => `${Math.floor(minutes / 60)}:${pad2(minutes % 60)}`
+/** Dezimalstunden wie ueberall in der App: 510 -> "8.50", 495 -> "8.25" */
+export const formatHm = (minutes: number) => formatDecimalHours(minutes)
 
 export const formatTime = (iso: string) => {
   const d = new Date(iso)

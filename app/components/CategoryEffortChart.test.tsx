@@ -17,9 +17,9 @@ describe('CategoryEffortChart', () => {
     )
     const items = within(screen.getByRole('list', { name: 'Aufwand pro Kategorie' })).getAllByRole('listitem')
     expect(items.map((li) => li.textContent)).toEqual([
-      expect.stringContaining('Abdecken14:30'),
-      expect.stringContaining('Gerüstbau7:30'),
-      expect.stringContaining('Streichen1:30'),
+      expect.stringContaining('Abdecken14.50'),
+      expect.stringContaining('Gerüstbau7.50'),
+      expect.stringContaining('Streichen1.50'),
     ])
     // 870 / 1410 = 62 %
     expect(items[0].textContent).toContain('62 %')

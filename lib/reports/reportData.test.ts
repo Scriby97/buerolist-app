@@ -47,7 +47,8 @@ describe('reportData', () => {
   })
 
   it('formatiert Stunden als h:mm', () => {
-    expect(formatHm(510)).toBe('8:30')
-    expect(formatHm(0)).toBe('0:00')
+    expect(formatHm(510)).toBe('8.50')
+    expect(formatHm(495)).toBe('8.25')
+    expect(formatHm(0)).toBe('0.00')
   })
 })

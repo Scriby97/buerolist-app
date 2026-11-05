@@ -60,8 +60,8 @@ describe('buildTimeMatrix', () => {
 
 describe('formatHoursMinutes', () => {
   it('formatiert als h:mm und laesst 0 leer', () => {
-    expect(formatHoursMinutes(510)).toBe('8:30')
-    expect(formatHoursMinutes(60)).toBe('1:00')
+    expect(formatHoursMinutes(510)).toBe('8.50')
+    expect(formatHoursMinutes(60)).toBe('1.00')
     expect(formatHoursMinutes(0)).toBe('')
   })
 })
