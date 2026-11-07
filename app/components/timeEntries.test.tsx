@@ -50,6 +50,9 @@ const sick = {
   createdBy: null,
 }
 
+// Titel der Abwesenheitskarte: "Abwesenheit" (rot, eigenes Element) + ": Krankheit"
+const absenceTitle = (_: string, el: Element | null) => el?.tagName === 'H3' && el.textContent === 'Abwesenheit: Krankheit'
+
 describe('Einträge - Abwesenheiten', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -60,7 +63,7 @@ describe('Einträge - Abwesenheiten', () => {
 
   it('zeigt die Abwesenheit des gewaehlten Tages mit Tagestotal', async () => {
     renderWithIntl(<MyEntries />)
-    expect(await screen.findByText('Abwesenheit: Krankheit')).toBeTruthy()
+    expect(await screen.findByText(absenceTitle)).toBeTruthy()
     expect(screen.getByText('Grippe')).toBeTruthy()
     expect(screen.getByText(/8\.75 h/, { selector: 'span' })).toBeTruthy()
     // Mitarbeiter: keine Personenauswahl (das Backend liefert nur die eigenen)
@@ -69,18 +72,18 @@ describe('Einträge - Abwesenheiten', () => {
 
   it('loescht eine eigene Abwesenheit nach Bestaetigung', async () => {
     renderWithIntl(<MyEntries />)
-    await screen.findByText('Abwesenheit: Krankheit')
+    await screen.findByText(absenceTitle)
     fireEvent.click(screen.getByRole('button', { name: 'Löschen' }))
     const dialog = await screen.findByRole('dialog')
     fireEvent.click(within(dialog).getByRole('button', { name: 'Löschen' }))
     await waitFor(() => expect(deleteAbsence).toHaveBeenCalledWith('a1'))
-    await waitFor(() => expect(screen.queryByText('Abwesenheit: Krankheit')).toBeNull())
+    await waitFor(() => expect(screen.queryByText(absenceTitle)).toBeNull())
   })
 
   it('sperrt vom Admin erfasste Abwesenheiten fuer Mitarbeiter', async () => {
     getAbsences.mockResolvedValue([{ ...sick, createdBy: { id: 'boss', firstName: 'Chef' } }])
     renderWithIntl(<MyEntries />)
-    await screen.findByText('Abwesenheit: Krankheit')
+    await screen.findByText(absenceTitle)
     expect(screen.queryByRole('button', { name: 'Löschen' })).toBeNull()
   })
 })

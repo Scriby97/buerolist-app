@@ -44,7 +44,7 @@
   },
   "createTimeEntry": {
     "title": "Log time",
-    "projectLabel": "Project",
+    "projectLabel": "Customer project",
     "projectSearchPlaceholder": "Search number, customer or project …",
     "projectSearchNoMatches": "No project found.",
     "loadingProjects": "Loading projects...",
@@ -1093,7 +1093,7 @@
     "saveSuccess": "Absence saved",
     "saveSuccessMultiple": "{count} absences saved",
     "saveError": "The absence could not be saved.",
-    "cardTitle": "Absence: {reason}",
+    "cardTitle": "<label>Absence</label>: {reason}",
     "durationLabel": "Duration:",
     "editTitle": "Edit absence",
     "confirmDeleteTitle": "Delete absence",

@@ -23,7 +23,8 @@ export const absenceDay = (absence: Pick<Absence, 'date'>) => {
 };
 
 /** Neutrale Farbe fuer Abwesenheiten (Kalenderpunkt, Kartenrand). */
-export const ABSENCE_COLOR = { light: 'oklch(0.62 0.02 260)', dark: 'oklch(0.6 0.02 260)' };
+// Abwesenheiten sind rot markiert (Kalenderpunkt, Kartenstreifen, Titel)
+export const ABSENCE_COLOR = { light: 'oklch(0.58 0.2 27)', dark: 'oklch(0.68 0.18 27)' };
 
 interface AbsenceItemProps {
   absence: Absence;
@@ -42,7 +43,10 @@ export const AbsenceItem: FC<AbsenceItemProps> = ({ absence, canManage, canEdit,
   const recordedByName = absence.createdBy ? personName(absence.createdBy, '?') : null;
 
   return (
-    <div className="flex items-start justify-between rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-800/60 p-4">
+    <div
+      className="flex items-start justify-between rounded-lg border border-dashed border-zinc-300 dark:border-zinc-600 border-l-4 border-l-red-500 dark:border-l-red-400 bg-zinc-50 dark:bg-zinc-800/60 p-4"
+      style={{ borderLeftStyle: 'solid' }}
+    >
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex items-center gap-2.5">
           <svg className="h-8 w-8 shrink-0 text-zinc-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" aria-hidden="true">
@@ -50,7 +54,10 @@ export const AbsenceItem: FC<AbsenceItemProps> = ({ absence, canManage, canEdit,
             <path d="M16 2v4M8 2v4M3 10h18M10 14l4 4M14 14l-4 4" />
           </svg>
           <h3 className="truncate font-semibold text-zinc-900 dark:text-zinc-50">
-            {t('cardTitle', { reason: absence.reason.name })}
+            {t.rich('cardTitle', {
+              reason: absence.reason.name,
+              label: (chunks) => <span className="text-red-600 dark:text-red-400">{chunks}</span>,
+            })}
           </h3>
         </div>
         <div className="space-y-1 text-sm text-zinc-600 dark:text-zinc-400">

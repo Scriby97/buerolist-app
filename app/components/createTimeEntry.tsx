@@ -493,7 +493,11 @@ const CreateTimeEntry: FC<CreateTimeEntryProps> = ({ onNavigateToAddProject }) =
                 : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
             }`}
           >
-            {value === 'work' ? tAbsences('modeWork') : tAbsences('modeAbsence')}
+            {value === 'work' ? (
+              tAbsences('modeWork')
+            ) : (
+              <span className="text-red-600 dark:text-red-400">{tAbsences('modeAbsence')}</span>
+            )}
           </button>
         ))}
       </div>

@@ -44,7 +44,7 @@
   },
   "createTimeEntry": {
     "title": "Saisir du temps",
-    "projectLabel": "Projet",
+    "projectLabel": "Projet client",
     "projectSearchPlaceholder": "Rechercher un numéro, client ou projet …",
     "projectSearchNoMatches": "Aucun projet trouvé.",
     "loadingProjects": "Chargement des projets...",
@@ -1093,7 +1093,7 @@
     "saveSuccess": "Absence enregistrée",
     "saveSuccessMultiple": "{count} absences enregistrées",
     "saveError": "L’absence n’a pas pu être enregistrée.",
-    "cardTitle": "Absence : {reason}",
+    "cardTitle": "<label>Absence</label> : {reason}",
     "durationLabel": "Durée :",
     "editTitle": "Modifier l’absence",
     "confirmDeleteTitle": "Supprimer l’absence",
