@@ -1093,7 +1093,7 @@
     "saveSuccess": "Absence saved",
     "saveSuccessMultiple": "{count} absences saved",
     "saveError": "The absence could not be saved.",
-    "cardTitle": "<label>Absence</label>: {reason}",
+    "cardTitle": "<label>Absence:</label> {reason}",
     "durationLabel": "Duration:",
     "editTitle": "Edit absence",
     "confirmDeleteTitle": "Delete absence",

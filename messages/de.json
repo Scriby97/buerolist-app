@@ -1093,7 +1093,7 @@
     "saveSuccess": "Abwesenheit gespeichert",
     "saveSuccessMultiple": "{count} Abwesenheiten gespeichert",
     "saveError": "Die Abwesenheit konnte nicht gespeichert werden.",
-    "cardTitle": "<label>Abwesenheit</label>: {reason}",
+    "cardTitle": "<label>Abwesenheit:</label> {reason}",
     "durationLabel": "Dauer:",
     "editTitle": "Abwesenheit bearbeiten",
     "confirmDeleteTitle": "Abwesenheit löschen",
