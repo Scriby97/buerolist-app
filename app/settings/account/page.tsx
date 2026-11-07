@@ -8,10 +8,13 @@ import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/lib/hooks/useToast'
 import { ToastContainer } from '@/app/components/Toast'
 import Breadcrumbs from '@/app/components/Breadcrumbs'
+import { updateName } from '@/lib/api/profile'
+import { useApiErrorMessage } from '@/lib/i18n/useApiErrorMessage'
 
 export default function SettingsAccountPage() {
   const router = useRouter()
-  const { supabaseUser, loading: authLoading, signOut } = useAuth()
+  const { supabaseUser, userProfile, loading: authLoading, signOut, refreshUserRole } = useAuth()
+  const getApiErrorMessage = useApiErrorMessage()
   const { toasts, showToast, removeToast } = useToast()
   const [signingOut, setSigningOut] = useState(false)
   const t = useTranslations('settingsAccount')
@@ -24,6 +27,28 @@ export default function SettingsAccountPage() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // Name: Eingaben erst ab der ersten Aenderung im State, vorher gilt das Profil
+  const [nameDraft, setNameDraft] = useState<{ firstName: string; lastName: string } | null>(null)
+  const name = nameDraft ?? { firstName: userProfile?.firstName ?? '', lastName: userProfile?.lastName ?? '' }
+  const nameChanged =
+    name.firstName.trim() !== (userProfile?.firstName ?? '') || name.lastName.trim() !== (userProfile?.lastName ?? '')
+  const [savingName, setSavingName] = useState(false)
+
+  const handleSaveName = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setSavingName(true)
+    try {
+      await updateName({ firstName: name.firstName.trim(), lastName: name.lastName.trim() })
+      await refreshUserRole()
+      setNameDraft(null)
+      showToast(t('nameSaveSuccess'), 'success')
+    } catch (err) {
+      showToast(getApiErrorMessage(err, t('nameSaveError')), 'error')
+    } finally {
+      setSavingName(false)
+    }
+  }
 
   useEffect(() => {
     if (!authLoading && !supabaseUser) {
@@ -110,6 +135,52 @@ export default function SettingsAccountPage() {
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
               {supabaseUser?.email}
             </p>
+          </section>
+
+          <section className="border-t border-zinc-200 dark:border-zinc-700 pt-6 space-y-4">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{t('nameTitle')}</h2>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">{t('nameSubtitle')}</p>
+            </div>
+            <form onSubmit={handleSaveName} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                    {t('firstNameLabel')}
+                  </label>
+                  <input
+                    id="firstName"
+                    required
+                    maxLength={255}
+                    autoComplete="given-name"
+                    value={name.firstName}
+                    onChange={(event) => setNameDraft({ ...name, firstName: event.target.value })}
+                    className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-zinc-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                    {t('lastNameLabel')}
+                  </label>
+                  <input
+                    id="lastName"
+                    required
+                    maxLength={255}
+                    autoComplete="family-name"
+                    value={name.lastName}
+                    onChange={(event) => setNameDraft({ ...name, lastName: event.target.value })}
+                    className="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-zinc-700 dark:text-zinc-100"
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={savingName || !nameChanged || !name.firstName.trim() || !name.lastName.trim()}
+                className="w-full sm:w-auto px-5 py-2.5 bg-brown-600 text-white font-semibold rounded-lg hover:bg-brown-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {savingName ? t('submitting') : t('nameSaveButton')}
+              </button>
+            </form>
           </section>
 
           <section className="border-t border-zinc-200 dark:border-zinc-700 pt-6 space-y-4">
