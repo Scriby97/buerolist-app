@@ -882,7 +882,12 @@
     "resetConfirmTitle": "Envoyer l'e-mail de réinitialisation",
     "resetConfirmMessage": "Envoyer l'e-mail de réinitialisation à {email} ?",
     "roleUser": "Utilisateur·rice",
-    "roleAdministrator": "Administrateur"
+    "roleAdministrator": "Administrateur",
+    "deleteUserButton": "Supprimer",
+    "deleteConfirmTitle": "Supprimer le collaborateur sans connexion ?",
+    "deleteConfirmMessage": "{name} n’appartient plus à aucune organisation et n’a aucune saisie. L’entrée sera supprimée définitivement.",
+    "deleteSuccessToast": "{name} a été supprimé",
+    "deleteErrorGeneric": "Erreur lors de la suppression de l’utilisateur"
   },
   "errors": {
     "VALIDATION_BAD_REQUEST_GENERIC": "Requête invalide.",
@@ -971,6 +976,8 @@
     "PLACEHOLDER_NOT_FOUND": "Collaborateur sans login introuvable.",
     "PLACEHOLDER_MERGE_OVERLAP": "Les heures saisies pour toi se chevauchent avec des saisies existantes de ton compte. Contacte ton admin.",
     "MEMBER_IS_PLACEHOLDER": "Ce n'est pas possible pour un collaborateur sans login.",
+    "PLACEHOLDER_IN_USE": "Ce collaborateur sans connexion appartient encore à une organisation ou a des saisies ou absences et ne peut donc pas être supprimé.",
+    "USER_NOT_PLACEHOLDER": "Seuls les collaborateurs sans connexion peuvent être supprimés ici.",
     "WORK_SCHEDULE_INVALID": "Les horaires doivent être croissants.",
     "ITEM_PRESET_NOT_FOUND": "La position n'a pas été trouvée.",
     "TIME_ENTRY_OVERLAP_FOR": "Une saisie existe déjà pour {name} sur cette période – rien n’a été enregistré.",

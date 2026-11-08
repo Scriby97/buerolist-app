@@ -882,7 +882,12 @@
     "resetConfirmTitle": "Send reset email",
     "resetConfirmMessage": "Send reset email to {email}?",
     "roleUser": "User",
-    "roleAdministrator": "Administrator"
+    "roleAdministrator": "Administrator",
+    "deleteUserButton": "Delete",
+    "deleteConfirmTitle": "Delete employee without login?",
+    "deleteConfirmMessage": "{name} no longer belongs to any organization and has no entries. The record will be deleted permanently.",
+    "deleteSuccessToast": "{name} was deleted",
+    "deleteErrorGeneric": "Error deleting the user"
   },
   "errors": {
     "VALIDATION_BAD_REQUEST_GENERIC": "Invalid request.",
@@ -971,6 +976,8 @@
     "PLACEHOLDER_NOT_FOUND": "Employee without login not found.",
     "PLACEHOLDER_MERGE_OVERLAP": "The time recorded for you overlaps with existing entries of your account. Please contact your admin.",
     "MEMBER_IS_PLACEHOLDER": "This is not possible for an employee without login.",
+    "PLACEHOLDER_IN_USE": "This employee without login still belongs to an organization or has time entries or absences and therefore cannot be deleted.",
+    "USER_NOT_PLACEHOLDER": "Only employees without login can be deleted here.",
     "WORK_SCHEDULE_INVALID": "The working hours must be in ascending order.",
     "ITEM_PRESET_NOT_FOUND": "The item was not found.",
     "TIME_ENTRY_OVERLAP_FOR": "There is already an entry for {name} in this period – nothing was saved for anyone.",

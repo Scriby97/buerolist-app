@@ -882,7 +882,12 @@
     "resetConfirmTitle": "Invia email di reimpostazione",
     "resetConfirmMessage": "Inviare l'email di reimpostazione a {email}?",
     "roleUser": "Utente",
-    "roleAdministrator": "Amministratore"
+    "roleAdministrator": "Amministratore",
+    "deleteUserButton": "Elimina",
+    "deleteConfirmTitle": "Eliminare il collaboratore senza login?",
+    "deleteConfirmMessage": "{name} non appartiene più a nessuna organizzazione e non ha registrazioni. La voce verrà eliminata definitivamente.",
+    "deleteSuccessToast": "{name} è stato eliminato",
+    "deleteErrorGeneric": "Errore durante l’eliminazione dell’utente"
   },
   "errors": {
     "VALIDATION_BAD_REQUEST_GENERIC": "Richiesta non valida.",
@@ -971,6 +976,8 @@
     "PLACEHOLDER_NOT_FOUND": "Collaboratore senza login non trovato.",
     "PLACEHOLDER_MERGE_OVERLAP": "Le ore registrate per te si sovrappongono a registrazioni esistenti del tuo account. Contatta il tuo admin.",
     "MEMBER_IS_PLACEHOLDER": "Non è possibile per un collaboratore senza login.",
+    "PLACEHOLDER_IN_USE": "Questo collaboratore senza login appartiene ancora a un’organizzazione o ha registrazioni o assenze e quindi non può essere eliminato.",
+    "USER_NOT_PLACEHOLDER": "Qui si possono eliminare solo collaboratori senza login.",
     "WORK_SCHEDULE_INVALID": "Gli orari di lavoro devono essere crescenti.",
     "ITEM_PRESET_NOT_FOUND": "La posizione non è stata trovata.",
     "TIME_ENTRY_OVERLAP_FOR": "Per {name} esiste già una registrazione in questo periodo – non è stato salvato nulla.",

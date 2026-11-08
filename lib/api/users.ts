@@ -22,3 +22,14 @@ export async function sendUserResetPassword(userId: string): Promise<void> {
     await throwApiError(response, 'Fehler beim Senden der Reset-Email')
   }
 }
+
+/** Admin: ungenutzten Mitarbeiter ohne Login (keine Organisation, keine Eintraege) loeschen. */
+export async function deleteUnusedPlaceholder(userId: string): Promise<void> {
+  const response = await authenticatedFetch(buildApiUrl(`/auth/users/${userId}`), {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    await throwApiError(response, 'Fehler beim Loeschen des Benutzers')
+  }
+}

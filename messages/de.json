@@ -882,7 +882,12 @@
     "resetConfirmTitle": "Passwort zurücksetzen",
     "resetConfirmMessage": "E-Mail zum Zurücksetzen des Passworts an {email} senden?",
     "roleUser": "Benutzer",
-    "roleAdministrator": "Administrator"
+    "roleAdministrator": "Administrator",
+    "deleteUserButton": "Löschen",
+    "deleteConfirmTitle": "Mitarbeiter ohne Login löschen?",
+    "deleteConfirmMessage": "{name} gehört keiner Organisation mehr an und hat keine Einträge. Der Eintrag wird endgültig gelöscht.",
+    "deleteSuccessToast": "{name} wurde gelöscht",
+    "deleteErrorGeneric": "Fehler beim Löschen des Benutzers"
   },
   "errors": {
     "VALIDATION_BAD_REQUEST_GENERIC": "Ungültige Anfrage.",
@@ -971,6 +976,8 @@
     "PLACEHOLDER_NOT_FOUND": "Mitarbeiter ohne Login nicht gefunden.",
     "PLACEHOLDER_MERGE_OVERLAP": "Die für dich erfassten Zeiten überschneiden sich mit bestehenden Einträgen deines Kontos. Bitte melde dich bei deinem Admin.",
     "MEMBER_IS_PLACEHOLDER": "Das ist bei einem Mitarbeiter ohne Login nicht möglich.",
+    "PLACEHOLDER_IN_USE": "Dieser Mitarbeiter ohne Login gehört noch einer Organisation an oder hat Zeiteinträge bzw. Abwesenheiten und kann deshalb nicht gelöscht werden.",
+    "USER_NOT_PLACEHOLDER": "Nur Mitarbeiter ohne Login können hier gelöscht werden.",
     "WORK_SCHEDULE_INVALID": "Die Arbeitszeiten müssen aufsteigend sein.",
     "ITEM_PRESET_NOT_FOUND": "Die Position wurde nicht gefunden.",
     "TIME_ENTRY_OVERLAP_FOR": "Für {name} ist in diesem Zeitraum bereits ein Eintrag erfasst – es wurde für niemanden gespeichert.",

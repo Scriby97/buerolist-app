@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { useAuth } from '@/lib/auth/AuthProvider'
 import { createInvite, deleteInvite, getOrganizationInvites } from '@/lib/api/invites'
-import { getUsers, sendUserResetPassword } from '@/lib/api/users'
+import { deleteUnusedPlaceholder, getUsers, sendUserResetPassword } from '@/lib/api/users'
+import { ConfirmDialog } from '@/app/components/ConfirmDialog'
 import { getAllOrganizations } from '@/lib/api/organizations'
 import type { InviteEntity, InviteStatus, Organization, User } from '@/lib/types/user'
 import { useToast } from '@/lib/hooks/useToast'
@@ -56,6 +57,7 @@ export default function AdminAllUsersPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedOrgId, setSelectedOrgId] = useState<string>('')
   const [confirmUser, setConfirmUser] = useState<User | null>(null)
+  const [deleteUser, setDeleteUser] = useState<User | null>(null)
   const [submittingId, setSubmittingId] = useState<string | null>(null)
   const [invitesLoading, setInvitesLoading] = useState(false)
   const [invitesError, setInvitesError] = useState<string | null>(null)
@@ -155,7 +157,7 @@ export default function AdminAllUsersPage() {
         .join(' ')
         .toLowerCase()
       return (
-        user.email.toLowerCase().includes(term) ||
+        (user.email ?? '').toLowerCase().includes(term) ||
         name.includes(term) ||
         user.role.toLowerCase().includes(term) ||
         orgNames.includes(term)
@@ -165,7 +167,7 @@ export default function AdminAllUsersPage() {
 
   const getDisplayName = (user: User) => {
     const name = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()
-    return name || user.email
+    return name || user.email || '?'
   }
 
   const getInviteStatus = (invite: InviteEntity): InviteStatus => {
@@ -261,13 +263,60 @@ export default function AdminAllUsersPage() {
     setConfirmUser(user)
   }
 
+  // Mitarbeiter ohne Login, die keiner Organisation mehr angehoeren, koennen
+  // geloescht werden (der Server prueft zusaetzlich, dass keine Zeiten oder
+  // Abwesenheiten daran haengen). Ohne E-Mail gibt es keinen Passwort-Reset.
+  const isOrphanPlaceholder = (user: User) =>
+    !!user.isPlaceholder && (user.organizationMemberships ?? []).length === 0
+
+  const handleConfirmDelete = async () => {
+    if (!deleteUser) return
+    const user = deleteUser
+    setDeleteUser(null)
+    setSubmittingId(user.id)
+    try {
+      await deleteUnusedPlaceholder(user.id)
+      setUsers((prev) => prev.filter((u) => u.id !== user.id))
+      showToast(t('deleteSuccessToast', { name: getDisplayName(user) }), 'success')
+    } catch (err) {
+      showToast(getApiErrorMessage(err, t('deleteErrorGeneric')), 'error')
+    } finally {
+      setSubmittingId(null)
+    }
+  }
+
+  const renderUserAction = (user: User, fullWidth = false) => {
+    const width = fullWidth ? 'w-full ' : ''
+    if (isOrphanPlaceholder(user)) {
+      return (
+        <button
+          onClick={() => setDeleteUser(user)}
+          className={`${width}px-3 py-2 text-xs font-semibold rounded-lg border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors`}
+          disabled={submittingId === user.id}
+        >
+          {t('deleteUserButton')}
+        </button>
+      )
+    }
+    if (!user.email) return null
+    return (
+      <button
+        onClick={() => handleResetRequest(user)}
+        className={`${width}px-3 py-2 text-xs font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 transition-colors`}
+        disabled={submittingId === user.id}
+      >
+        {submittingId === user.id ? t('sendingLabel') : t('resetPasswordButton')}
+      </button>
+    )
+  }
+
   const handleConfirmReset = async () => {
     if (!confirmUser) return
 
     setSubmittingId(confirmUser.id)
     try {
       await sendUserResetPassword(confirmUser.id)
-      showToast(t('resetSuccessToast', { email: confirmUser.email }), 'success')
+      showToast(t('resetSuccessToast', { email: confirmUser.email ?? '' }), 'success')
       setConfirmUser(null)
     } catch (err) {
       const message = getApiErrorMessage(err, t('resetErrorGeneric'))
@@ -424,15 +473,7 @@ export default function AdminAllUsersPage() {
                             )
                           })()}
                         </td>
-                        <td className="px-4 py-3">
-                          <button
-                            onClick={() => handleResetRequest(user)}
-                            className="px-3 py-2 text-xs font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 transition-colors"
-                            disabled={submittingId === user.id}
-                          >
-                            {submittingId === user.id ? t('sendingLabel') : t('resetPasswordButton')}
-                          </button>
-                        </td>
+                        <td className="px-4 py-3">{renderUserAction(user)}</td>
                       </tr>
                     ))
                   )}
@@ -473,15 +514,7 @@ export default function AdminAllUsersPage() {
                         })()}
                       </p>
                     </div>
-                    <div className="pt-1">
-                      <button
-                        onClick={() => handleResetRequest(user)}
-                        className="w-full px-3 py-2 text-xs font-semibold rounded-lg bg-brown-600 text-white hover:bg-brown-700 transition-colors"
-                        disabled={submittingId === user.id}
-                      >
-                        {submittingId === user.id ? t('sendingLabel') : t('resetPasswordButton')}
-                      </button>
-                    </div>
+                    {renderUserAction(user, true) && <div className="pt-1">{renderUserAction(user, true)}</div>}
                   </div>
                 ))
               )}
@@ -648,6 +681,17 @@ export default function AdminAllUsersPage() {
         )}
       </div>
 
+      {deleteUser && (
+        <ConfirmDialog
+          title={t('deleteConfirmTitle')}
+          message={t('deleteConfirmMessage', { name: getDisplayName(deleteUser) })}
+          confirmLabel={t('deleteUserButton')}
+          cancelLabel={tCommon('cancel')}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteUser(null)}
+        />
+      )}
+
       {confirmUser && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl max-w-md w-full">
@@ -656,7 +700,7 @@ export default function AdminAllUsersPage() {
                 {t('resetConfirmTitle')}
               </h3>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {t('resetConfirmMessage', { email: confirmUser.email })}
+                {t('resetConfirmMessage', { email: confirmUser.email ?? '' })}
               </p>
               <div className="flex gap-3 justify-end">
                 <button

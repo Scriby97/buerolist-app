@@ -109,7 +109,9 @@ export interface PendingInvite {
 
 export interface User {
   id: string
-  email: string
+  /** null bei Mitarbeitern ohne Login (isPlaceholder) */
+  email: string | null
+  isPlaceholder?: boolean
   // Globale, funktionale Rolle - nur diese zwei Werte existieren serverseitig.
   // "administrator" ist ausschliesslich für Entwickler-Accounts gedacht (kann
   // organisationsübergreifend auf alle Daten zugreifen); es gibt keine
