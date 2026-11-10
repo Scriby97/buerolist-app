@@ -103,9 +103,9 @@ const LoginPage: FC = () => {
     <div className="min-h-dvh flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
             {t('title')}
-          </h2>
+          </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             {t('subtitle')}
           </p>
@@ -200,11 +200,12 @@ const LoginPage: FC = () => {
           </div>
         </div>
 
-        <div className="text-center">
-          <Link
-            href="/impressum"
-            className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-          >
+        <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+          <Link href="/datenschutz" className="hover:text-zinc-700 dark:hover:text-zinc-200">
+            {t('datenschutzLink')}
+          </Link>
+          {' · '}
+          <Link href="/impressum" className="hover:text-zinc-700 dark:hover:text-zinc-200">
             {t('impressumLink')}
           </Link>
         </div>

@@ -420,7 +420,8 @@
     "forgotPasswordLink": "Passwort vergessen?",
     "redirecting": "Weiterleitung...",
     "registeredSuccessMessage": "Registrierung erfolgreich. Du kannst dich jetzt anmelden.",
-    "impressumLink": "Impressum"
+    "impressumLink": "Impressum",
+    "datenschutzLink": "Datenschutz"
   },
   "register": {
     "title": "Registrieren",
@@ -481,6 +482,10 @@
     "contactTitle": "Kontakt",
     "developedByTitle": "Entwicklung",
     "developedByText": "Bürolist wird entwickelt von",
+    "backToApp": "Zurück zur App"
+  },
+  "datenschutz": {
+    "title": "Datenschutzerklärung",
     "backToApp": "Zurück zur App"
   },
   "settingsAccount": {
