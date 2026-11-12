@@ -204,7 +204,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
           <ul className="space-y-3 text-sm sm:hidden print:hidden">
             {data.days.map((day) => (
               <li key={day.key}>
-                <p className="border-b border-zinc-400 pb-1 text-xs font-semibold uppercase tracking-wide text-zinc-600">
+                <p className="border-b border-zinc-400 pb-1 text-xs font-bold uppercase tracking-wide text-zinc-900">
                   {day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </p>
                 <ul>
@@ -212,7 +212,7 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                     <li key={entry.id} className="border-b border-zinc-200 py-1.5">
                       <p className="flex flex-wrap gap-x-3 tabular-nums">
                         <span>{formatTime(entry.startAt)}–{formatTime(entry.endAt)}</span>
-                        <span className="font-semibold">{formatHm(entryMinutes(entry))} h</span>
+                        <span className="font-bold">{formatHm(entryMinutes(entry))} h</span>
                         {(entry.travelMinutes ?? 0) > 0 && (
                           <span className="text-zinc-600">
                             {t('colTravel')} {formatHm(entry.travelMinutes ?? 0)} h
@@ -254,12 +254,12 @@ export const ProjectReport: FC<ProjectReportProps> = ({ detail, customerNotes = 
                 day.entries.map((entry, index) => (
                   <Fragment key={entry.id}>
                     <tr className="break-inside-avoid border-t border-zinc-200">
-                      <td className={`${td} whitespace-nowrap`}>
+                      <td className={`${td} whitespace-nowrap font-bold`}>
                         {index === 0 &&
                           day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
                       </td>
                       <td className={`${td} whitespace-nowrap tabular-nums`}>{formatTime(entry.startAt)}–{formatTime(entry.endAt)}</td>
-                      <td className={`${td} text-right tabular-nums`}>{formatHm(entryMinutes(entry))}</td>
+                      <td className={`${td} text-right font-bold tabular-nums`}>{formatHm(entryMinutes(entry))}</td>
                       {totalTravel > 0 && <td className={`${td} text-right tabular-nums`}>{travelCell(entry.travelMinutes ?? 0)}</td>}
                       <td className={td}>{creatorName(entry)}</td>
                       <td className={td}>{entry.category?.name ?? '–'}</td>
