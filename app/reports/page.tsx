@@ -74,8 +74,8 @@ function ReportsPageContent() {
     costs: true,
     entries: true,
     comments: true,
-    notes: false,
-    photos: false,
+    notes: true,
+    photos: true,
   })
   // Ergebnis gehoert zu einer bestimmten Auswahl - aendert sich die Auswahl,
   // verschwindet die alte Vorschau automatisch.
