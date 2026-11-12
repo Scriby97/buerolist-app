@@ -80,6 +80,6 @@ describe('EmployeeReport', () => {
     expect(screen.getByText('Total Arbeitszeit').nextSibling?.textContent).toBe('5.00')
     expect(screen.getAllByText('Krankheit').at(-1)!.nextSibling?.textContent).toBe('17.50')
     expect(screen.getAllByText('Feuerwehr').at(-1)!.nextSibling?.textContent).toBe('2.50')
-    expect(screen.getByText('Total inkl. Abwesenheiten').nextSibling?.textContent).toBe('25.00')
+    expect(screen.queryByText('Total inkl. Abwesenheiten')).toBeNull()
   })
 })

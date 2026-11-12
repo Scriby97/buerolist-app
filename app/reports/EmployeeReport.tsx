@@ -52,7 +52,6 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
   const dateLocale = useDateLocale();
   const data = buildReportData(entries);
   const absences = options.absences ? [...allAbsences].sort((a, b) => a.date.localeCompare(b.date)) : [];
-  const absenceMinutes = absences.reduce((sum, a) => sum + a.minutes, 0);
   // Summe pro Grund, in der Reihenfolge des ersten Auftretens
   const absenceByReason = [...absences.reduce((map, a) => {
     const label = absenceReasonLabel(a.reason);
@@ -97,13 +96,13 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
                   {options.comment && <th className={th}>{t('colComment')}</th>}
                 </tr>
               </thead>
-              <tbody>
-                {data.days.map((day) => (
-                  <Fragment key={day.key}>
+              {/* Ein tbody pro Tag: kraeftiger Strich am Tagesende, auch ohne Tagestotal */}
+              {data.days.map((day) => (
+                <tbody key={day.key} className="border-b-2 border-zinc-900">
                     {day.entries.map((entry, index) => (
                       <Fragment key={entry.id}>
                         <tr className="break-inside-avoid border-t border-zinc-200">
-                          <td className={`${td} whitespace-nowrap`}>
+                          <td className={`${td} whitespace-nowrap font-bold`}>
                             {index === 0 &&
                               day.date.toLocaleDateString(dateLocale, { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })}
                           </td>
@@ -129,16 +128,14 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
                       </Fragment>
                     ))}
                     {options.dayTotals && (
-                      <tr className="text-xs font-semibold text-zinc-700">
-                        <td className={td} />
-                        <td className={`${td} text-right`}>{t('dayTotal')}</td>
+                      <tr className="font-bold text-zinc-900">
+                        <td className={td} colSpan={2} />
                         <td className={`${td} text-right tabular-nums`}>{formatHm(day.minutes)}</td>
                         <td className={td} colSpan={columnCount - 3} />
                       </tr>
                     )}
-                  </Fragment>
-                ))}
-              </tbody>
+                </tbody>
+              ))}
             </table>
           )}
 
@@ -180,12 +177,6 @@ export const EmployeeReport: FC<EmployeeReportProps> = ({
                   <td className="px-2 py-0.5 text-right tabular-nums">{formatHm(minutes)}</td>
                 </tr>
               ))}
-              {absences.length > 0 && (
-                <tr className="border-t border-zinc-400 font-bold">
-                  <td className="px-2 py-1">{t('totalInclAbsences')}</td>
-                  <td className="px-2 py-1 text-right tabular-nums">{formatHm(data.totalMinutes + absenceMinutes)}</td>
-                </tr>
-              )}
               {options.items && data.materialRappen > 0 && (
                 <tr>
                   <td className="px-2 py-0.5">{tItems('materialTitle')}</td>

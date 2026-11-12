@@ -337,7 +337,6 @@
     "colProject": "Projekt",
     "colCategory": "Kategorie",
     "colComment": "Bemerkung",
-    "dayTotal": "Tag",
     "totalHours": "Total Stunden",
     "projectSummaryTitle": "Zusammenfassung pro Projekt",
     "signatureEmployee": "Datum / Unterschrift Mitarbeiter",
@@ -369,8 +368,7 @@
     "option_absences": "Abwesenheiten",
     "absencesTitle": "Abwesenheiten",
     "colReason": "Grund",
-    "totalWorkHours": "Total Arbeitszeit",
-    "totalInclAbsences": "Total inkl. Abwesenheiten"
+    "totalWorkHours": "Total Arbeitszeit"
   },
   "settingsCategories": {
     "title": "Kategorien",

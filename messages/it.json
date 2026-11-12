@@ -337,7 +337,6 @@
     "colProject": "Progetto",
     "colCategory": "Categoria",
     "colComment": "Osservazione",
-    "dayTotal": "Giorno",
     "totalHours": "Totale ore",
     "projectSummaryTitle": "Riepilogo per progetto",
     "signatureEmployee": "Data / firma collaboratore",
@@ -369,8 +368,7 @@
     "option_absences": "Assenze",
     "absencesTitle": "Assenze",
     "colReason": "Motivo",
-    "totalWorkHours": "Totale tempo di lavoro",
-    "totalInclAbsences": "Totale incl. assenze"
+    "totalWorkHours": "Totale tempo di lavoro"
   },
   "settingsCategories": {
     "title": "Categorie",
